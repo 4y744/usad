@@ -7,17 +7,18 @@ import { Link } from "react-router-dom"
 //Import auth hooks
 import { useSignIn } from "../hooks/auth";
 
+//Import components
+import { LoadingSpinner } from "../components/LoadingSpinner";
+
 export const SignInPage = () => {
     
-    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
 
     const [currentError, setCurrentError] = useState("");
     const [buttonPressed, setButtonPressed] = useState(false);
 
-    const [SignIn, loading, error] = useSignIn();
+    const [SignIn, loading, error] = useSignIn("/");
 
     const handleSignIn = () => {
         setButtonPressed(true);
@@ -32,20 +33,47 @@ export const SignInPage = () => {
   
     return (
         <div className="flex justify-center items-center w-full my-36">
-            <div className="flex justify-start items-start flex-col rounded-md p-6 shadow-md text-white bg-zinc-900 sm:w-96 w-80">
-                <h1 className="text-2xl font-bold mb-1">Sign In</h1>
-                <span className="mb-2">Sign into your account.</span>
-                <InputField type="text" placeholder="Email" setState={setEmail} fieldError={!email && buttonPressed}/>
-                <InputField type="password" placeholder="Password" setState={setPassword} fieldError={!password && buttonPressed}/>
-                <span className="text-red-600 font-bold text-sm h-4">{currentError}</span>
-                <Link to="" className="text-sm font-semibold my-1 text-green-700 hover:underline">Forgot my password</Link>
+            <div className="flex justify-start items-start flex-col gap-3 rounded-md p-6 shadow-md text-white bg-zinc-900 sm:w-96 w-80">
+                <h1 className="text-2xl font-bold">Sign In</h1>
+                <span>Sign into your account.</span>
 
-                <button className="bg-green-700 hover:bg-green-600 active:outline outline-offset-2 outline-2 outline-green-600
-                w-full p-3 mt-2 rounded-md" onClick={handleSignIn}>Sign in</button>
-                <span className="text-zinc-300 text-sm w-full text-center mt-1">
-                    Don't have an account? 
-                    <Link to="/signup" className="text-green-600 font-bold ml-1 hover:underline">Sign up!</Link>
+                <InputField
+                    type="text"
+                    placeholder="Email"
+                    setState={setEmail}
+                    fieldError={!email && buttonPressed}
+                />
+
+                <InputField
+                    type="password"
+                    placeholder="Password"
+                    setState={setPassword}
+                    fieldError={!password && buttonPressed}
+                />
+
+                <span className="text-red-600 font-bold text-sm h-4">
+                    {currentError}
                 </span>
+                <Link
+                    to=""
+                    className="text-sm font-semibold text-green-700 hover:underline"
+                >
+                    Forgot my password
+                </Link>
+
+                <button
+                    className={`bg-green-700 outline-offset-2 outline-2 outline-green-600
+                    w-full h-12 rounded-md flex justify-center items-center 
+                    ${
+                        loading
+                            ? "opacity-50"
+                            : "opacity-100 hover:bg-green-600 active:outline"
+                    }`}
+                    onClick={handleSignIn}
+                    disabled={loading}
+                >
+                    {loading ? <LoadingSpinner /> : <>Sign in</>}
+                </button>
             </div>
         </div>
     )

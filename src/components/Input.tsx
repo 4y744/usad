@@ -55,7 +55,7 @@ export const Input = (props : {type: string, inputs: Array<string>, function: st
             //Necessary to prevent infinite loops
             setTimeout(() => worker.terminate(), 1000)
         }
-        catch(err) {console.log(err);}
+        catch(err) {}
     }
 
     //If the input type is a box renders this
