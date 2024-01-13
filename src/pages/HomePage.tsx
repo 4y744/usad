@@ -6,7 +6,8 @@ import { getDocs, collection, query } from "firebase/firestore";
 import { db } from "../hooks/firebase";
 
 //Import components
-import { Loading, LinkCard } from '../libs/exports';
+import { Loading } from '../components/Loading';
+import { LinkCard } from '../components/LinkCard';
 
 export const HomePage = () => {
     return <>
@@ -76,8 +77,6 @@ const Featured = () => {
 
         setLoading(false);     
     }
-
-    if(isLoading) return <Loading/>
     
     return <div className='px-4'>
         <h1 className='font-bold text-white xl:text-2xl lg:text-xl text-lg py-3 text-start'>Featured</h1>

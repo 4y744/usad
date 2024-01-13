@@ -5,5 +5,19 @@
 @tailwind utilities;
 
 body {
-  @apply bg-zinc-800;
+    @apply bg-zinc-800;
+}
+
+.loading{
+    animation: loading 1s infinite linear;
+}
+
+@keyframes loading {
+    from{
+        left: -50%;
+    }
+
+    to{
+        left: 100%;
+    }
 }

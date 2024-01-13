@@ -9,26 +9,18 @@ import { useSignUp } from "../hooks/auth";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 
 export const SignUpPage = () => {
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
 
-    const [currentError, setCurrentError] = useState("");
 
+    const [credentials, setCredentials] = useState({username: "", email: "", password: "", confirmPassword: ""});
     const [buttonPressed, setButtonPressed] = useState(false);
 
     const [SignUp, loading, error] = useSignUp("/");
 
     const handleSignUp = () => {
         setButtonPressed(true);
-
-        SignUp(username, email, password, confirmPassword);
+        SignUp(credentials);
     };
 
-    useEffect(() => {
-        setCurrentError(error);
-    }, [error]);
 
     return (
         <div className="flex justify-center items-center w-full my-36">
@@ -36,55 +28,30 @@ export const SignUpPage = () => {
                 <h1 className="text-2xl font-bold">Sign Up</h1>
                 <span>Create an account to join and contribute.</span>
 
-                <InputField
-                    type="text"
-                    placeholder="Username"
-                    setState={setUsername}
-                    fieldError={!username && buttonPressed}
-                />
+                <InputField type="text" placeholder="Username" fieldError={!credentials.username && buttonPressed} 
+                setState={(value) => setCredentials({...credentials, username: value})}/>
 
-                <InputField
-                    type="text"
-                    placeholder="Email"
-                    setState={setEmail}
-                    fieldError={!email && buttonPressed}
-                />
+                <InputField type="text" placeholder="Email" fieldError={!credentials.email && buttonPressed} 
+                setState={(value) => setCredentials({...credentials, email: value})}/>
 
-                <InputField
-                    type="password"
-                    placeholder="Password"
-                    setState={setPassword}
-                    fieldError={!password && buttonPressed}
-                />
+                <InputField type="password" placeholder="Password" fieldError={!credentials.password && buttonPressed} 
+                setState={(value) => setCredentials({...credentials, password: value})}/>
 
-                <InputField
-                    type="password"
-                    placeholder="Confirm password"
-                    setState={setConfirmPassword}
-                    fieldError={!confirmPassword && buttonPressed}
-                />
+                <InputField type="password" placeholder="Confirm password" fieldError={!credentials.confirmPassword && buttonPressed} 
+                setState={(value) => setCredentials({...credentials, confirmPassword: value})}/>
 
                 <span className="text-red-600 font-bold text-sm h-4">
-                    {currentError}
+                    {error}
                 </span>
-                <Link
-                    to=""
-                    className="text-sm font-semibold text-green-700 hover:underline"
-                >
+
+                <Link to="" className="text-sm font-semibold text-green-700 hover:underline">
                     Forgot my password
                 </Link>
 
-                <button
-                    className={`bg-green-700 outline-offset-2 outline-2 outline-green-600
-                    w-full h-12 rounded-md flex justify-center items-center 
-                    ${
-                        loading
-                            ? "opacity-50"
-                            : "opacity-100 hover:bg-green-600 active:outline"
-                    }`}
-                    onClick={handleSignUp}
-                    disabled={loading}
-                >
+                <button className={`flex justify-center items-center w-full h-12 rounded-md 
+                bg-green-700 outline-offset-2 outline-2 outline-green-600
+                ${loading ? "opacity-50" : "opacity-100 hover:bg-green-600 active:outline"}`} 
+                onClick={handleSignUp} disabled={loading}>
                     {loading ? <LoadingSpinner /> : <>Sign up</>}
                 </button>
             </div>
@@ -92,20 +59,12 @@ export const SignUpPage = () => {
     );
 };
 
-const InputField = (props: {
-    type: string;
-    placeholder: string;
-    setState: React.Dispatch<React.SetStateAction<any>>;
-    fieldError: boolean;
-}) => (
+const InputField = (props: {type: string, placeholder: string, setState: (value: string) => void, fieldError: boolean}) => (
     <div className="flex flex-col w-full">
-        <input
-            className={`rounded-md bg-zinc-800 h-12 px-3
-        focus:outline outline-offset-2 outline-2 outline-green-600 
-        ${props.fieldError ? "outline outline-red-600" : "outline-green-600"}`}
-            type={props.type}
-            placeholder={props.placeholder}
-            onChange={(event) => props.setState(event.target.value)}
-        />
+        <input className={`rounded-md bg-zinc-800 h-12 px-3 focus:outline outline-offset-2 outline-2
+        outline-green-600 ${props.fieldError ? "outline outline-red-600" : "outline-green-600"}`}
+        type={props.type} placeholder={props.placeholder} onChange={(event) => props.setState(event.target.value)}/>
     </div>
 );
+
+

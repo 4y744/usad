@@ -1,6 +1,8 @@
 
 //Import components
-import { Input, Loading, NotFoundPage } from '../libs/exports.ts';
+import { Input } from '../components/Input.tsx';
+import { Loading } from '../components/Loading.tsx';
+import { NotFoundPage } from './NotFoundPage.tsx';
 
 //Import react hooks
 import {useState, useEffect} from 'react';

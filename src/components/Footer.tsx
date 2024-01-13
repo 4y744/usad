@@ -47,7 +47,7 @@ export const Footer = () => (
         </div>
         <div className="w-3/4 h-[1px] my-2 bg-zinc-400"></div>
         <div className="flex">
-            <h1 className="md:text-base text-sm text-center">Copyright {"(C)"} 2024 USAD, All rights reserved.</h1>
+            <h1 className="md:text-sm text-xs text-center">Copyright {"(C)"} 2024 USAD, All rights reserved.</h1>
         </div>
     </footer>
 )

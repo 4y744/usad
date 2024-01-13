@@ -12,24 +12,15 @@ import { LoadingSpinner } from "../components/LoadingSpinner";
 
 export const SignInPage = () => {
     
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-
-    const [currentError, setCurrentError] = useState("");
+    const [credentials, setCredentials] = useState({email: "", password: ""});
     const [buttonPressed, setButtonPressed] = useState(false);
 
     const [SignIn, loading, error] = useSignIn("/");
 
     const handleSignIn = () => {
         setButtonPressed(true);
-
-        SignIn(email, password);
+        SignIn(credentials);
     }
-
-    useEffect(() => {
-        setCurrentError(error);
-    }, [error])
-
   
     return (
         <div className="flex justify-center items-center w-full my-36">
@@ -37,41 +28,23 @@ export const SignInPage = () => {
                 <h1 className="text-2xl font-bold">Sign In</h1>
                 <span>Sign into your account.</span>
 
-                <InputField
-                    type="text"
-                    placeholder="Email"
-                    setState={setEmail}
-                    fieldError={!email && buttonPressed}
-                />
+                <InputField type="email" placeholder="Email" setState={(value) => setCredentials({...credentials, email: value})} 
+                fieldError={!credentials.email && buttonPressed}/>
 
-                <InputField
-                    type="password"
-                    placeholder="Password"
-                    setState={setPassword}
-                    fieldError={!password && buttonPressed}
-                />
+                <InputField type="password" placeholder="Password" setState={(value) => setCredentials({...credentials, password: value})} 
+                fieldError={!credentials.password && buttonPressed}/>
 
                 <span className="text-red-600 font-bold text-sm h-4">
-                    {currentError}
+                    {error}
                 </span>
-                <Link
-                    to=""
-                    className="text-sm font-semibold text-green-700 hover:underline"
-                >
+
+                <Link to="" className="text-sm font-semibold text-green-700 hover:underline">
                     Forgot my password
                 </Link>
 
-                <button
-                    className={`bg-green-700 outline-offset-2 outline-2 outline-green-600
-                    w-full h-12 rounded-md flex justify-center items-center 
-                    ${
-                        loading
-                            ? "opacity-50"
-                            : "opacity-100 hover:bg-green-600 active:outline"
-                    }`}
-                    onClick={handleSignIn}
-                    disabled={loading}
-                >
+                <button className={`bg-green-700 outline-offset-2 outline-2 outline-green-600 w-full h-12 rounded-md
+                flex justify-center items-center ${loading ? "opacity-50" : "opacity-100 hover:bg-green-600 active:outline"}`}
+                onClick={handleSignIn} disabled={loading}>
                     {loading ? <LoadingSpinner /> : <>Sign in</>}
                 </button>
             </div>
@@ -80,14 +53,10 @@ export const SignInPage = () => {
 
 }
 
-const InputField = (props : {type: string, placeholder: string, setState: React.Dispatch<React.SetStateAction<any>>, fieldError: boolean}) => (
-    <div className="flex flex-col w-full mt-3 mb-1">
-        <input className={`p-3 rounded-md bg-zinc-800 
-        focus:outline outline-offset-2 outline-2 outline-green-600 ${
-       props.fieldError ? "outline outline-red-600" : "outline-green-600"
-        }`}
-        type={props.type} placeholder={props.placeholder}
-        onChange={(event) => props.setState(event.target.value)}/>
+const InputField = (props: {type: string, placeholder: string, setState: (value: string) => void, fieldError: boolean}) => (
+    <div className="flex flex-col w-full">
+        <input className={`rounded-md bg-zinc-800 h-12 px-3 focus:outline outline-offset-2 outline-2
+        outline-green-600 ${props.fieldError ? "outline outline-red-600" : "outline-green-600"}`}
+        type={props.type} placeholder={props.placeholder} onChange={(event) => props.setState(event.target.value)}/>
     </div>
-
-)
+);
