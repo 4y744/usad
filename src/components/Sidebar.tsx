@@ -10,7 +10,7 @@ export const Sidebar = () => {
 
     return (
         <section style={logged ? {visibility: "visible"} : {visibility: "hidden"}} className="fixed bottom-0
-        md:h-[calc(100dvh-56px)] md:w-14 md:hover:w-48 transition-width duration-200
+        md:h-[calc(100dvh-56px)] md:w-14 md:hover:w-48 transition-width duration-200 md:pb-1
         h-14 w-full z-20 group overflow-hidden
         flex md:flex-col md:items-start md:justify-end items-center justify-center
         bg-zinc-900 text-zinc-200 text-xl

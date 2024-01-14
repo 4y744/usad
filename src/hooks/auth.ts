@@ -96,18 +96,18 @@ export const useSignOut = (redirectUrl: string): [() => void, boolean] => {
 //     return [getUsername, username]
 //}
 
-export const useUser = () : {username: string, logged: boolean, loading: boolean} => {
-    const [user, setUser] = useState({username: "", logged: false, loading: true});
+export const useUser = () : {username: string, email: string, logged: boolean, loading: boolean} => {
+    const [user, setUser] = useState({username: "", email: "", logged: false, loading: true});
 
     useEffect(() => {
         onAuthStateChanged(auth, () => {
             setUser({...user, loading: true})
             if (auth.currentUser) {
                 getDoc(doc(db, "users", auth.currentUser.uid))
-                .then((doc) => setUser({...user, username: doc.data()?.username, logged: true, loading: false}))
+                .then((doc) => setUser({...user, username: doc.data()?.username, email: auth.currentUser!.email!, logged: true, loading: false}))
             }
             else {
-                setUser({...user, username: "", logged: false, loading: false})
+                setUser({...user, username: "", email: "", logged: false, loading: false})
             }
         })
     }, []) 

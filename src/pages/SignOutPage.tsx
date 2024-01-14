@@ -10,7 +10,7 @@ export const SignOutPage = () => {
         SignOut();
     }
 
-    const {username, logged} = useContext(AuthContext);
+    const {username, email, logged} = useContext(AuthContext);
 
     return (
         <div className="flex justify-center items-center w-full my-36">
@@ -22,9 +22,21 @@ export const SignOutPage = () => {
 
                 {logged ?
                     <>
-                        <span className="">Currently signed in as 
+                        {/* <span className="">Currently signed in as 
                             <span className="font-bold text-green-600 ml-2">{username}</span>
-                        </span>
+                        </span> */}
+
+                        <div className="bg-zinc-800 w-full p-2 rounded-md">
+                            <h1 className="font-semibold mb-1">Current user information</h1>
+                            <div className="w-full text-sm">
+                                <span>Username:</span>
+                                <span className="text-green-600 font-bold ml-1">{username}</span>
+                            </div>
+                            <div className="w-full text-sm">
+                                <span>Email:</span>
+                                <span className="text-green-600 font-bold ml-1">{email}</span>
+                            </div>
+                        </div>
 
                         <button className={`bg-green-700 outline-offset-2 outline-2 
                         outline-green-600 w-full h-12 rounded-md flex justify-center items-center 

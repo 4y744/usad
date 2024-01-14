@@ -1,4 +1,10 @@
+import { useParams } from "react-router-dom"
+
 export const UserPage = () => {
 
-    return <div>User</div>
+    const {uid} = useParams();
+
+    return (
+        <div>{uid}</div>
+    )
 }

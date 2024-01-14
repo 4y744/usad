@@ -12,7 +12,7 @@ export const Footer = () => (
 
                     <div className="flex flex-col flex-1 md:mx-8 mx-4">
                         <FooterHeading text="Project"/>
-                        <FooterLink url="#" text="GitHub"/>
+                        <FooterAnchor url="https://github.com/4y744/USAD" text="GitHub"/>
                         <FooterLink url="#" text="Documentation"/>
                         <FooterLink url="#" text="About"/>
                     </div>
@@ -26,8 +26,8 @@ export const Footer = () => (
            
                     <div className="flex flex-col flex-1 md:mx-8 mx-4">
                         <FooterHeading text="Legal"/>
-                        <FooterLink url="#" text="GNU GPLv3"/>
-                        <FooterLink url="#" text="License"/>
+                        <FooterAnchor url="https://www.gnu.org/licenses/gpl-3.0.html" text="GNU GPLv3"/>
+                        <FooterAnchor url="#" text="License"/>
                         <FooterLink url="#" text="Terms of use"/>
                     </div>
 
@@ -57,6 +57,10 @@ const FooterHeading = (props : {text: string}) => (
 )
 
 const FooterLink = (props : {url: string, text: string}) => (
+    <Link className="text-zinc-400 hover:underline my-1 md:text-base sm:text-sm text-xs" to={props.url}>{props.text}</Link>
+)
+
+const FooterAnchor = (props: {url: string, text: string}) => (
     <a className="text-zinc-400 hover:underline my-1 md:text-base sm:text-sm text-xs" href={props.url}>{props.text}</a>
 )
 

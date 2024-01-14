@@ -20,6 +20,7 @@ import './locale/config';
 import { useUser } from "./hooks/auth";
 import { createContext } from "react";
 import { LoadingPage } from "./pages/LoadingPage";
+import { UserPage } from "./pages/UserPage";
 
 let ROUTES = [
     { path: "", element: <HomePage/> },
@@ -31,12 +32,12 @@ let ROUTES = [
     { path: "*", element: <NotFoundPage/> } 
 ]
 
-export const AuthContext = createContext({username: "", logged: false, loading: true});
+export const AuthContext = createContext({username: "", email: "", logged: false, loading: true});
 
 export const App = () => {
 
     const user = useUser();
-    console.log(user.loading);
+
     return (
     <AuthContext.Provider value={{...user}}>
         <BrowserRouter>
@@ -59,6 +60,7 @@ export const App = () => {
                         <Route path="signin" element={<SignInPage/>} />
                         <Route path="signup" element={<SignUpPage/>} />
                         <Route path="signout" element={<SignOutPage/>} />
+                        <Route path="user/:uid" element={<UserPage/>} />
                         <Route path="about" element={<AboutPage/>} />
                         <Route path="algorithm/:id" element={<AlgorithmPage/>} />
                         <Route path="*" element={<NotFoundPage/>} />

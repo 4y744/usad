@@ -1,12 +1,14 @@
 //Import react hooks
 import {useState, useEffect} from 'react';
 
+//Import React Router hooks
+import { Link } from 'react-router-dom';
+
 //Import Firebase hooks
 import { getDocs, collection, query } from "firebase/firestore";
 import { db } from "../hooks/firebase";
 
 //Import components
-import { Loading } from '../components/Loading';
 import { LinkCard } from '../components/LinkCard';
 
 export const HomePage = () => {
@@ -44,8 +46,8 @@ const Heading = () => (
                 Easily create and share your own specialized calculators. 
             </p>
             <div className='flex'>
-                <a href="#" className="mx-2 px-4 py-3 my-3 rounded-md bg-green-700 hover:bg-green-600 transition-background duration-100 active:outline outline-offset-2 outline-2 outline-green-600 shadow-md">Get started</a>
-                <a href="#" className="mx-2 px-4 py-3 my-3 rounded-md bg-green-700 hover:bg-green-600 transition-background duration-100 active:outline outline-offset-2 outline-2 outline-green-600 shadow-md">Learn more</a>
+                <Link to="#" className="mx-2 px-4 py-3 my-3 rounded-md bg-green-700 hover:bg-green-600 transition-background duration-100 active:outline outline-offset-2 outline-2 outline-green-600 shadow-md">Get started</Link>
+                <Link to="/about" className="mx-2 px-4 py-3 my-3 rounded-md bg-green-700 hover:bg-green-600 transition-background duration-100 active:outline outline-offset-2 outline-2 outline-green-600 shadow-md">Learn more</Link>
             </div>
         </div>
     </header>
