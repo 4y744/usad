@@ -1,13 +1,15 @@
 //Import React Router hooks
-import { useParams } from "react-router-dom"
-import { useGetAlgorithms, useGetUser } from "../hooks/auth";
+import { useNavigate, useParams } from "react-router-dom"
+import { useGetAlgorithms, useGetUser } from "../hooks/firestore";
 
 export const UserPage = () => {
 
     const {username} = useParams();
+    const navigate = useNavigate();
 
-    const {user, loading} = useGetUser(username!);
-    const {algorithms} = useGetAlgorithms({username: username})
+    const {user, loading} = useGetUser({username: username}, () => navigate("/404"));
+    console.log(user);
+    //const {algorithms} = useGetAlgorithms({username: username})
 
     return loading ? <PlaceHolder/> : (
         <div className="flex justify-center items-center w-full">
