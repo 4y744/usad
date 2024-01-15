@@ -45,8 +45,7 @@ export const App = () => {
             <Sidebar/>
 
             {/* Content wrapper */}
-            <div className={`md:mt-14 mt-16 
-            ${user.logged ? "md:ml-14 md:mb-0 mb-14" : ""}`}>
+            <div className={`${user.logged ? "md:ml-14 md:mb-0 mb-14" : ""}`}>
             {/* Sets margin for side bar on mobile */}
 
                 {/* Main content */}
@@ -60,7 +59,7 @@ export const App = () => {
                         <Route path="signin" element={<SignInPage/>} />
                         <Route path="signup" element={<SignUpPage/>} />
                         <Route path="signout" element={<SignOutPage/>} />
-                        <Route path="user/:uid" element={<UserPage/>} />
+                        <Route path="user/:username" element={<UserPage/>} />
                         <Route path="about" element={<AboutPage/>} />
                         <Route path="algorithm/:id" element={<AlgorithmPage/>} />
                         <Route path="*" element={<NotFoundPage/>} />

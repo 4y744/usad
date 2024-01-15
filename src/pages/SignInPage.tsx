@@ -47,6 +47,10 @@ export const SignInPage = () => {
                 onClick={handleSignIn} disabled={loading}>
                     {loading ? <LoadingSpinner /> : <>Sign in</>}
                 </button>
+
+                <Link to="/signup" className="text-sm text-center w-full font-semibold text-green-700 hover:underline">
+                    Don't have an account? Sign up!
+                </Link>
             </div>
         </div>
     )

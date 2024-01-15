@@ -1,4 +1,3 @@
-import { collection, getDoc } from 'firebase/firestore';
 //Import React hooks
 import { useEffect, useState } from "react";
 
@@ -7,7 +6,7 @@ import { auth } from "./firebase"
 import { User, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 //Import Firebase hooks
-import { doc, setDoc, writeBatch } from "firebase/firestore";
+import { doc, collection, getDoc, getDocs, writeBatch, where, query } from "firebase/firestore";
 import { db } from "./firebase.ts";
 import { useUsernameValidator } from './validate.ts';
 import { useNavigate } from 'react-router-dom';
@@ -26,13 +25,17 @@ export const useSignUp = (redirectUrl: string): [(credentials: {username: string
     const SignUp = async (credentials: {username: string, email: string, password: string, confirmPassword: string}) => {
         //Using a separate variable to store the errors avoids synchronisation problems as setState() is async.
         //It also only refreshes the component once when multiple errors are present.
+        setLoading(true);
+
         let tempError = "";
         Object.entries(credentials).forEach(async([key, val]) => val.length == 0 && (tempError = "input/empty-fields"));
         credentials.username && await (await getDoc(doc(db, "usernames", credentials.username))).exists() && (tempError = "auth/username-claimed");
         
-        if(tempError.length > 0) return setError(tempError);
+        if(tempError.length > 0){
+            setLoading(false);
+            return setError(tempError)
+        };
 
-        setLoading(true);
 
         await createUserWithEmailAndPassword(auth, credentials.email, credentials.password).catch().then(() => {
             const batch = writeBatch(db);
@@ -57,10 +60,15 @@ export const useSignIn = (redirectUrl: string): [(credentials: {email: string, p
     const SignIn = async (credentials : {email: string, password: string}) => {
         //Using a separate variable to store the errors avoids synchronisation problems as setState() is async.
         //It also only refreshes the component once when multiple errors are present.
+        setLoading(true);
+
         let tempError = "";
         Object.entries(credentials).forEach(async([key, val]) => val.length == 0 && (tempError = "input/empty-fields"));
 
-        if(tempError.length > 0) return setError(tempError);
+        if(tempError.length > 0){
+            setLoading(false);
+            return setError(tempError)
+        };
 
         setLoading(true);
         await signInWithEmailAndPassword(auth, credentials.email, credentials.password)
@@ -95,6 +103,92 @@ export const useSignOut = (redirectUrl: string): [() => void, boolean] => {
 
 //     return [getUsername, username]
 //}
+
+export const useGetUser = (param: string) : {user: {username: string, uid: string}, loading: boolean} => {
+    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState({username: "", uid: ""});
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetch = async () => {
+            try{
+                let usernameDoc = await getDoc(doc(db, "usernames", param));
+                if(!usernameDoc.exists()) throw new Error("User does not exit!");
+
+                let userDoc = await getDoc(doc(db, "users", usernameDoc.data().uid));
+                if(!userDoc.exists()) throw new Error("User does not exist");
+
+                const data = userDoc.data();
+                    
+                setUser({
+                    ...user, 
+                    uid: param,
+                    username: data.username
+                });
+            }
+            catch(err){
+                navigate("/404");
+            }
+            
+        }
+
+        setLoading(true);
+
+        fetch()
+        .then(() => setLoading(false))
+        
+        
+    }, [])
+
+    return {user, loading}
+}
+
+export const useGetAlgorithms = (params: {username?: string, uid?: string}) : {algorithms: {}} => {
+    const [algorithms, setAlgorithms] = useState([]);
+
+    const navigate = useNavigate();
+
+
+    useEffect(() => {
+        // const fetch = async () => {
+        //     try{
+        //         let userId = "";
+        //         if(params.username != null){
+                    
+        //             let usernameDoc = await getDoc(doc(db, "usernames", param));
+        //             if(!usernameDoc.exists()) throw new Error("User does not exit!");
+
+        //             let userDoc = await getDoc(doc(db, "users", usernameDoc.data().uid));
+        //             if(!userDoc.exists()) throw new Error("User does not exist");
+
+        //         }
+        //         else if(params.uid != null){
+        //             userId = params.uid;
+        //         }
+        //         else throw new Error("Invalid user information!")
+
+        //         let q = query(collection(db, "usernames"), where("uid", "==", userId));
+        //         let algorithmDocs = await getDocs(q);
+
+        //         if(algorithmDocs.empty) throw new Error("No algorithms found!");
+
+        //         const data = algorithmDocs.docs;
+                    
+        //         console.log(data);
+        //     }
+        //     catch(err){
+        //         console.log(err);
+        //     }
+            
+        // }
+
+        // fetch()
+
+    }, [])
+
+    return {algorithms}
+}
 
 export const useUser = () : {username: string, email: string, logged: boolean, loading: boolean} => {
     const [user, setUser] = useState({username: "", email: "", logged: false, loading: true});

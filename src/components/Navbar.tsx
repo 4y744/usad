@@ -27,7 +27,7 @@ export const Navbar = () => {
     const {username, logged} = useContext(AuthContext)
 
     return (
-        <nav className="bg-zinc-900 drop-shadow-md fixed top-0 z-10 w-full">
+        <nav className="bg-zinc-900 drop-shadow-md sticky top-0 z-10 w-full">
             {/* Big screen navbar */}
             <div className="md:flex hidden p-2">
                 <div className="flex justify-start items-center xl:flex-1 flex-2">
