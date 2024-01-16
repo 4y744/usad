@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 
 export const LinkCard = (props: {algorithmId: string, title: string, author: string, language: string, date: string, votes: number}) => (
-    <div className="bg-zinc-900 text-white h-20 w-full flex 
-    flex-col justify-center items-start px-4 drop-shadow-md
+    <div className="bg-zinc-900 text-white h-20 w-full px-4 
+    flex flex-col justify-center items-start drop-shadow-md
     border-l-green-600 border-l-4">
         <div className="flex items-center w-full py-0.5">
-            <Link to={`algorithm/${props.algorithmId}`} className="md:text-base text-sm font-bold hover:underline truncate">{props.title}</Link>
+            <Link to={`/algorithm/${props.algorithmId}`} className="md:text-base text-sm font-bold hover:underline truncate">{props.title}</Link>
             <span className="text-xs px-2 py-1 ml-2 rounded-md bg-zinc-800 select-none">{props.language}</span>
         </div>
 
@@ -24,7 +24,7 @@ export const LinkCard = (props: {algorithmId: string, title: string, author: str
 
 
 const LinkCardAuthor = (props : {username : string}) => (
-    <Link className="text-gray-300 text-xs ml-2 hover:text-gray-200" to={`user/${props.username}`}>
+    <Link className="text-gray-300 text-xs ml-2 hover:text-gray-200" to={`/user/${props.username}`}>
         <span>by</span>
         <span className="mx-0.5 underline">{props.username}</span>
     </Link>

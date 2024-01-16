@@ -1,6 +1,6 @@
 //Import react hooks
 import {useState, useEffect} from 'react';
-
+import firebase from 'firebase/compat/app';
 //Import React Router hooks
 import { Link } from 'react-router-dom';
 
@@ -12,6 +12,7 @@ import { db } from "../hooks/firebase";
 import { LinkCard } from '../components/LinkCard';
 
 export const HomePage = () => {
+
     return <>
         <Heading/>
         <Featured/>
@@ -79,7 +80,7 @@ const Featured = () => {
 
         setLoading(false);     
     }
-    
+
     return <div className='px-4'>
         <h1 className='font-bold text-white xl:text-2xl lg:text-xl text-lg py-3 text-start'>Featured</h1>
         <div className='grid 2xl:grid-cols-4 xl:grid-cols-3 md:grid-cols-2 grid-cols-1 place-items-center gap-5'>

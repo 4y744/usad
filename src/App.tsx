@@ -21,6 +21,7 @@ import { useUser } from "./hooks/auth";
 import { createContext } from "react";
 import { LoadingPage } from "./pages/LoadingPage";
 import { UserPage } from "./pages/UserPage";
+import { ScrollToTop } from "./components/ScrollToTop";
 
 let ROUTES = [
     { path: "", element: <HomePage/> },
@@ -43,13 +44,13 @@ export const App = () => {
         <BrowserRouter>
             <Navbar/>
             <Sidebar/>
-
+            <ScrollToTop/>
             {/* Content wrapper */}
             <div className={`${user.logged ? "md:ml-14 md:mb-0 mb-14" : ""}`}>
             {/* Sets margin for side bar on mobile */}
 
                 {/* Main content */}
-                <div className="min-h-[75dvh]">
+                <div className="min-h-[80dvh] md:pt-14 pt-16">
                     
                 {/* Loads either the loading page or the routes */}
                 {user.loading ? <LoadingPage/> : 

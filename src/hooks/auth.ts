@@ -10,6 +10,7 @@ import { doc, collection, getDoc, getDocs, writeBatch, where, query } from "fire
 import { db } from "./firebase.ts";
 import { useUsernameValidator } from './validate.ts';
 import { useNavigate } from 'react-router-dom';
+import firebase from "firebase/compat/app";
 
 export const useSignUp = (redirectUrl: string): [(credentials: {username: string, email: string, password: string, confirmPassword: string}) => void, boolean, string] => {
     const [loading, setLoading] = useState(false);
@@ -35,11 +36,14 @@ export const useSignUp = (redirectUrl: string): [(credentials: {username: string
             setLoading(false);
             return setError(tempError)
         };
-
+        
 
         await createUserWithEmailAndPassword(auth, credentials.email, credentials.password).catch().then(() => {
             const batch = writeBatch(db);
-            batch.set(doc(db, "users", auth.currentUser!.uid), { username: credentials.username });
+            batch.set(doc(db, "users", auth.currentUser!.uid), { 
+                username: credentials.username,
+                created: Date.now()
+            });
             batch.set(doc(db, "usernames", credentials.username), { uid: auth.currentUser!.uid })
             batch.commit()
                 .then(() => navigate(redirectUrl))
