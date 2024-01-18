@@ -65,6 +65,10 @@ export const Draggable = ({children} : any) => {
             document.removeEventListener("mousemove", handleMouseMove)
             draggable.current!.removeEventListener("mousedown", handleMouseDown);
             draggable.current!.removeEventListener("mouseup", handleMouseUp)
+
+            draggable.current!.removeEventListener("touchmove", handleTouchMove);
+            draggable.current!.removeEventListener("touchstart", handleTouchStart);
+            draggable.current!.removeEventListener("touchend", handleTouchEnd);
         }
     }, [])
 
