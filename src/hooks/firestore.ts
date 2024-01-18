@@ -96,3 +96,42 @@ export const useGetAlgorithms = (params: {username?: string, uid?: string}) : Do
 
     return algorithms;
 }
+
+interface alg_interface{
+    name?: string;
+    description?: string;
+    input_type?: string;
+    inputs?: Array<string>;
+    function?: string;
+    loading: boolean;
+}
+
+
+export const useGetlAlgorithm = (id: string) => {
+    const [algorithm, setAlgorithm] = useState<alg_interface>({loading: true});
+
+    useEffect(() => {
+        const fetch = async () => {
+
+            try{
+                const docRef = doc(db, "algorithms", id);
+                const algDocs = await getDoc(docRef);
+               
+                if(!algDocs.exists()) throw new Error("Not found!")
+
+                setAlgorithm({
+                    ...algDocs.data(),
+                    loading: false
+                })
+            }
+            catch(err){
+                
+            }
+            
+        }
+
+        fetch()
+    }, [])
+
+    return algorithm;
+}

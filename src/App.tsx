@@ -22,6 +22,7 @@ import { createContext } from "react";
 import { LoadingPage } from "./pages/LoadingPage";
 import { UserPage } from "./pages/UserPage";
 import { ScrollToTop } from "./components/ScrollToTop";
+import { BlockEditor } from "./pages/BlockEditor";
 
 let ROUTES = [
     { path: "", element: <HomePage/> },
@@ -60,6 +61,7 @@ export const App = () => {
                         <Route path="signin" element={<SignInPage/>} />
                         <Route path="signup" element={<SignUpPage/>} />
                         <Route path="signout" element={<SignOutPage/>} />
+                        <Route path="editor" element={<BlockEditor/>}/>
                         <Route path="user/:username" element={<UserPage/>} />
                         <Route path="about" element={<AboutPage/>} />
                         <Route path="algorithm/:id" element={<AlgorithmPage/>} />
