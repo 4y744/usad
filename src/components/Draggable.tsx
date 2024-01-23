@@ -1,17 +1,20 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 
-export const Draggable = ({children} : any) => {
+export const Draggable = ({children, onDrag} : {children: any, onDrag?: (pos: {x: number, y: number}) => void}) => {
     const draggable = useRef<HTMLDivElement>(null);
     const dragging = useRef(false);
 
     //Relative cursor offset in draggable
     const clickPos = useRef({x: 0, y: 0});
 
+
+    //Mouse event handlers
     const handleMouseMove = (event: MouseEvent) => {
         if(!dragging.current) return;
 
         draggable.current!.style.left = `${event.pageX - clickPos.current.x}px`;
         draggable.current!.style.top = `${event.pageY - clickPos.current.y}px`;
+        onDrag && onDrag({x: event.pageX - clickPos.current.x, y: event.pageY - clickPos.current.y});
     }
 
     const handleMouseDown = (event: MouseEvent) => {
@@ -19,6 +22,7 @@ export const Draggable = ({children} : any) => {
         clickPos.current.y = event.pageY - draggable.current!.offsetTop;
 
         dragging.current = true;
+
         event.stopPropagation();
     }
 
@@ -28,13 +32,13 @@ export const Draggable = ({children} : any) => {
         event.stopPropagation();
     }
 
-
+    //Touch event handlers
     const handleTouchMove = (event: TouchEvent) => {
         if(!dragging.current) return;
 
         draggable.current!.style.left = `${event.touches[0].pageX - clickPos.current.x}px`;
         draggable.current!.style.top = `${event.touches[0].pageY - clickPos.current.y}px`;
-
+        
         event.preventDefault();
     }
 
@@ -43,6 +47,7 @@ export const Draggable = ({children} : any) => {
         clickPos.current.y = event.touches[0].pageY - draggable.current!.offsetTop;
 
         dragging.current = true;
+        
         event.stopPropagation();
     }
 
@@ -75,7 +80,7 @@ export const Draggable = ({children} : any) => {
     
 
     return (
-        <div className="absolute overscroll-none" style={{cursor: "grab", userSelect: "none"}} ref={draggable}>
+        <div className="absolute" style={{cursor: "grab", userSelect: "none"}} ref={draggable}>
             {children}
         </div>
        
