@@ -94,10 +94,6 @@ export const BlockEditor = () => {
         
     }, [])
 
-    useEffect(() => {
-        console.log(CompileToJavaScript(blocks))
-    }, [blocks])
-    
     
     return (
         <BlockEditorContext.Provider value={blocks}>

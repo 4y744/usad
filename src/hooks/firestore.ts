@@ -98,8 +98,9 @@ export const useGetAlgorithms = (params: {username?: string, uid?: string}) : Do
 }
 
 interface alg_interface{
-    name?: string;
+    title?: string;
     description?: string;
+    author?: string;
     input_type?: string;
     inputs?: Array<string>;
     function?: string;

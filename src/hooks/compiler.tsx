@@ -4,6 +4,7 @@ import { PrintBlock } from "../components/LogicBlocks/PrintBlock"
 import { ConditionalBlock } from "../components/LogicBlocks/ConditionalBlock"
 import { ComparisonBlock } from "../components/LogicBlocks/ComparisonBlock.tsx"
 import { RunBlock } from "../components/LogicBlocks/RunBlock.tsx"
+import { SnapPoint } from "../components/LogicBlocks/SnapPoint.tsx"
 
 type block_interface = {
     [key: string]: {
@@ -26,7 +27,9 @@ export const BuildBlock = (blockId: string, blocks: any): any => {
         
     const block = blocks[blockId];
     
-    if(block == null) return <></>
+    if(block == null) return (
+        <SnapPoint/>
+    )
 
     switch(block.type){
         case "start":

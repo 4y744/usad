@@ -55,7 +55,6 @@ export const App = () => {
                     
                 {/* Loads either the loading page or the routes */}
                 {user.loading ? <LoadingPage/> : 
-                    <>
                     <Routes>
                         <Route path="" element={<HomePage/>} />
                         <Route path="signin" element={<SignInPage/>} />
@@ -67,7 +66,6 @@ export const App = () => {
                         <Route path="algorithm/:id" element={<AlgorithmPage/>} />
                         <Route path="*" element={<NotFoundPage/>} />
                     </Routes>
-                    </>
                 }
                 </div>
 

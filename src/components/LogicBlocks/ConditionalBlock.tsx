@@ -6,6 +6,8 @@ export const ConditionalBlock = ({id, condition, run} : {id: string, condition: 
 
     const blocks = useContext(BlockEditorContext);
 
+    if(!condition) console.log("Empty")
+
     return (
         <div className="w-40 bg-red-500">
             <div className="h-20">
