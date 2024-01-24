@@ -1,110 +1,120 @@
-import { createContext, useEffect, useRef, useState } from "react"
+import { Dispatch, SetStateAction, createContext, useContext, useEffect, useRef, useState } from "react"
 
 import { Draggable } from "../components/Draggable"
-import { useCompiler } from "../hooks/compiler.tsx"
+import { useBlockBuilder, useCompiler } from "../hooks/editor.tsx"
 
-type block_interface = {
-    [key: string]: {
-        type: string,
-        metadata?: {
-            number?: string,
-            comparator?: string
-        }
-        ports: {
-            next?: string,
-            condition?: string,
-            run?: string,
-            first?: string,
-            second?: string
-        }
-    }
+
+type blockType = {
+    id: string,
+    parent: string,
+    type: string,
+    attached: boolean,
+    metadata?: {
+        values: string[]
+    },
+    ports: string[]
 }
-
-export const BlockEditorContext = createContext<block_interface>({});
+                                                            
+export const BlockEditorContext = createContext<[blockType[], Dispatch<SetStateAction<blockType[]>>]>([[], ()=>{}]);
 
 export const BlockEditor = () => {
 
-    const [blocks, setBlocks] = useState<block_interface>({});
-    const {CompileToBlocks, CompileToJavaScript} = useCompiler();
+    const [blocks, setBlocks] = useState<blockType[]>([]);
+    //const {CompileToBlocks, CompileToJavaScript} = useCompiler();
+    const {BlockBuilder} = useBlockBuilder(blocks);
 
     useEffect(() => {
-        
-        setBlocks({
-            "start": {
+
+        setBlocks([
+            {
+                id: "start",
+                parent: "",
                 type: "start",
-                ports: {
-                    next: "1"
-                }
+                attached: false,
+                ports: ["1"]
             },
-            "1": {
+            {
+                id: "1",
+                parent: "start",
                 type: "condition",
-                ports: {
-                    next: "2",
-                    condition: "3",
-                    run: "4"
-                }
+                attached: true,
+                ports: ["2", "3", "4"]
             },
-            "2": {
+            {
+                id: "2",
+                parent: "1",
                 type: "print",
-                ports: {
-                    next: "exit"
-                }
+                attached: true,
+                ports: ["exit"]
             },
-            "3": {
+            {
+                id: "3",
+                parent: "1",
                 type: "comparison",
+                attached: true,
                 metadata: {
-                    comparator: ">"
+                    values: [">"]
                 },
-                ports: {
-                    first: "6",
-                    second: "7"
-                }
+                ports: ["6", "7"]
             },
-            "4": {
+            {
+                id: "4",
+                parent: "1",
                 type: "run",
-                ports: {}
+                attached: true,
+                ports: []
             },
-            "5": {
+            {
+                id: "6",
+                parent: "3",
                 type: "number",
+                attached: true,
                 metadata: {
-                    number: "5"
+                    values: ["1"]
                 },
-                ports: {}
+                ports: []
             },
-            "6": {
+            {
+                id: "7",
+                parent: "3",
                 type: "number",
+                attached: true,
                 metadata: {
-                    number: "1"
+                    values: ["1"]
                 },
-                ports: {}
+                ports: []
             },
-            "7": {
-                type: "number",
-                metadata: {
-                    number: "2"
-                },
-                ports: {}
-            },
-            "exit": {
+            {
+                id: "exit",
+                parent: "2",
                 type: "exit",
-                ports: {
-                }
+                attached: true,
+                ports: []
+            },
+            {
+                id: "de",
+                parent: "",
+                type: "print",
+                attached: false,
+                ports: ["dee"]
+            },
+            {
+                id: "dee",
+                parent: "de",
+                type: "print",
+                attached: true,
+                ports: []
             }
-        });
+        ]);
         
     }, [])
 
     
     return (
-        <BlockEditorContext.Provider value={blocks}>
+        <BlockEditorContext.Provider value={[blocks, setBlocks]}>
             <div className="relative
             w-full h-[3000px] overflow-x-hidden">
-
-                <Draggable>
-                    <div className="flex">
-                        {CompileToBlocks(blocks)}
-                    </div>
-                </Draggable>
+                {BlockBuilder()}
             </div>
         </BlockEditorContext.Provider>
     )

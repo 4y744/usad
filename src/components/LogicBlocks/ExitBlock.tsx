@@ -1,4 +1,6 @@
-export const ExitBlock = ({id}: {id: number | string}) => {
+import { blockType } from "../../hooks/editor"
+
+export const ExitBlock = ({block}: {block: blockType}) => {
     
     return (
         <div className="w-40 h-40 bg-red-500">Exit</div>
