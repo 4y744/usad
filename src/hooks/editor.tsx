@@ -83,8 +83,6 @@ export const useBlockBuilder = (blocks: blockType[]) => {
 
     const BuildBlock = (parentId: string, port: number, isMaster?: boolean) => {
 
-
-        
         const parentBlock = blocks.find((parent) => parent.id == parentId);
         const block = blocks.find((block) => block.id == (isMaster ? parentId : parentBlock?.ports[port]));
 
