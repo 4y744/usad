@@ -4,17 +4,27 @@ import { blockType, useBlockBuilder } from "../../hooks/editor";
 
 export const StartBlock = ({block}: {block: blockType}) => {
 
-    const [blocks, setBlocks] = useContext(BlockEditorContext);
+    const {blocks, setBlocks} = useContext(BlockEditorContext);
     const {BuildBlock} = useBlockBuilder(blocks);
+    
 
     const detachBlock = (id: string, port: number) => {
-        setBlocks(blocks.map((block) => {
-            if(block.id == id)
-            {
-                block.ports.splice(port, 1);
-            }
-            return block;
+        setBlocks(blocks
+            .map((block) => {
+                if(block.id == blocks.find((block) => block.id == id)!.ports[port])
+                {
+                    block.attached = false;
+                }
+                return block;
+            })
+            .map((block) => {
+                if(block.id == id)
+                {
+                    block.ports.splice(port, 1);
+                }
+                return block;
         }))
+        
     }
 
     return (
@@ -23,7 +33,7 @@ export const StartBlock = ({block}: {block: blockType}) => {
                 <h1>Start</h1>
                 <button onClick={() => detachBlock("start", 0)}>DETACH</button>
             </div>
-            {BuildBlock(block.ports[0], {id: "", port: 0})}
+            {BuildBlock(block.id, 0)}
         </>
     )
 }

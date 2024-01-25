@@ -2,10 +2,11 @@ import { StartBlock } from "../components/LogicBlocks/StartBlock.tsx"
 import { ExitBlock } from "../components/LogicBlocks/ExitBlock.tsx"
 import { PrintBlock } from "../components/LogicBlocks/PrintBlock.tsx"
 import { ConditionalBlock } from "../components/LogicBlocks/ConditionalBlock.tsx"
-import { ComparisonBlock } from "../components/LogicBlocks/ComparisonBlock.tsx.tsx"
+import { ComparisonBlock } from "../components/LogicBlocks/ComparisonBlock.tsx"
 import { DoBlock } from "../components/LogicBlocks/DoBlock.tsx"
-import { SnapPoint } from "../components/LogicBlocks/SnapPoint.tsx"
+import { SnapBlock } from "../components/LogicBlocks/SnapBlock.tsx"
 import { Draggable } from "../components/Draggable.tsx"
+import { createContext } from "react"
 
 type block_interface = {
     [key: string]: {
@@ -67,7 +68,6 @@ const BuildScript = (blockId: string, blocks: any): string => {
 
 export type blockType = {
     id: string,
-    parent: string,
     type: string,
     attached: boolean,
     metadata?: {
@@ -76,16 +76,22 @@ export type blockType = {
     ports: string[]
 }
 
-export const useBlockBuilder = (blocks: blockType[]) => {
+export const MasterBlockContext = createContext<string>("");
 
-    const BuildBlock = (blockId: string, parent: {id: string, port: number}): any => {
-        
-        const block = blocks.find((block) => block.id == blockId);
-        
-        if(block == null) return (
-            <SnapPoint parent={parent}/>
-        )
+export const useBlockBuilder = (blocks: blockType[]) => {
     
+
+    const BuildBlock = (parentId: string, port: number, isMaster?: boolean) => {
+
+
+        
+        const parentBlock = blocks.find((parent) => parent.id == parentId);
+        const block = blocks.find((block) => block.id == (isMaster ? parentId : parentBlock?.ports[port]));
+
+        if(block == null) return (
+            <SnapBlock parent={{id: parentId, port}}/>
+        )
+
         switch(block.type){
             case "start": return <StartBlock block={block}/> 
             case "exit": return <ExitBlock block={block}/> 
@@ -93,18 +99,20 @@ export const useBlockBuilder = (blocks: blockType[]) => {
             case "condition": return <ConditionalBlock block={block}/>  
             case "comparison": return <ComparisonBlock block={block}/>
             case "do": return <DoBlock block={block}/>   
-            default: return <SnapPoint parent={parent}/>
+            default: return <SnapBlock parent={{id: parentId, port}}/>
         }
     }
 
     const BlockBuilder = () => {
         const clusters = blocks.filter((block) => block.attached == false);
         return clusters.map((block) => (
-            <Draggable key={block.id}>
-                <div className="flex">
-                    {BuildBlock(block.id, {id: "", port: 0})}
-                </div>
-            </Draggable>
+            <MasterBlockContext.Provider key={block.id} value={block.id}>
+                <Draggable masterId={block.id}>
+                    <div className="flex">
+                        {BuildBlock(block.id, 0, true)}
+                    </div>
+                </Draggable>
+            </MasterBlockContext.Provider>
         ))
     }
 

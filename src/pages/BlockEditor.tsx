@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, createContext, useContext, useEffect, useRef, useState } from "react"
+import { Dispatch, MutableRefObject, SetStateAction, createContext, useContext, useEffect, useRef, useState } from "react"
 
 import { Draggable } from "../components/Draggable"
 import { useBlockBuilder, useCompiler } from "../hooks/editor.tsx"
@@ -6,7 +6,6 @@ import { useBlockBuilder, useCompiler } from "../hooks/editor.tsx"
 
 type blockType = {
     id: string,
-    parent: string,
     type: string,
     attached: boolean,
     metadata?: {
@@ -15,11 +14,16 @@ type blockType = {
     ports: string[]
 }
                                                             
-export const BlockEditorContext = createContext<[blockType[], Dispatch<SetStateAction<blockType[]>>]>([[], ()=>{}]);
+export const BlockEditorContext = createContext<
+{blocks: blockType[], setBlocks: Dispatch<SetStateAction<blockType[]>>,
+selectedBlock: MutableRefObject<string>}>
+({blocks: [], setBlocks: () => {}, selectedBlock: {current: ""}});
 
 export const BlockEditor = () => {
 
     const [blocks, setBlocks] = useState<blockType[]>([]);
+    //const [selectedBlock, setSelectedBlock] = useState("");
+    const selectedBlock = useRef("")
     //const {CompileToBlocks, CompileToJavaScript} = useCompiler();
     const {BlockBuilder} = useBlockBuilder(blocks);
 
@@ -28,28 +32,24 @@ export const BlockEditor = () => {
         setBlocks([
             {
                 id: "start",
-                parent: "",
                 type: "start",
                 attached: false,
                 ports: ["1"]
             },
             {
                 id: "1",
-                parent: "start",
                 type: "condition",
                 attached: true,
                 ports: ["2", "3", "4"]
             },
             {
                 id: "2",
-                parent: "1",
                 type: "print",
                 attached: true,
                 ports: ["exit"]
             },
             {
                 id: "3",
-                parent: "1",
                 type: "comparison",
                 attached: true,
                 metadata: {
@@ -59,14 +59,12 @@ export const BlockEditor = () => {
             },
             {
                 id: "4",
-                parent: "1",
                 type: "run",
                 attached: true,
                 ports: []
             },
             {
                 id: "6",
-                parent: "3",
                 type: "number",
                 attached: true,
                 metadata: {
@@ -76,7 +74,6 @@ export const BlockEditor = () => {
             },
             {
                 id: "7",
-                parent: "3",
                 type: "number",
                 attached: true,
                 metadata: {
@@ -86,22 +83,19 @@ export const BlockEditor = () => {
             },
             {
                 id: "exit",
-                parent: "2",
                 type: "exit",
                 attached: true,
                 ports: []
             },
             {
-                id: "de",
-                parent: "",
-                type: "print",
+                id: "gg",
+                type: "condition",
                 attached: false,
-                ports: ["dee"]
+                ports: ["gg2"]
             },
             {
-                id: "dee",
-                parent: "de",
-                type: "print",
+                id: "gg2",
+                type: "exit",
                 attached: true,
                 ports: []
             }
@@ -109,9 +103,8 @@ export const BlockEditor = () => {
         
     }, [])
 
-    
     return (
-        <BlockEditorContext.Provider value={[blocks, setBlocks]}>
+        <BlockEditorContext.Provider value={{blocks, setBlocks, selectedBlock}}>
             <div className="relative
             w-full h-[3000px] overflow-x-hidden">
                 {BlockBuilder()}

@@ -1,11 +1,14 @@
-import { useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
+import { BlockEditorContext } from "../pages/BlockEditor";
 
-export const Draggable = ({children, onDrag} : {children: any, onDrag?: (pos: {x: number, y: number}) => void}) => {
+export const Draggable = ({children, masterId} : {children: any, masterId: string}) => {
     const draggable = useRef<HTMLDivElement>(null);
     const dragging = useRef(false);
 
     //Relative cursor offset in draggable
     const clickPos = useRef({x: 0, y: 0});
+
+    const {selectedBlock} = useContext(BlockEditorContext);
 
 
     //Mouse event handlers
@@ -14,7 +17,7 @@ export const Draggable = ({children, onDrag} : {children: any, onDrag?: (pos: {x
 
         draggable.current!.style.left = `${event.pageX - clickPos.current.x}px`;
         draggable.current!.style.top = `${event.pageY - clickPos.current.y}px`;
-        onDrag && onDrag({x: event.pageX - clickPos.current.x, y: event.pageY - clickPos.current.y});
+
     }
 
     const handleMouseDown = (event: MouseEvent) => {
@@ -22,14 +25,12 @@ export const Draggable = ({children, onDrag} : {children: any, onDrag?: (pos: {x
         clickPos.current.y = event.pageY - draggable.current!.offsetTop;
 
         dragging.current = true;
-
+        selectedBlock.current = masterId;
         event.stopPropagation();
     }
 
     const handleMouseUp = (event: MouseEvent) => {
         dragging.current = false;
-
-        event.stopPropagation();
     }
 
     //Touch event handlers
@@ -47,35 +48,31 @@ export const Draggable = ({children, onDrag} : {children: any, onDrag?: (pos: {x
         clickPos.current.y = event.touches[0].pageY - draggable.current!.offsetTop;
 
         dragging.current = true;
+        selectedBlock.current = masterId;
         
         event.stopPropagation();
     }
 
     const handleTouchEnd = (event: TouchEvent) => {
         dragging.current = false;
-
-        event.stopPropagation();
     }
 
     useEffect(() => {
         document.addEventListener("mousemove", handleMouseMove)
         draggable.current!.addEventListener("mousedown", handleMouseDown);
-        draggable.current!.addEventListener("mouseup", handleMouseUp);
+        document.addEventListener("mouseup", handleMouseUp);
 
         draggable.current!.addEventListener("touchmove", handleTouchMove);
         draggable.current!.addEventListener("touchstart", handleTouchStart);
-        draggable.current!.addEventListener("touchend", handleTouchEnd);
+        document.addEventListener("touchend", handleTouchEnd);
 
         return () => {
             document.removeEventListener("mousemove", handleMouseMove)
-            draggable.current!.removeEventListener("mousedown", handleMouseDown);
-            draggable.current!.removeEventListener("mouseup", handleMouseUp)
-
-            draggable.current!.removeEventListener("touchmove", handleTouchMove);
-            draggable.current!.removeEventListener("touchstart", handleTouchStart);
-            draggable.current!.removeEventListener("touchend", handleTouchEnd);
+            document.removeEventListener("mouseup", handleMouseUp)
+            document.removeEventListener("touchend", handleTouchEnd);
         }
     }, [])
+
 
     
 
