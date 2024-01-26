@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react"
 import { BlockEditorContext } from "../pages/BlockEditor";
 
-export const Draggable = ({children, masterId} : {children: any, masterId: string}) => {
+export const Draggable = ({children, masterId, startPos} : {children: any, masterId: string, startPos: {x: number, y: number}}) => {
     const draggable = useRef<HTMLDivElement>(null);
     const dragging = useRef(false);
 
@@ -26,11 +26,16 @@ export const Draggable = ({children, masterId} : {children: any, masterId: strin
 
         dragging.current = true;
         selectedBlock.current = masterId;
+
+        draggable.current!.style.zIndex = "10";
+        draggable.current!.style.cursor = "grabbing";
         event.stopPropagation();
     }
 
     const handleMouseUp = (event: MouseEvent) => {
         dragging.current = false;
+        draggable.current!.style.zIndex = "0";
+        draggable.current!.style.cursor = "grab";
     }
 
     //Touch event handlers
@@ -50,14 +55,19 @@ export const Draggable = ({children, masterId} : {children: any, masterId: strin
         dragging.current = true;
         selectedBlock.current = masterId;
         
+        draggable.current!.style.zIndex = "10";
         event.stopPropagation();
     }
 
     const handleTouchEnd = (event: TouchEvent) => {
+        draggable.current!.style.zIndex = "0";
         dragging.current = false;
     }
 
     useEffect(() => {
+        draggable.current!.style.top = `${startPos.y}px`;
+        draggable.current!.style.left = `${startPos.x}px`;
+
         document.addEventListener("mousemove", handleMouseMove)
         draggable.current!.addEventListener("mousedown", handleMouseDown);
         document.addEventListener("mouseup", handleMouseUp);
@@ -77,7 +87,7 @@ export const Draggable = ({children, masterId} : {children: any, masterId: strin
     
 
     return (
-        <div className="absolute" style={{cursor: "grab", userSelect: "none"}} ref={draggable}>
+        <div className="absolute" style={{cursor: "grab", userSelect: "none", zIndex: "0"}} ref={draggable}>
             {children}
         </div>
        

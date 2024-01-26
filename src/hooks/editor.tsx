@@ -7,6 +7,7 @@ import { DoBlock } from "../components/LogicBlocks/DoBlock.tsx"
 import { SnapBlock } from "../components/LogicBlocks/SnapBlock.tsx"
 import { Draggable } from "../components/Draggable.tsx"
 import { createContext } from "react"
+import { NumberBlock } from "../components/LogicBlocks/NumberBlock.tsx"
 
 type block_interface = {
     [key: string]: {
@@ -70,6 +71,10 @@ export type blockType = {
     id: string,
     type: string,
     attached: boolean,
+    position: {
+        x: number,
+        y: number
+    },
     metadata?: {
         values: string[]
     },
@@ -81,7 +86,7 @@ export const MasterBlockContext = createContext<string>("");
 export const useBlockBuilder = (blocks: blockType[]) => {
     
 
-    const BuildBlock = (parentId: string, port: number, isMaster?: boolean) => {
+    const BuildBlock = ({parentId, port, isMaster} : {parentId: string, port: number, isMaster?: boolean}) => {
 
         const parentBlock = blocks.find((parent) => parent.id == parentId);
         const block = blocks.find((block) => block.id == (isMaster ? parentId : parentBlock?.ports[port]));
@@ -97,6 +102,7 @@ export const useBlockBuilder = (blocks: blockType[]) => {
             case "condition": return <ConditionalBlock block={block}/>  
             case "comparison": return <ComparisonBlock block={block}/>
             case "do": return <DoBlock block={block}/>   
+            case "number": return <NumberBlock block={block}/> 
             default: return <SnapBlock parent={{id: parentId, port}}/>
         }
     }
@@ -105,9 +111,9 @@ export const useBlockBuilder = (blocks: blockType[]) => {
         const clusters = blocks.filter((block) => block.attached == false);
         return clusters.map((block) => (
             <MasterBlockContext.Provider key={block.id} value={block.id}>
-                <Draggable masterId={block.id}>
+                <Draggable masterId={block.id} startPos={{x: block.position.x, y: block.position.y}}>
                     <div className="flex">
-                        {BuildBlock(block.id, 0, true)}
+                        <BuildBlock parentId={block.id} port={0} isMaster={true}/>
                     </div>
                 </Draggable>
             </MasterBlockContext.Provider>

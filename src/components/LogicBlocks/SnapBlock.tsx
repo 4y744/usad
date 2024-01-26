@@ -1,6 +1,7 @@
-import { useContext, useEffect, useRef } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { BlockEditorContext } from "../../pages/BlockEditor"
 import { MasterBlockContext } from "../../hooks/editor";
+import { start } from "@popperjs/core";
 
 export const SnapBlock = ({parent}: {parent: {id: string, port: number}}) => {
 
@@ -12,7 +13,7 @@ export const SnapBlock = ({parent}: {parent: {id: string, port: number}}) => {
 
     //Checks if the cursor is in the rect bounds of the snapRef object
     const mouseOver = useRef(false);
-   
+    
     const handleAttach = (event: MouseEvent | TouchEvent) => {
 
         if(!mouseOver.current || selectedBlock.current == "start" || selectedBlock.current == masterId) return;
@@ -32,14 +33,18 @@ export const SnapBlock = ({parent}: {parent: {id: string, port: number}}) => {
 
     const handleMouseMove = (event: MouseEvent) => {
         const snapRect = snapRef.current!.getBoundingClientRect();
+
         mouseOver.current = event.pageY > snapRect.top 
         && event.pageY < snapRect.bottom 
         && event.pageX > snapRect.left 
         && event.pageX < snapRect.right;
+
+        mouseOver.current! ? snapRef.current!.classList.add("!rounded-none") : snapRef.current!.classList.remove("!rounded-none")
     }
 
     const handleTouchMove = (event: TouchEvent) => {
         const snapRect = snapRef.current!.getBoundingClientRect();
+
         mouseOver.current = event.touches[0].pageY > snapRect.top 
         && event.touches[0].pageY < snapRect.bottom 
         && event.touches[0].pageX > snapRect.left 
@@ -63,15 +68,13 @@ export const SnapBlock = ({parent}: {parent: {id: string, port: number}}) => {
             document.removeEventListener("touchmove", handleTouchMove)
         }
 
-        //Dependency array needs selectedBlock, because event listeners do not automatically refresh the state.
-        //Every time the selected block changes, useEffect is run and all event listeners are unmounted and replaced with new ones.
-        //useState is used, because useRef doesn't work for some reason.
-    }, [selectedBlock])
+    }, [])
     
     return (
-        <div ref={snapRef} className="bg-green-700 w-40 h-24 py-2 rounded-lg
-        flex justify-center items-center">
-            <h1 className="text-white text-sm text-center px-2 py-1">Drag a block here...</h1>
+        <div ref={snapRef} className="rounded-lg min-h-12
+        flex justify-center items-center transition-rounded duration-100
+        border-2 border-dashed border-cyan-700">
+            <h1 className="text-white text-xs px-3">Drag a block here...</h1>
         </div>
     )
 }

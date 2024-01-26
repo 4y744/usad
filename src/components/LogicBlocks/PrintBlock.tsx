@@ -5,7 +5,7 @@ import { DetachButton } from "../DetachButton";
 
 export const PrintBlock = ({block}: {block: blockType}) => {
 
-    const {blocks, setBlocks} = useContext(BlockEditorContext);
+    const {blocks} = useContext(BlockEditorContext);
     const {BuildBlock} = useBlockBuilder(blocks);
 
     return (
@@ -13,10 +13,10 @@ export const PrintBlock = ({block}: {block: blockType}) => {
             <div className="w-fit h-fit bg-zinc-900 relative p-4
             rounded-lg flex flex-col justify-center items-center">
                  <h1 className="text-white text-xl">Print</h1>
-                 {BuildBlock(block.id, 1)}
-                 <DetachButton id={block.id} port={0} position="right"/>
+                 <BuildBlock parentId={block.id} port={1}/>
+                 <DetachButton parent={block} port={0} position="right"/>
             </div>
-            {BuildBlock(block.id, 0)}
+            <BuildBlock parentId={block.id} port={0}/>
         </>
     )
 }

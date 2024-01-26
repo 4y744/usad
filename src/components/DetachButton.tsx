@@ -1,27 +1,31 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { BlockEditorContext } from "../pages/BlockEditor";
+import { blockType } from "../hooks/editor";
 
-export const DetachButton = ({id, port, position}: {id: string, port: number, position: string}) => {
+export const DetachButton = ({parent, port, position}: {parent: blockType, port: number, position: string}) => {
 
-    const {blocks, setBlocks} = useContext(BlockEditorContext);
+    const {blocks, setBlocks, blockEditorRef} = useContext(BlockEditorContext);
     const [attached, setAttached] = useState(false);
+    const buttonRef = useRef<HTMLButtonElement>(null)
 
     useEffect(() => {
-        const parent = blocks.find((block) => block.id == id);
-        setAttached(blocks.find((block) => block.id == parent?.ports[port]) ? true : false);
+        setAttached(blocks.find((block) => block.id == parent.ports[port]) ? true : false);
     }, [blocks])
-    
+
     const detachBlock = () => {
+        if(!attached) return;
         setBlocks(blocks
             .map((block) => {
-                if(block.id == blocks.find((block) => block.id == id)!.ports[port])
+                if(block.id == parent.ports[port])
                 {
                     block.attached = false;
+                    block.position.x = buttonRef.current!.getBoundingClientRect().left + blockEditorRef.current!.scrollLeft;
+                    block.position.y = buttonRef.current!.getBoundingClientRect().top + blockEditorRef.current!.scrollTop;
                 }
                 return block;
             })
             .map((block) => {
-                if(block.id == id)
+                if(block.id == parent.id)
                 {
                     block.ports[port] = "";
                 }
@@ -31,13 +35,20 @@ export const DetachButton = ({id, port, position}: {id: string, port: number, po
     }
     
     return (
-        <button className={`aspect-square rounded-lg
-        active:outline outline-2 outline-offset-2
+        <button ref={buttonRef} className={`rounded-full h-6 w-6
+        active:outline outline-2 outline-offset-1
+        flex items-center justify-center z-10 text-white
         ${attached 
-        ? "bg-green-600 hover:bg-green-500 outline-green-500" 
-        : "bg-red-700 hover:bg-red-600 outline-red-600"}
-        ${position == "right" ? "absolute h-12 w-3 right-0 top-1/2 -translate-y-1/2" : null}
-        ${position == "flex" ? "h-3 w-12 my-2" : null}`}
-        onClick={detachBlock}></button>
+        ? "bg-red-700 hover:bg-red-600 outline-red-600"
+        : "bg-green-600 hover:bg-green-500 outline-green-600"}
+        ${position == "right" ? "absolute right-0 top-[22px] translate-x-1/2 -translate-y-1/2" : null}
+        ${position == "flex" ? "my-2" : null}
+        ${position == "top" ? "absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2" : null}`}
+        onClick={detachBlock}>
+            {attached 
+            ? <i className="fa-solid fa-xmark"></i> 
+            : <i className={`fa-solid fa-arrow-right
+            ${position == "flex" || position == "top" ? "rotate-90" : "rotate-0"}`}></i>}
+        </button>
     )
 }

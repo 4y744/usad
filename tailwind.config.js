@@ -14,7 +14,9 @@ export default {
         'height': 'height',
         'width': 'width',
         'background': 'background',
-        'padding': 'padding'
+        'padding': 'padding',
+        'border': 'border',
+        'rounded': 'border-radius'
       },
       backgroundImage: {
         'home-headline': "url('/src/assets/svgs/home-headline.svg')",
