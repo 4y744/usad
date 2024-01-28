@@ -1,13 +1,9 @@
-import { useContext } from "react"
-import { BlockEditorContext } from "../../pages/BlockEditor"
-import { blockType, useBlockBuilder } from "../../hooks/editor";
-import { DetachButton } from "../DetachButton";
+import { BuildBlock } from "../../../hooks/editor";
+import { blockType } from "../../../types";
+import { DetachButton } from "../../DetachButton";
 
 export const StartBlock = ({block}: {block: blockType}) => {
 
-    const {blocks} = useContext(BlockEditorContext);
-    const {BuildBlock} = useBlockBuilder(blocks);
-    
     return (
         <>
             <div className="w-32 h-12 bg-green-700 relative
@@ -19,4 +15,4 @@ export const StartBlock = ({block}: {block: blockType}) => {
             <BuildBlock parentId={block.id} port={0}/>
         </>
     )
-}
+};

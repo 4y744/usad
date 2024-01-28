@@ -5,11 +5,10 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 //Import auth hooks
-import { useSignUp } from "../hooks/auth";
-import { LoadingSpinner } from "../components/LoadingSpinner";
+import { useSignUp } from "../../hooks/auth";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 
 export const SignUpPage = () => {
-
 
     const [credentials, setCredentials] = useState({username: "", email: "", password: "", confirmPassword: ""});
     const [buttonPressed, setButtonPressed] = useState(false);

@@ -5,10 +5,10 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
 //Import auth hooks
-import { useSignIn } from "../hooks/auth";
+import { useSignIn } from "../../hooks/auth";
 
 //Import components
-import { LoadingSpinner } from "../components/LoadingSpinner";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 
 export const SignInPage = () => {
     

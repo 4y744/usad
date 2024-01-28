@@ -6,7 +6,7 @@ import vite from "../assets/images/logos/vite.png"
 import tailwind from "../assets/images/logos/tailwind.png"
 
 export const Footer = () => (
-    <footer className="bg-zinc-900 w-full flex flex-col items-center justify-center text-zinc-300 py-5">
+    <footer className="bg-zinc-900 w-full flex flex-col items-center justify-center text-white py-5">
         <div className="sm:w-fit w-full">
             <div className="flex flex-wrap justify-center items-center">
 

@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom"
-import { auth } from "../hooks/firebase"
-import { useUser } from "../hooks/auth"
 import { useContext } from "react"
-import { AuthContext } from "../App"
+import { AuthContext } from "../contexts";
 
 export const Sidebar = () => {
 
@@ -15,11 +13,32 @@ export const Sidebar = () => {
         flex md:flex-col md:items-start md:justify-end items-center justify-center
         bg-zinc-900 text-zinc-200 text-xl
         md:border-none border-t-[4px] border-green-600">
-            <SideLink url="" faClass="fa-solid fa-chart-line" text="Dashboard"/>
-            <SideLink url="" faClass="fa-regular fa-bookmark" text="Bookmarks"/>
-            <SideLink url={`/user/${username}`} faClass="fa-regular fa-user" text="Profile"/>
-            <SideLink url="/signout" faClass="fa-solid fa-arrow-right-from-bracket" text="Sign out"/>
-            <SideLink url="" faClass="fa-solid fa-gear" text="Settings"/>
+
+            <SideLink 
+            url="/dashboard" 
+            faClass="fa-solid fa-chart-line" 
+            text="Dashboard"/>
+
+            <SideLink 
+            url="/dashboard/bookmarks" 
+            faClass="fa-regular fa-bookmark" 
+            text="Bookmarks"/>
+
+            <SideLink 
+            url={`/user/${username}`} 
+            faClass="fa-regular fa-user" 
+            text="Profile"/>
+
+            <SideLink 
+            url="/signout" 
+            faClass="fa-solid fa-arrow-right-from-bracket" 
+            text="Sign out"/>
+
+            <SideLink 
+            url="/settings" 
+            faClass="fa-solid fa-gear" 
+            text="Settings"/>
+
         </section>
     )
 }

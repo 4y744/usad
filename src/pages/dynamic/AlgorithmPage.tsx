@@ -1,13 +1,9 @@
 
-//Import components
-import { Input } from '../components/Input.tsx';
-import { Loading } from '../components/Loading.tsx';
-import { NotFoundPage } from './NotFoundPage.tsx';
 
 //Import react hooks
 import { useParams } from 'react-router-dom';
 
-import { useGetUser, useGetlAlgorithm } from '../hooks/firestore.ts';
+import { useGetUser, useGetlAlgorithm } from '../../hooks/firestore.ts';
 
 export const AlgorithmPage = () => {
 

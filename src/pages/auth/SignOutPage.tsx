@@ -1,7 +1,7 @@
-import { useSignOut } from "../hooks/auth"
-import { LoadingSpinner } from "../components/LoadingSpinner";
+import { useSignOut } from "../../hooks/auth"
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { useContext } from "react";
-import { AuthContext } from "../App";
+import { AuthContext } from "../../contexts";
 
 export const SignOutPage = () => {
     const [SignOut, loading] = useSignOut("/");

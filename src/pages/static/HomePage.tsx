@@ -1,19 +1,19 @@
 //Import react hooks
 import {useState, useEffect} from 'react';
-import firebase from 'firebase/compat/app';
 //Import React Router hooks
 import { Link } from 'react-router-dom';
 
 //Import Firebase hooks
 import { getDocs, collection, query } from "firebase/firestore";
-import { db } from "../hooks/firebase";
+import { db } from "../../hooks/firebase";
 
 //Import components
-import { LinkCard } from '../components/LinkCard';
+import { LinkCard } from '../../components/LinkCard';
 
 export const HomePage = () => {
 
     return <>
+
         <Heading/>
         <Featured/>
         <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos deserunt quisquam, ut nam quaerat quae soluta est vitae distinctio. Neque minus facere incidunt enim doloremque praesentium illum fugit odio. Soluta!</h1>
@@ -47,7 +47,7 @@ const Heading = () => (
                 Easily create and share your own specialized calculators. 
             </p>
             <div className='flex'>
-                <Link to="#" className="mx-2 px-4 py-3 my-3 rounded-md bg-green-700 hover:bg-green-600 transition-background duration-100 active:outline outline-offset-2 outline-2 outline-green-600 shadow-md">Get started</Link>
+                <Link to="/dashboard" className="mx-2 px-4 py-3 my-3 rounded-md bg-green-700 hover:bg-green-600 transition-background duration-100 active:outline outline-offset-2 outline-2 outline-green-600 shadow-md">Get started</Link>
                 <Link to="/about" className="mx-2 px-4 py-3 my-3 rounded-md bg-green-700 hover:bg-green-600 transition-background duration-100 active:outline outline-offset-2 outline-2 outline-green-600 shadow-md">Learn more</Link>
             </div>
         </div>

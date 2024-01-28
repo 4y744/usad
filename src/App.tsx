@@ -7,34 +7,35 @@ import { Sidebar } from "./components/Sidebar";
 import { Footer } from "./components/Footer";
 
 //Import page components
-import { HomePage } from "./pages/HomePage";
-import { SignInPage } from "./pages/SignInPage";
-import { SignOutPage } from "./pages/SignOutPage";
-import { SignUpPage } from "./pages/SignUpPage";
-import { AboutPage } from "./pages/AboutPage";
-import { AlgorithmPage } from "./pages/AlgorithmPage";
-import { NotFoundPage } from "./pages/NotFoundPage";
+import { HomePage } from "./pages/static/HomePage";
+import { SignInPage } from "./pages/auth/SignInPage";
+import { SignOutPage } from "./pages/auth/SignOutPage";
+import { SignUpPage } from "./pages/auth/SignUpPage";
+import { AboutPage } from "./pages/static/AboutPage";
+import { AlgorithmPage } from "./pages/dynamic/AlgorithmPage";
+import { NotFoundPage } from "./pages/static/NotFoundPage";
+import { LoadingPage } from "./pages/static/LoadingPage";
+import { UserPage } from "./pages/dynamic/UserPage";
+import { BlockEditor } from "./pages/protected/BlockEditor";
+import { DashboardPage } from "./pages/protected/DashboardPage";
 
 //Import i18n hooks
 import './locale/config';
+
+//Auth hooks
 import { useUser } from "./hooks/auth";
-import { createContext } from "react";
-import { LoadingPage } from "./pages/LoadingPage";
-import { UserPage } from "./pages/UserPage";
+
+//Import utils
 import { ScrollToTop } from "./components/ScrollToTop";
-import { BlockEditor } from "./pages/BlockEditor";
+import { ProtectedRoute } from "./components/router/ProtectedRoute";
 
-let ROUTES = [
-    { path: "", element: <HomePage/> },
-    { path: "signin", element: <SignInPage/> },
-    { path: "signup", element: <SignUpPage/> },
-    { path: "signout", element: <SignOutPage/> },
-    { path: "about", element: <AboutPage/>},
-    { path: "algorithm/:id", element: <AlgorithmPage/>},
-    { path: "*", element: <NotFoundPage/> } 
-]
+//Import contexts
+import { AuthContext } from "./contexts";
+import { CreatePage } from "./pages/protected/CreatePage";
+import { SettingsPage } from "./pages/dynamic/SettingsPage";
 
-export const AuthContext = createContext({username: "", email: "", logged: false, loading: true});
+
+
 
 export const App = () => {
 
@@ -51,19 +52,32 @@ export const App = () => {
             {/* Sets margin for side bar on mobile */}
 
                 {/* Main content */}
-                <div className="min-h-[80dvh] md:pt-14 pt-16">
+                <div className="min-h-[80vh] md:pt-14 pt-16">
                     
                 {/* Loads either the loading page or the routes */}
                 {user.loading ? <LoadingPage/> : 
                     <Routes>
+                        {/* Generic routes */}
                         <Route path="" element={<HomePage/>} />
                         <Route path="signin" element={<SignInPage/>} />
                         <Route path="signup" element={<SignUpPage/>} />
                         <Route path="signout" element={<SignOutPage/>} />
-                        <Route path="editor" element={<BlockEditor/>}/>
                         <Route path="user/:username" element={<UserPage/>} />
                         <Route path="about" element={<AboutPage/>} />
                         <Route path="algorithm/:id" element={<AlgorithmPage/>} />
+
+                        {/* Protected routes */}
+                        <Route path="/" element={<ProtectedRoute/>}>
+                            <Route path="settings" element={<SettingsPage/>}>
+                                <Route path="s1" element={<h1>s1</h1>}/>
+                                <Route path="s2" element={<h1>s2</h1>}/>
+                            </Route>
+                            <Route path="dashboard" element={<DashboardPage/>} />
+                            <Route path="create" element={<CreatePage/>}/>
+                            <Route path="editor" element={<BlockEditor/>}/>
+                        </Route>
+                        
+                        {/* 404 page */}
                         <Route path="*" element={<NotFoundPage/>} />
                     </Routes>
                 }

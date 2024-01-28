@@ -1,12 +1,9 @@
-import { useContext } from "react";
-import { blockType, useBlockBuilder } from "../../hooks/editor"
-import { BlockEditorContext } from "../../pages/BlockEditor";
-import { DetachButton } from "../DetachButton";
+import { BuildBlock } from "../../../hooks/editor"
+import { blockType } from "../../../types";
+import { DetachButton } from "../../DetachButton";
 
 export const PrintBlock = ({block}: {block: blockType}) => {
 
-    const {blocks} = useContext(BlockEditorContext);
-    const {BuildBlock} = useBlockBuilder(blocks);
 
     return (
         <>

@@ -5,7 +5,7 @@ import logo from "../assets/images/logo.png";
 import { useState, useRef, useContext } from "react";
 
 import { Link } from "react-router-dom";
-import { AuthContext } from "../App";
+import { AuthContext } from "../contexts";
 
 //Import localization
 // import i18n from "../locale/config";

@@ -1,9 +1,9 @@
 //Import React Router hooks
 import { useParams } from "react-router-dom"
-import { useGetAlgorithms, useGetUser } from "../hooks/firestore";
-import { NotFoundPage } from "./NotFoundPage";
-import { LinkCard } from "../components/LinkCard";
-import { LoadingSpinner } from "../components/LoadingSpinner";
+import { useGetAlgorithms, useGetUser } from "../../hooks/firestore";
+import { NotFoundPage } from "../static/NotFoundPage";
+import { LinkCard } from "../../components/LinkCard";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 
 export const UserPage = () => {
 

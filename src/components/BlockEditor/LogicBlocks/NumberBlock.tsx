@@ -1,12 +1,10 @@
 import { ChangeEvent, useContext, useEffect, useRef } from "react";
-import { blockType, useBlockBuilder } from "../../hooks/editor"
-import { DetachButton } from "../DetachButton"
-import { BlockEditorContext } from "../../pages/BlockEditor";
+import { blockType } from "../../../types";
+import { BlockEditorContext } from "../../../contexts";
 
 export const NumberBlock = ({block}: {block: blockType}) => {
 
     const {blocks, setBlocks} = useContext(BlockEditorContext);
-    const {BuildBlock} = useBlockBuilder(blocks);
     const inputRef = useRef<HTMLInputElement>(null)
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -26,9 +24,12 @@ export const NumberBlock = ({block}: {block: blockType}) => {
         <>
             <div className="w-fit h-12 bg-green-700 rounded-lg
             flex justify-center items-center px-2
+            border-2 border-green-900
             focus-within:outline outline-2 outline-offset-2 outline-green-700">
+                {block.attached ? null 
+                : <i className="fa-solid fa-up-down-left-right text-white text-xl"></i>}
                 <input onBlur={handleChange} ref={inputRef} type="number" placeholder="0" className="no-scrollbar 
-                outline-none text-end w-16 h-4 bg-transparent placeholder-white text-white"
+                outline-none text-end w-16 h-8 bg-transparent placeholder-white text-white"
                 defaultValue={block.metadata?.values[0]}/>
             </div>
         </>

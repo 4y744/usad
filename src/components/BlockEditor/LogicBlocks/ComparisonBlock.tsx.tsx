@@ -1,12 +1,12 @@
-import { ChangeEvent, useContext, useEffect, useRef } from "react";
-import { blockType, useBlockBuilder } from "../../hooks/editor"
-import { BlockEditorContext } from "../../pages/BlockEditor";
-import { DetachButton } from "../DetachButton";
+import { ChangeEvent, useContext } from "react";
+import { BuildBlock } from "../../../hooks/editor"
+import { DetachButton } from "../../DetachButton";
+import { blockType } from "../../../types";
+import { BlockEditorContext } from "../../../contexts";
 
 export const ComparisonBlock = ({block}: {block: blockType}) => {
 
     const {blocks, setBlocks} = useContext(BlockEditorContext);
-    const {BuildBlock} = useBlockBuilder(blocks);
 
     const handleChange = (event : ChangeEvent<HTMLSelectElement>) => {
         setBlocks(blocks.map((b) => {
@@ -18,7 +18,7 @@ export const ComparisonBlock = ({block}: {block: blockType}) => {
     return (
 
         <>
-            <div className="w-72 h-fit bg-zinc-900 relative p-2
+            <div className="min-w-72 w-fit h-fit bg-zinc-900 relative p-2
                 rounded-lg flex flex-col justify-center items-center text-white">
                 <h1 className="text-sm mb-2">Comparison</h1>
 
