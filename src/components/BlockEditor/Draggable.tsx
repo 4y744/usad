@@ -1,7 +1,7 @@
-import { useContext, useEffect, useRef } from "react"
-import { BlockEditorContext, MasterBlockContext } from "../contexts";
+import { MutableRefObject, RefObject, useContext, useEffect, useRef } from "react"
+import { BlockEditorContext, MasterBlockContext } from "../../contexts";
 
-export const Draggable = ({children, startPos, scale, zoomMagnitude} : {children: any, startPos: {x: number, y: number}, scale: number, zoomMagnitude: number}) => {
+export const Draggable = ({children, startPos, scale, zoomMagnitude} : {children: any, startPos: {x: number, y: number}, scale: RefObject<number>, zoomMagnitude: number}) => {
     const draggable = useRef<HTMLDivElement>(null);
     const dragging = useRef(false);
 
@@ -19,12 +19,12 @@ export const Draggable = ({children, startPos, scale, zoomMagnitude} : {children
         if(!dragging.current) return;
 
         currentPos.current = {
-            x: event.clientX - clickPos.current.x,
-            y: event.clientY - clickPos.current.y 
+            x: (event.clientX - clickPos.current.x) / (scale.current! / 100),
+            y: (event.clientY - clickPos.current.y) / (scale.current! / 100) 
         }
 
-        draggable.current!.style.top = `${currentPos.current.y}px`;
-        draggable.current!.style.left = `${currentPos.current.x}px`;
+        draggable.current!.style.top = `${currentPos.current.y * (scale.current! / 100)}px`;
+        draggable.current!.style.left = `${currentPos.current.x * (scale.current! / 100)}px`;
 
         
     }
@@ -107,26 +107,26 @@ export const Draggable = ({children, startPos, scale, zoomMagnitude} : {children
         if(!draggable.current) return;
         
         draggable.current!.style.scale = `${event.detail.scale}%`
-
+        
         if(event.detail.deltaY > 0){
-            draggable.current!.style.left = `${currentPos.current.x /= zoomMagnitude}px`;
-            draggable.current!.style.top = `${currentPos.current.y /= zoomMagnitude}px`;
+            draggable.current!.style.left = `${currentPos.current.x * (event.detail.scale / 100)}px`;
+            draggable.current!.style.top = `${currentPos.current.y * (event.detail.scale / 100)}px`;
         }
         else{
-            draggable.current!.style.left = `${currentPos.current.x *= zoomMagnitude}px`;
-            draggable.current!.style.top = `${currentPos.current.y *= zoomMagnitude}px`;
+            draggable.current!.style.left = `${currentPos.current.x * (event.detail.scale / 100)}px`;
+            draggable.current!.style.top = `${currentPos.current.y * (event.detail.scale / 100)}px`;
         }
         
     }
 
     useEffect(() => {
-        draggable.current!.style.top = `${startPos.y}px`;
-        draggable.current!.style.left = `${startPos.x}px`;
+        draggable.current!.style.top = `${startPos.y * (scale.current! / 100)}px`;
+        draggable.current!.style.left = `${startPos.x * (scale.current! / 100)}px`;
 
         currentPos.current.x = startPos.x;
         currentPos.current.y = startPos.y;
 
-        draggable.current!.style.scale = `${scale}%`
+        draggable.current!.style.scale = `${scale.current!}%`
 
         document.addEventListener("mousemove", handleMouseMove)
         draggable.current!.addEventListener("mousedown", handleMouseDown);

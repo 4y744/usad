@@ -1,12 +1,11 @@
-import { memo, useContext, useEffect, useRef, useState } from "react";
-import { blockType } from "../types";
-import { BlockEditorContext } from "../contexts";
+import { useContext, useEffect, useRef, useState } from "react";
+import { blockType } from "../../types";
+import { BlockEditorContext } from "../../contexts";
 
 
-export const DetachButton = memo(
-    ({parent, port, position}: {parent: blockType, port: number, position: string}) => {
+export const DetachButton = ({parent, port, position}: {parent: blockType, port: number, position: string}) => {
 
-        const {blocks, setBlocks, blockEditorRef} = useContext(BlockEditorContext);
+        const {blocks, setBlocks, blockEditorRef, scale} = useContext(BlockEditorContext);
         const [attached, setAttached] = useState(false);
         const buttonRef = useRef<HTMLButtonElement>(null)
     
@@ -28,8 +27,8 @@ export const DetachButton = memo(
                     if(block.id == parent.ports[port])
                     {
                         block.attached = false;
-                        block.position.x = (buttonRef.current!.getBoundingClientRect().right - blockEditorRef.current!.getBoundingClientRect().left + blockEditorRef.current!.scrollLeft);
-                        block.position.y = (buttonRef.current!.getBoundingClientRect().bottom - blockEditorRef.current!.getBoundingClientRect().top + blockEditorRef.current!.scrollTop)
+                        block.position.x = (buttonRef.current!.getBoundingClientRect().right - blockEditorRef.current!.getBoundingClientRect().left + blockEditorRef.current!.scrollLeft) / (scale.current! / 100);
+                        block.position.y = (buttonRef.current!.getBoundingClientRect().bottom - blockEditorRef.current!.getBoundingClientRect().top + blockEditorRef.current!.scrollTop) / (scale.current! / 100);
                     }
                     return block;
                 })
@@ -61,4 +60,3 @@ export const DetachButton = memo(
             </button>
         )
     }
-)

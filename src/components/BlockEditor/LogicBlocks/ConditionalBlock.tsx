@@ -1,6 +1,6 @@
-import { BuildBlock } from "../../../hooks/editor";
+import { BuildBlock } from "../BuildBlock";
 import { blockType } from "../../../types";
-import { DetachButton } from "../../DetachButton";
+import { DetachButton } from "../DetachButton";
 
 export const ConditionalBlock = ({block}: {block: blockType}) => {
 

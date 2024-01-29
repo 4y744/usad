@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { useContext } from "react"
-import { AuthContext } from "../contexts";
+import { AuthContext } from "../../contexts";
 
 export const Sidebar = () => {
 
@@ -49,7 +49,12 @@ const SideLink = (props : {url: string, faClass: string, text: string}) => (
     hover:bg-green-600 active:outline outline-2 outline-offset-2 outline-green-600 transition-background duration-100
     rounded-md overflow-hidden
     flex items-center">
-        <span className="w-[42px] shrink-0 flex justify-center items-center aspect-square"><i className={props.faClass}></i></span>
+
+        <span className="w-[42px] shrink-0 flex justify-center items-center aspect-square">
+            <i className={props.faClass}/>
+        </span>
+
         <span className="ml-2 text-base whitespace-nowrap overflow-hidden">{props.text}</span>
+
     </Link>
 )

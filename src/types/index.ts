@@ -1,5 +1,12 @@
 import { Dispatch, MutableRefObject, RefObject, SetStateAction } from "react"
 
+export type userType = {
+    username: string, 
+    email: string, 
+    logged: boolean, 
+    loading: boolean
+}
+
 export type blockType = {
     id: string,
     type: string,

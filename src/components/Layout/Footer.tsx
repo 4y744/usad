@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom"
 
-import firebase from "../assets/images/logos/firebase.png"
-import react from "../assets/images/logos/react.png"
-import vite from "../assets/images/logos/vite.png"
-import tailwind from "../assets/images/logos/tailwind.png"
+import firebase from "../../assets/images/logos/firebase.png"
+import react from "../../assets/images/logos/react.png"
+import vite from "../../assets/images/logos/vite.png"
+import tailwind from "../../assets/images/logos/tailwind.png"
 
 export const Footer = () => (
     <footer className="bg-zinc-900 w-full flex flex-col items-center justify-center text-white py-5">
@@ -14,7 +14,7 @@ export const Footer = () => (
                         <FooterHeading text="Project"/>
                         <FooterAnchor url="https://github.com/4y744/USAD" text="GitHub"/>
                         <FooterLink url="#" text="Documentation"/>
-                        <FooterLink url="#" text="About"/>
+                        <FooterLink url="/about" text="About"/>
                     </div>
 
                     <div className="flex flex-col flex-1 md:mx-8 mx-4">
@@ -27,7 +27,7 @@ export const Footer = () => (
                     <div className="flex flex-col flex-1 md:mx-8 mx-4">
                         <FooterHeading text="Legal"/>
                         <FooterAnchor url="https://www.gnu.org/licenses/gpl-3.0.html" text="GNU GPLv3"/>
-                        <FooterAnchor url="#" text="License"/>
+                        <FooterAnchor url="https://github.com/4y744/USAD/blob/main/LICENSE" text="License"/>
                         <FooterLink url="#" text="Terms of use"/>
                     </div>
 
@@ -61,7 +61,7 @@ const FooterLink = (props : {url: string, text: string}) => (
 )
 
 const FooterAnchor = (props: {url: string, text: string}) => (
-    <a className="text-zinc-400 hover:underline my-1 md:text-base sm:text-sm text-xs" href={props.url}>{props.text}</a>
+    <a className="text-zinc-400 hover:underline my-1 md:text-base sm:text-sm text-xs" href={props.url} target="_blank">{props.text}</a>
 )
 
 const LinkImage = (props : {url: string, image:string, alt:string}) => (

@@ -1,6 +1,6 @@
 import { ChangeEvent, useContext } from "react";
-import { BuildBlock } from "../../../hooks/editor"
-import { DetachButton } from "../../DetachButton";
+import { BuildBlock } from "../BuildBlock";
+import { DetachButton } from "../DetachButton";
 import { blockType } from "../../../types";
 import { BlockEditorContext } from "../../../contexts";
 

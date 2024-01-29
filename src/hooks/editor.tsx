@@ -1,12 +1,5 @@
-import { StartBlock } from "../components/BlockEditor/LogicBlocks/StartBlock.tsx"
-import { ExitBlock } from "../components/BlockEditor/LogicBlocks/ExitBlock.tsx"
-import { PrintBlock } from "../components/BlockEditor/LogicBlocks/PrintBlock.tsx"
-import { ConditionalBlock } from "../components/BlockEditor/LogicBlocks/ConditionalBlock.tsx"
-import { ComparisonBlock } from "../components/BlockEditor/LogicBlocks/ComparisonBlock.tsx.tsx"
-import { SnapBlock } from "../components/BlockEditor/LogicBlocks/SnapBlock.tsx"
-import { RefObject, useContext, useEffect, useRef } from "react"
-import { NumberBlock } from "../components/BlockEditor/LogicBlocks/NumberBlock.tsx"
-import { BlockEditorContext } from "../contexts/index.ts"
+
+import { RefObject, useEffect, useRef } from "react"
 
 // const BuildScript = (blockId: string, blocks: any): string => {
         
@@ -45,28 +38,7 @@ import { BlockEditorContext } from "../contexts/index.ts"
 // }
 
 
-export const BuildBlock = ({parentId, port, isMaster,} : {parentId: string, port: number, isMaster?: boolean}) => {
-    
 
-    const {blocks} = useContext(BlockEditorContext);
-
-    const parentBlock = blocks.find((parent) => parent.id == parentId);
-    const block = blocks.find((block) => block.id == (isMaster ? parentId : parentBlock?.ports[port]));
-
-    if(block == null) return (
-        <SnapBlock parent={{id: parentId, port}}/>
-    )
-
-    switch(block.type){
-        case "start": return <StartBlock block={block}/> 
-        case "exit": return <ExitBlock block={block}/> 
-        case "print": return <PrintBlock block={block}/>
-        case "condition": return <ConditionalBlock block={block}/>  
-        case "comparison": return <ComparisonBlock block={block}/>
-        case "number": return <NumberBlock block={block}/> 
-        default: return <SnapBlock parent={{id: parentId, port}}/>
-    }
-}
 
 
 export const useDragToScroll = (blockEditorRef: RefObject<HTMLDivElement>) => {
@@ -151,15 +123,63 @@ export const useDragToScroll = (blockEditorRef: RefObject<HTMLDivElement>) => {
 export const useScrollToZoom = (blockEditorRef : RefObject<HTMLDivElement>) => {
 
     const scale = useRef(100);
+    const mousePos = useRef({x: 0, y: 0});
 
     const handleZoom = (event: WheelEvent) => {
        
         scale.current = event.deltaY > 0 ? scale.current / 1.05 : scale.current * 1.05;
         blockEditorRef.current!.dispatchEvent(new CustomEvent("zoom", {detail: {deltaY: event.deltaY, scale: scale.current}}));
+
+        // if(event.deltaY < 0)
+        // {
+        //     blockEditorRef.current!.scrollLeft += mousePos.current.x / (scale.current + 100 * scale.current);
+        //     blockEditorRef.current!.scrollTop += mousePos.current.y * ((scale.current * 1.05 - scale.current) / 100);
+        // }
+        
+        // if(event.deltaY < 0)
+        // {
+        //     if(mousePos.current.x > blockEditorRef.current!.getBoundingClientRect().width / 2){
+
+        //         blockEditorRef.current!.scrollLeft += mousePos.current.x  * (scale.current! / 100 - 1) - mousePos.current.x * ((scale.current! / 1.05) / 100 - 1);
+        //     }
+        //     else{
+        //         blockEditorRef.current!.scrollLeft -= mousePos.current.x * ((scale.current! / 1.05) / 100 - 1) - mousePos.current.x  * (scale.current! / 100 - 1); 
+        //     }
+
+        //     if(mousePos.current.y > blockEditorRef.current!.getBoundingClientRect().height / 2)
+        //     {
+        //         blockEditorRef.current!.scrollTop += mousePos.current.y  * (scale.current! / 100 - 1) - mousePos.current.y * ((scale.current! / 1.05) / 100 - 1);
+        //     }
+        //     else{
+        //         blockEditorRef.current!.scrollTop -= mousePos.current.y * ((scale.current! / 1.05) / 100 - 1) - (mousePos.current.y  * (scale.current! / 100 - 1));
+        //     }
+        //     // if(mousePos.current!.x > blockEditorRef.current!.getBoundingClientRect().width / 2)
+        //     // {
+        //     // }
+        //     // else{
+        //     //     blockEditorRef.current!.scrollLeft -= (mousePos.current.x  * (scale.current! / 100 - 1)) - (mousePos.current.x) * ((scale.current! / 1.05) / 100 - 1)
+        //     // }
+        //     //blockEditorRef.current!.scrollTop +=  ((mousePos.current.y + blockEditorRef.current!.getBoundingClientRect().height / 2) * ((scale.current! * 1.05) / 100 - 1)) - ((mousePos.current.y + blockEditorRef.current!.getBoundingClientRect().height / 2) * (scale.current! / 100 - 1))
+        // }
+        // else{
+        //     blockEditorRef.current!.scrollLeft += (mousePos.current.x) * ((scale.current! / 1.05) / 100 - 1) - (mousePos.current.x  * (scale.current! / 100 - 1)) 
+        //     blockEditorRef.current!.scrollTop += (mousePos.current.y) * ((scale.current! / 1.05) / 100 - 1) - (mousePos.current.y  * (scale.current! / 100 - 1))
+            
+        // }
+        
+        
+    }
+
+    const handleMouseMove = (event: MouseEvent) => {
+        mousePos.current = {
+            x: event.clientX - blockEditorRef.current!.getBoundingClientRect().left + blockEditorRef.current!.scrollLeft,
+            y: event.clientY - blockEditorRef.current!.getBoundingClientRect().top + blockEditorRef.current!.scrollTop
+        }
     }
 
     useEffect(() => {
         blockEditorRef.current!.addEventListener("wheel", handleZoom);
+        blockEditorRef.current!.addEventListener("mousemove", handleMouseMove);
     }, [])
 
     return {scale}
