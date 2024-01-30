@@ -13,7 +13,7 @@ export const BlockEditor = () => {
     const blockEditorRef = useRef<HTMLDivElement>(null);
     
     //Changes scale when scroll wheel is moved
-    const {scale} = useScrollToZoom(blockEditorRef);
+    const {scale} = useScrollToZoom(blockEditorRef, 0.05);
 
     //Enables dragto scroll
     useDragToScroll(blockEditorRef);
@@ -145,8 +145,12 @@ export const BlockEditor = () => {
                 bg-zinc-800 hover:cursor-move overflow-hidden
                 border-8 border-zinc-900
                 no-scrollbar">
-                    <div className="w-[3000px] h-[3000px] pointer-events-none"></div>
-                    <BlockBuilder blocks={blocks} setBlocks={setBlocks} blockEditorRef={blockEditorRef} scale={scale}/>
+                    <div className="w-[10000px] h-[10000px] pointer-events-none"></div>
+                    <BlockBuilder 
+                        blocks={blocks} 
+                        setBlocks={setBlocks} 
+                        blockEditorRef={blockEditorRef} 
+                        scale={scale}/>
                 </div>
         </div>
         

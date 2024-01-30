@@ -17,15 +17,13 @@ import { DashboardPage } from "../../pages/protected/DashboardPage";
 import { ProtectedRoute } from "../Router/ProtectedRoute";
 import { CreatePage } from "../../pages/protected/CreatePage";
 import { SettingsPage } from "../../pages/dynamic/SettingsPage";
-import { ScrollToTop } from "../ScrollToTop";
 
 export const MainContent = () => {
 
     const {loading} = useContext(AuthContext);
 
     return (
-        <div className="min-h-[80vh] md:pt-14 pt-16">
-                <ScrollToTop/>   
+        <div className="min-h-[80vh] md:mt-14 mmt-16">  
                 {loading ? <LoadingPage/> : 
                     <Routes>
 

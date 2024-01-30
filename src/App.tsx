@@ -28,8 +28,7 @@ export const App = () => {
         <BrowserRouter>
             <Navbar/>
             <Sidebar/>
-            <ScrollToTop/>
-
+            <ScrollToTop/> 
             <div className={`${user.logged ? "md:ml-14 md:mb-0 mb-14" : ""}`}>
                 <MainContent/>
                 <Footer/>

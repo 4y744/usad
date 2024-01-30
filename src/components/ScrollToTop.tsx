@@ -5,7 +5,7 @@ export const ScrollToTop = () => {
     const location = useLocation();
 
     useEffect(() => {
-        window.scroll({top: 0, behavior: 'smooth'})
+        document.documentElement.scroll({top: 0, behavior: 'smooth'})
     }, [location])
 
     return <></>

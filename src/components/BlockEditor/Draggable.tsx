@@ -1,15 +1,16 @@
-import { MutableRefObject, RefObject, useContext, useEffect, useRef } from "react"
+import { RefObject, useContext, useEffect, useRef } from "react"
 import { BlockEditorContext, MasterBlockContext } from "../../contexts";
+import { Vector2 } from "../../types";
 
-export const Draggable = ({children, startPos, scale, zoomMagnitude} : {children: any, startPos: {x: number, y: number}, scale: RefObject<number>, zoomMagnitude: number}) => {
+export const Draggable = ({children, startPos, scale} : {children: any, startPos: Vector2, scale: RefObject<number>}) => {
     const draggable = useRef<HTMLDivElement>(null);
     const dragging = useRef(false);
 
     //Relative cursor offset in draggable
-    const clickPos = useRef({x: 0, y: 0});
+    const clickPos = useRef<Vector2>({x: 0, y: 0});
     
-    //The current position of the draggable
-    const currentPos = useRef({x: 0, y: 0});
+    //The current position of the draggable (without scaling)
+    const currentPos = useRef<Vector2>({x: 0, y: 0});
 
     const masterId = useContext(MasterBlockContext);
     const {selectedBlock, blocks, setBlocks, blockEditorRef} = useContext(BlockEditorContext);

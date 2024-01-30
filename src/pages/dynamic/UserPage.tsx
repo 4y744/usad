@@ -4,13 +4,14 @@ import { useGetAlgorithms, useGetUser } from "../../hooks/firestore";
 import { NotFoundPage } from "../static/NotFoundPage";
 import { LinkCard } from "../../components/LinkCard";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
+import { DocumentData } from "firebase/firestore";
 
 export const UserPage = () => {
 
     const {username} = useParams();
 
     const user = useGetUser({username: username});
-    const algorithms = useGetAlgorithms({username: username});
+    const {algorithms} = useGetAlgorithms({username: username});
 
     if(user.error) return <NotFoundPage/>
 
@@ -45,7 +46,7 @@ export const UserPage = () => {
                     <h1 className="text-lg bg-zinc-800 rounded-md text-center py-1 mb-4">Algorithms</h1>
                     {algorithms ? 
                     <div className="bg-zinc-800 rounded-md flex flex-col gap-5 p-4">
-                        {algorithms?.map((alg) => (
+                        {algorithms?.map((alg: DocumentData) => (
                             <LinkCard key={alg.id} algorithmId={alg.id} title={alg.title} author={alg.author} language="BG" date="28/12/23" votes={5}/>
                         ))}
                     </div> : <h2 className="w-full text-center text-sm">This user hasn't shared any algorithms yet...</h2>}

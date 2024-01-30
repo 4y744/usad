@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 //Import Firebase hooks
 import { doc, collection, getDoc, getDocs, writeBatch, where, query, DocumentData } from "firebase/firestore";
 import { db } from "./firebase.ts";
+import { algorithmType } from "../types/index.ts";
 
 export const useGetUser = (param: {username?: string, uid?: string}) : {username: string, uid: string, created: Date, loading: boolean, error: boolean} => {
     const [user, setUser] = useState({username: "", uid: "", created: new Date(), loading: true, error: false});
@@ -58,8 +59,9 @@ export const useGetUser = (param: {username?: string, uid?: string}) : {username
     return user;
 }
 
-export const useGetAlgorithms = (params: {username?: string, uid?: string}) : DocumentData[] | undefined => {
+export const useGetAlgorithms = (params: {username?: string, uid?: string}) : {algorithms: DocumentData[] | undefined, loading: boolean} => {
     const [algorithms, setAlgorithms] = useState<DocumentData[]>();
+    const [loading, setLoading] = useState(true);
 
     const user = useGetUser({username: params.username, uid: params.uid})
 
@@ -82,34 +84,27 @@ export const useGetAlgorithms = (params: {username?: string, uid?: string}) : Do
                 })
 
 
-                setAlgorithms(tempDocs)
+                setAlgorithms(tempDocs);
             }
             catch(err){
                 
             }
             
+            setLoading(false);
         }
 
         fetch()
 
     }, [user])
 
-    return algorithms;
+    return {algorithms, loading};
 }
 
-interface alg_interface{
-    title?: string;
-    description?: string;
-    author?: string;
-    input_type?: string;
-    inputs?: Array<string>;
-    function?: string;
-    loading: boolean;
-}
+
 
 
 export const useGetlAlgorithm = (id: string) => {
-    const [algorithm, setAlgorithm] = useState<alg_interface>({loading: true});
+    const [algorithm, setAlgorithm] = useState<algorithmType>({loading: true});
 
     useEffect(() => {
         const fetch = async () => {

@@ -26,7 +26,7 @@ export const LinkCard = (props: {algorithmId: string, title: string, author: str
 const LinkCardAuthor = (props : {username : string}) => (
     <Link className="text-gray-300 text-xs ml-2 hover:text-gray-200" to={`/user/${props.username}`}>
         <span>by</span>
-        <span className="mx-0.5 underline">{props.username}</span>
+        <span className="mx-1 underline">{props.username}</span>
     </Link>
 )
 

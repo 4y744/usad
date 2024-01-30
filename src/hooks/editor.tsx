@@ -1,5 +1,6 @@
 
 import { RefObject, useEffect, useRef } from "react"
+import { Vector2 } from "../types";
 
 // const BuildScript = (blockId: string, blocks: any): string => {
         
@@ -120,60 +121,34 @@ export const useDragToScroll = (blockEditorRef: RefObject<HTMLDivElement>) => {
     
 }
 
-export const useScrollToZoom = (blockEditorRef : RefObject<HTMLDivElement>) => {
+export const useScrollToZoom = (blockEditorRef : RefObject<HTMLDivElement>, magnitude: number) => {
 
     const scale = useRef(100);
-    const mousePos = useRef({x: 0, y: 0});
+    
+    const mousePos = useRef<Vector2>({x: 0, y: 0});
 
     const handleZoom = (event: WheelEvent) => {
        
-        scale.current = event.deltaY > 0 ? scale.current / 1.05 : scale.current * 1.05;
+        scale.current = event.deltaY > 0 ? scale.current / (magnitude + 1) : scale.current * (magnitude + 1);
         blockEditorRef.current!.dispatchEvent(new CustomEvent("zoom", {detail: {deltaY: event.deltaY, scale: scale.current}}));
-
-        // if(event.deltaY < 0)
-        // {
-        //     blockEditorRef.current!.scrollLeft += mousePos.current.x / (scale.current + 100 * scale.current);
-        //     blockEditorRef.current!.scrollTop += mousePos.current.y * ((scale.current * 1.05 - scale.current) / 100);
-        // }
         
-        // if(event.deltaY < 0)
-        // {
-        //     if(mousePos.current.x > blockEditorRef.current!.getBoundingClientRect().width / 2){
-
-        //         blockEditorRef.current!.scrollLeft += mousePos.current.x  * (scale.current! / 100 - 1) - mousePos.current.x * ((scale.current! / 1.05) / 100 - 1);
-        //     }
-        //     else{
-        //         blockEditorRef.current!.scrollLeft -= mousePos.current.x * ((scale.current! / 1.05) / 100 - 1) - mousePos.current.x  * (scale.current! / 100 - 1); 
-        //     }
-
-        //     if(mousePos.current.y > blockEditorRef.current!.getBoundingClientRect().height / 2)
-        //     {
-        //         blockEditorRef.current!.scrollTop += mousePos.current.y  * (scale.current! / 100 - 1) - mousePos.current.y * ((scale.current! / 1.05) / 100 - 1);
-        //     }
-        //     else{
-        //         blockEditorRef.current!.scrollTop -= mousePos.current.y * ((scale.current! / 1.05) / 100 - 1) - (mousePos.current.y  * (scale.current! / 100 - 1));
-        //     }
-        //     // if(mousePos.current!.x > blockEditorRef.current!.getBoundingClientRect().width / 2)
-        //     // {
-        //     // }
-        //     // else{
-        //     //     blockEditorRef.current!.scrollLeft -= (mousePos.current.x  * (scale.current! / 100 - 1)) - (mousePos.current.x) * ((scale.current! / 1.05) / 100 - 1)
-        //     // }
-        //     //blockEditorRef.current!.scrollTop +=  ((mousePos.current.y + blockEditorRef.current!.getBoundingClientRect().height / 2) * ((scale.current! * 1.05) / 100 - 1)) - ((mousePos.current.y + blockEditorRef.current!.getBoundingClientRect().height / 2) * (scale.current! / 100 - 1))
-        // }
-        // else{
-        //     blockEditorRef.current!.scrollLeft += (mousePos.current.x) * ((scale.current! / 1.05) / 100 - 1) - (mousePos.current.x  * (scale.current! / 100 - 1)) 
-        //     blockEditorRef.current!.scrollTop += (mousePos.current.y) * ((scale.current! / 1.05) / 100 - 1) - (mousePos.current.y  * (scale.current! / 100 - 1))
-            
-        // }
-        
-        
+        //I've tried to many things to get the correct behavior, but I just can't do it.
+        //Should of course be possible, but for now I will leave it at this.
+        if(event.deltaY < 0)
+        {
+            blockEditorRef.current!.scrollLeft += mousePos.current.x * magnitude;
+            blockEditorRef.current!.scrollTop += mousePos.current.y * magnitude;
+        }
+        else{
+            blockEditorRef.current!.scrollLeft -= mousePos.current.x * magnitude;
+            blockEditorRef.current!.scrollTop -= mousePos.current.y * magnitude;
+        }
     }
 
     const handleMouseMove = (event: MouseEvent) => {
         mousePos.current = {
-            x: event.clientX - blockEditorRef.current!.getBoundingClientRect().left + blockEditorRef.current!.scrollLeft,
-            y: event.clientY - blockEditorRef.current!.getBoundingClientRect().top + blockEditorRef.current!.scrollTop
+            x: event.clientX + blockEditorRef.current!.scrollLeft,
+            y: event.clientY + blockEditorRef.current!.scrollTop
         }
     }
 
