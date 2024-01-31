@@ -43,14 +43,14 @@ const Heading = () => (
         flex flex-col justify-center items-center text-white w-full 
         h-80 bg-home-headline bg-no-repeat bg-cover'>
         <div className='flex flex-col justify-center items-center w-full lg:px-16 px-4'>
-            <h1 className='font-bold text-white xl:text-4xl lg:text-3xl text-2xl my-3 text-center'>Universal Scalable Algorithm Directory</h1>
-            <p className="my-3 xl:text-lg lg:text-base text-sm max-w-xl sm:w-5/6 text-center">
+            <h1 className='font-bold text-white xl:text-4xl lg:text-3xl text-3xl my-3 text-center'>Universal Scalable Algorithm Directory</h1>
+            <p className="my-3 xl:text-lg max-w-xl text-center">
                 The ultimate tool for creating and sharing algorithms.
                 Easily create and share your own specialized calculators. 
             </p>
             <div className='flex'>
-                <Link to="/dashboard" className="mx-2 px-4 py-3 my-3 rounded-md bg-green-700 hover:bg-green-600 transition-background duration-100 active:outline outline-offset-2 outline-2 outline-green-600 shadow-md">Get started</Link>
-                <Link to="/about" className="mx-2 px-4 py-3 my-3 rounded-md bg-green-700 hover:bg-green-600 transition-background duration-100 active:outline outline-offset-2 outline-2 outline-green-600 shadow-md">Learn more</Link>
+                <Link to="/dashboard" className="m-3 px-4 py-3 rounded-md bg-green-700 hover:bg-green-600 transition-background duration-100 active:outline outline-offset-2 outline-2 outline-green-600 shadow-md">Get started</Link>
+                <Link to="/about" className="m-3 px-4 py-3 rounded-md bg-green-700 hover:bg-green-600 transition-background duration-100 active:outline outline-offset-2 outline-2 outline-green-600 shadow-md">Learn more</Link>
             </div>
         </div>
     </header>
@@ -146,7 +146,7 @@ const Card = ({title, description, linktext, url} : {title: string, description:
     
     return (
         <div className='bg-zinc-900 border-t-4 border-t-green-600 text-white
-        p-8 w-full h-full rounded-b-md drop-shadow-md 
+        p-8 w-full h-full rounded-b-md shadow-md 
         flex flex-col items-center gap-5'>
             <h1 className='md:text-lg text-base font-semibold'>{title}</h1>
             <p className='md:text-sm text-xs text-pretty text-zinc-200'>{description}</p>
@@ -154,7 +154,7 @@ const Card = ({title, description, linktext, url} : {title: string, description:
             className='bg-green-700 hover:bg-green-600 
             active:outline outline-2 outline-green-600 outline-offset-2
             md:text-sm text-sm
-            px-4 py-2 w-fit rounded-md drop-shadow-md mt-auto'>{linktext}</Link>
+            px-4 py-2 w-fit rounded-md shadow-md mt-auto'>{linktext}</Link>
         </div>
     )
 }

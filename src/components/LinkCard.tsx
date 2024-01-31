@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export const LinkCard = (props: {algorithmId: string, title: string, author: string, language: string, date: string, votes: number}) => (
     <div className="bg-zinc-900 text-white h-20 w-full px-4 
-    flex flex-col justify-center items-start drop-shadow-md
+    flex flex-col justify-center items-start shadow-md
     border-l-green-600 border-l-4">
         <div className="flex items-center w-full py-0.5">
             <Link to={`/algorithm/${props.algorithmId}`} className="md:text-base text-sm font-bold hover:underline truncate">{props.title}</Link>

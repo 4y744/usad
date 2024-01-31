@@ -103,7 +103,7 @@ export const useGetAlgorithms = (params: {username?: string, uid?: string}) : {a
 
 
 
-export const useGetlAlgorithm = (id: string) => {
+export const useGetAlgorithm = (id: string) => {
     const [algorithm, setAlgorithm] = useState<algorithmType>({loading: true});
 
     useEffect(() => {

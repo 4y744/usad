@@ -27,7 +27,7 @@ export const Navbar = () => {
     const {username, logged} = useContext(AuthContext)
 
     return (
-        <nav className="bg-zinc-900 drop-shadow-md fixed top-0 z-10 w-full">
+        <nav className="bg-zinc-900 shadow-md sticky top-0 z-10 w-full">
             {/* Big screen navbar */}
             <div className="md:flex hidden p-2">
                 <div className="flex justify-start items-center xl:flex-1 flex-2">
@@ -67,7 +67,7 @@ export const Navbar = () => {
                 {/* Dropdown */}
                 <div style={navToggled ? { height: dropdownRef.current?.scrollHeight! } : { height: 0 }}
                 ref={dropdownRef} className="flex justify-start items-start overflow-hidden flex-col px-3 
-                transition-height duration-300 ease-in-out">
+                transition-height duration-200 ease-in-out">
 
                     <DropdownLink onclick={toggleNavbar} url="/" text="Home"/>
                     <DropdownLink onclick={toggleNavbar} url="/browse" text="Browse"/>

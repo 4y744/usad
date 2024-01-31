@@ -23,7 +23,7 @@ export const MainContent = () => {
     const {loading} = useContext(AuthContext);
 
     return (
-        <div className="min-h-[80vh] md:mt-14 mmt-16">  
+        <div className="min-h-[80vh]">  
                 {loading ? <LoadingPage/> : 
                     <Routes>
 

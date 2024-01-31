@@ -1,5 +1,8 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
+  experimental: {
+    optimizeUniversalDefaults: true
+  },
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -24,5 +27,8 @@ export default {
     }
   },
   plugins: [],
+  experimental: {
+    optimizeUniversalDefaults: true
+  }
 }
 

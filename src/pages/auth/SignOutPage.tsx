@@ -13,7 +13,7 @@ export const SignOutPage = () => {
     const {username, email, logged} = useContext(AuthContext);
 
     return (
-        <div className="flex justify-center items-center w-full my-36">
+        <div className="flex justify-center items-center w-full my-16">
             <div className="flex justify-start items-start flex-col gap-3 
             rounded-md p-6 shadow-md text-white bg-zinc-900 sm:w-96 w-80">
 

@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { MutableRefObject, createContext } from "react";
 import { blockEditorContextType } from "../types";
 
 export const AuthContext = createContext({username: "", email: "", logged: false, loading: true});
@@ -13,3 +13,5 @@ export const BlockEditorContext = createContext<blockEditorContextType>
     blockEditorRef: {current: null}, 
     scale: {current: 100}}
 );
+
+export const InputContext = createContext<MutableRefObject<string[]>>({current: []});

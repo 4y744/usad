@@ -23,7 +23,7 @@ export const UserPage = () => {
             md:w-[700px] w-[500px] mx-5 my-12 md:aspect-square
             text-white">
 
-                <div className="bg-zinc-900 drop-shadow-md rounded-md
+                <div className="bg-zinc-900 shadow-md rounded-md
                 p-4">
                     <h1 className="text-lg bg-zinc-800 rounded-md text-center py-1 mb-2">Profile</h1>
                     <div className="text-sm">
@@ -39,7 +39,7 @@ export const UserPage = () => {
                     </div>
                 </div>
                 
-                <div className="bg-zinc-900 drop-shadow-md rounded-md
+                <div className="bg-zinc-900 shadow-md rounded-md
                 md:col-start-2 md:col-end-4 md:row-start-1 md:row-end-4 p-4
                 overflow-y-scroll no-scrollbar max-h-[750px]">
                     
@@ -52,7 +52,7 @@ export const UserPage = () => {
                     </div> : <h2 className="w-full text-center text-sm">This user hasn't shared any algorithms yet...</h2>}
                 </div>
                 
-                <div className="bg-zinc-900 drop-shadow-md rounded-md
+                <div className="bg-zinc-900 shadow-md rounded-md
                 md:row-start-2 md:row-end-4 p-4 max-h-[500px]">
                     <h1 className="text-lg bg-zinc-800 rounded-md text-center py-1 mb-4">Comments</h1>
                     <h2 className="w-full text-center text-sm">This user hasn't written any comments yet...</h2>
@@ -70,18 +70,18 @@ const Placeholder = () => (
             md:w-[700px] w-[500px] mx-5 my-12 md:aspect-square
             text-white">
 
-                <div className="bg-zinc-900 drop-shadow-md rounded-md
+                <div className="bg-zinc-900 shadow-md rounded-md
                 p-4 flex justify-center items-center">
                     <LoadingSpinner/>
                 </div>
                 
-                <div className="bg-zinc-900 drop-shadow-md rounded-md
+                <div className="bg-zinc-900 shadow-md rounded-md
                 md:col-start-2 md:col-end-4 md:row-start-1 md:row-end-4 p-4
                 flex justify-center items-center">
                     <LoadingSpinner/>
                 </div>
                 
-                <div className="bg-zinc-900 drop-shadow-md rounded-md
+                <div className="bg-zinc-900 shadow-md rounded-md
                 md:row-start-2 md:row-end-4 p-4
                 flex justify-center items-center">
                     <LoadingSpinner/>

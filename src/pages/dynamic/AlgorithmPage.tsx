@@ -3,29 +3,85 @@
 //Import react hooks
 import { Link, useParams } from 'react-router-dom';
 
-import { useGetUser, useGetlAlgorithm } from '../../hooks/firestore.ts';
-import { useEffect, useRef } from 'react';
+import { useGetAlgorithm } from '../../hooks/firestore.ts';
+import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
+import { InputContext } from '../../contexts/index.ts';
+import { LoadingSpinner } from '../../components/LoadingSpinner.tsx';
+import { leftPad } from '../../utils/string.ts';
+
 
 export const AlgorithmPage = () => {
 
 
     const {id} = useParams();
-    const algorithm = useGetlAlgorithm(id!);
+    const algorithm = useGetAlgorithm(id!);
 
-    if(algorithm.loading) return <>Loading</>
-    
+    const input = useRef<string[]>([]);
+
+    const output = useRef<Array<{value: string, timestamp: string}>>([]);
+    const [, update] = useState<string>("");
+    const connected = useRef(false);
+
+    const sandboxRef = useRef<HTMLIFrameElement>(null);
+
+
+    const handleRun = () => {
+        sandboxRef.current!.contentWindow!.postMessage({func: algorithm.function, input: input.current}, "*");
+    }
+
+    const handleMessage = (event: MessageEvent) => {
+        if(event.origin == "https://usad-shell.web.app"){
+            if(event.data == "CONNECTION ESTABLISHED"){
+                connected.current = true;
+                return update("ESTABLISHED");
+            }
+            const timestamp = new Date(event.data.timestamp);
+            const time = `${
+                leftPad(timestamp.getHours().toString(), 2, "0")
+            }:${leftPad(timestamp.getMinutes().toString(), 2, "0")
+            }:${leftPad(timestamp.getSeconds().toString(), 2, "0")
+            }.${leftPad(timestamp.getMilliseconds().toString(), 4, "0")}`
+            output.current = [
+                ...output.current,
+                {
+                    value: event.data.value,
+                    timestamp: time
+                }
+                ];
+            update(event.data.timestamp);
+        }
+    }
+
+
+    useEffect(() => {
+        window.addEventListener("message", handleMessage)
+
+        return () => {
+            window.removeEventListener("message", handleMessage)
+        }
+        
+    }, [])
+
+
+    if(algorithm.loading) return <Placeholder/>
+
     return (
-        <div className='w-full my-32 text-white
-        flex justify-center items-center'>
+        <InputContext.Provider value={input}>
+            <div className='w-full my-16 text-white
+            flex justify-center items-center'>
+            <iframe 
+            sandbox="allow-same-origin allow-scripts"
+            className='w-0 h-0'
+            src="https://usad-shell.web.app" ref={sandboxRef}/>
 
             <div className='bg-zinc-900
             grid md:grid-cols-2 grid-cols-1 gap-5
-            md:w-4/5 w-10/12 p-4 rounded-md drop-shadow-md'>
+            md:w-4/5 w-[90vw] p-4 rounded-md shadow-md'>
                 
                 <div className='flex flex-col gap-5'>
                     
                     <div className='flex flex-col bg-zinc-800 p-4 rounded-md
-                    drop-shadow-md'>
+                    shadow-md'>
                         <h1 className='text-2xl font-semibold mb-1'>{algorithm.title}</h1>
                         <div className='text-sm text-zinc-300'>
                             <span>Posted by </span>
@@ -38,155 +94,180 @@ export const AlgorithmPage = () => {
                     </div>
 
                     <div className='flex flex-col bg-zinc-800 p-4 rounded-md
-                    drop-shadow-md'>
+                    shadow-md'>
                         <div className='flex items-center mb-2'>
                             <h1 className='text-xl font-semibold'>Inputs</h1>
                             <button
-                            className='bg-green-700 hover:bg-green-600
-                            active:outline outline-2 outline-green-600 outline-offset-2
-                            px-4 py-2 ml-auto rounded-md drop-shadow-md'>Run</button>
+                            onClick={handleRun}
+                            className={`bg-green-700
+                            outline-2 outline-green-600 outline-offset-2
+                            px-4 py-2 ml-auto rounded-md shadow-md
+                            ${!connected.current ?  "opacity-50" : "opacity-100 hover:bg-green-600 active:outline"}`}
+                            disabled={!connected.current}>
+                            {connected.current ? <>Run</> : <LoadingSpinner/>}
+                            </button>
                         </div>
-                        <InputField placeholder='Enter values here...'/>
-                        {/* <InputBoxContainer/> */}
+                        {algorithm.input_type == "box" ? 
+                        <InputBoxContainer inputs={algorithm.inputs!} /> :
+                        <InputField placeholder={algorithm.inputs![0]}/>}
                     </div>
                 </div>
 
                 
 
                 <div className='bg-zinc-800 p-4 rounded-md
-                drop-shadow-md'>
+                shadow-md'>
                     <h1 className='text-xl font-semibold mb-2'>Description</h1>
                     <p className='text-base'>{algorithm.description}</p>
                 </div>
 
                 <div className='bg-zinc-800 p-4 rounded-md
-                drop-shadow-md'>
+                shadow-md'>
                     <h1 className='text-xl font-semibold mb-2'>Output log</h1>
-                    <OutputLog/>
+                    <OutputLog logs={output.current}/>
                 </div>
+                
 
                 <div className='bg-zinc-800 p-4 rounded-md
-                drop-shadow-md'>
+                shadow-md'>
                     <h1 className='text-xl font-semibold mb-2'>JavaScript</h1>
-                    <CodeContainer/>
+                    <CodeContainer func={algorithm.function!}/>
                 </div>
 
-                {/* <div className='bg-zinc-800 p-4 rounded-md
-                drop-shadow-md
-                row-start-1 row-end-3'>
-                    <h1 className='text-xl font-semibold mb-2'>Output log</h1>
-                    <OutputLog/>
-                </div> */}
             </div>
-
-            {/* <div>
-                <h1>{algorithm.title!}</h1>
-                <Input inputs={algorithm.inputs!} type={algorithm.input_type!} function={algorithm.function!}></Input>
-            </div>
-            <div>
-                <h1>Описание</h1>
-                <p>{algorithm.description}</p>
-            </div> */}
         </div>
+        </InputContext.Provider>
 
             
 
     )
 }
 
-const OutputLogLine = ({text, timestamp} : {text: string, timestamp: string}) => {
-    
-    return (
-        <span>
-            <span 
-            className='mr-1 text-green-600 font-semibold'>
-                [{timestamp}]:
-            </span>
-            <span>{text}</span>
-        </span>
-    )
-}
+
 
 const InputField = ({placeholder} : {placeholder: string}) => {
 
+    const input = useContext(InputContext);
+
+    const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+        input.current = event.target.value.split(/(?:,| |[\n])+/);
+        input.current = input.current.filter((str) => str !== "");
+    }
+
     return (
         <textarea
+        onChange={handleChange}
         placeholder={placeholder}
         className='bg-zinc-900 resize-none
-        p-2 rounded-md drop-shadow-md h-36
+        p-2 rounded-md shadow-md h-36
         focus:outline outline-2 outline-green-600 outline-offset-2'/>
     )
 }
 
-const InputBoxContainer = () => {
+const InputBoxContainer = ({inputs} : {inputs: string[]}) => {
 
     return (
         <div className='grid 2xl:grid-cols-3 xl:grid-cols-2 grid-cols-1 gap-5'>
-            <InputBox placeholder='Number'/>
-            <InputBox placeholder='Log'/>
-            <InputBox placeholder='Exponent'/>
-            <InputBox placeholder='Enter values here'/>           
+            {inputs.map((input, key) => (
+                <InputBox placeholder={input} index={key} key={key}/>
+            ))}           
         </div>
     )
 }
 
 
-const InputBox = ({placeholder} : {placeholder: string}) => {
+const InputBox = ({placeholder, index} : {placeholder: string, index: number}) => {
+
+    const input = useContext(InputContext);
+
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+        input.current[index] = event.target.value.split(/(?:,| |[\n])+/)
+        .filter((str) => str !== "")[0];
+        console.log(input.current);
+    }
 
     return (
         <input
         placeholder={placeholder}
+        onChange={handleChange}
         className='bg-zinc-900
-        p-2 rounded-md drop-shadow-md
+        p-2 rounded-md shadow-md
         focus:outline outline-2 outline-green-600 outline-offset-2' 
         type="text" />
     )
 }
 
-const OutputLog = () => {
+
+const OutputLog = ({logs} : {logs: Array<{value: string, timestamp: string}>}) => {
+
+    const logRef = useRef<HTMLUListElement>(null);
+    useEffect(() => {
+        logRef.current!.scroll({top: logRef.current!.getBoundingClientRect().height + logRef.current!.scrollTop, behavior: 'smooth'});
+    })
+    
+    return (
+        <ul ref={logRef}
+        className='bg-zinc-900 rounded-md p-4
+            flex flex-col h-60 overflow-auto'>
+            {logs.map(({value, timestamp}, key) => (
+                <OutputLogLine key={key} text={value} timestamp={timestamp} />)
+            )}
+        </ul>
+    )
+}
+
+const OutputLogLine = ({text, timestamp} : {text: string, timestamp: string}) => {
+    
+    return (
+        <li>
+            <span className='text-green-600 font-semibold'>[{timestamp}]: </span>
+            {text}
+        </li>
+    )
+}
+
+
+const CodeContainer = ({func} : {func: string}) => {
 
     return (
         <div className='bg-zinc-900 rounded-md p-4
-            flex flex-col h-60 overflow-y-scroll'>
-            <OutputLogLine text='Fizz' timestamp='12:24:45.443'/>
-            <OutputLogLine text='Fizz' timestamp='12:24:45.443'/>
-            <OutputLogLine text='Fizz' timestamp='12:24:45.443'/>
-            <OutputLogLine text='Fizz' timestamp='12:24:45.443'/>
-            <OutputLogLine text='Fizz' timestamp='12:24:45.443'/>
-            <OutputLogLine text='Fizz' timestamp='12:24:45.443'/>
-            <OutputLogLine text='Fizz' timestamp='12:24:45.443'/>
-            <OutputLogLine text='Fizz' timestamp='12:24:45.443'/>
-            <OutputLogLine text='Fizz' timestamp='12:24:45.443'/>
-            <OutputLogLine text='Fizz' timestamp='12:24:45.443'/>
-            <OutputLogLine text='Fizz' timestamp='12:24:45.443'/>
-            <OutputLogLine text='Fizz' timestamp='12:24:45.443'/>
-            <OutputLogLine text='Fizz' timestamp='12:24:45.443'/>
-            <OutputLogLine text='Fizz' timestamp='12:24:45.443'/>
-            <OutputLogLine text='Fizz' timestamp='12:24:45.443'/>
-            <OutputLogLine text='Fizz' timestamp='12:24:45.443'/>
-            <OutputLogLine text='Fizz' timestamp='12:24:45.443'/>
+        flex flex-col h-60 overflow-auto'>
+            <span>{atob(func)}</span>
         </div>
     )
 }
 
-const CodeContainer = () => {
+const Placeholder = () => {
 
     return (
-        <div className='bg-zinc-900 rounded-md p-4
-        flex flex-col h-60 overflow-y-scroll'>
-            <span>{`
-            function getBaseLog(x, y) {
-                return Math.log(y) / Math.log(x);
-            }
+        <div className='w-full my-16 text-white
+            flex justify-center items-center'>
 
-            // 2 x 2 x 2 = 8
-            console.log(getBaseLog(2, 8));
-                // Expected output: 3
+            <div className='bg-zinc-900
+            grid md:grid-cols-2 grid-cols-1 gap-5
+            md:w-4/5 w-[90vw] p-4 rounded-md shadow-md'>
+                
+                <div className='bg-zinc-800 p-4 rounded-md
+                shadow-md h-60 flex justify-center items-center'>
+                    <LoadingSpinner/>
+                </div>
 
-            // 5 x 5 x 5 x 5 = 625
-            console.log(getBaseLog(5, 625));
-            // Expected output: 4
-            `}</span>
+                <div className='bg-zinc-800 p-4 rounded-md
+                shadow-md h-60 flex justify-center items-center'>
+                    <LoadingSpinner/>
+                </div>
+
+                <div className='bg-zinc-800 p-4 rounded-md
+                shadow-md h-60 flex justify-center items-center'>
+                    <LoadingSpinner/>
+                </div>
+
+                <div className='bg-zinc-800 p-4 rounded-md
+                shadow-md h-60 flex justify-center items-center'>
+                    <LoadingSpinner/>
+                </div>
+
+            </div>
         </div>
     )
 }
