@@ -1,13 +1,23 @@
+//Import React hooks
+import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 
-
-//Import react hooks
+//Import React Router hooks
 import { Link, useParams } from 'react-router-dom';
 
+//Import custom hooks
 import { useGetAlgorithm } from '../../hooks/firestore.ts';
-import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
+
+//Import contexts
 import { InputContext } from '../../contexts/index.ts';
+
+//Import components
 import { LoadingSpinner } from '../../components/LoadingSpinner.tsx';
-import { leftPad } from '../../utils/string.ts';
+
+//Import utils
+import { leftPad } from '../../utils/formatter.ts';
+
+//Import config constants
+import { SHELL_URL } from '../../config/index.ts';
 
 
 export const AlgorithmPage = () => {
@@ -18,19 +28,18 @@ export const AlgorithmPage = () => {
 
     const input = useRef<string[]>([]);
 
-    const output = useRef<Array<{value: string, timestamp: string}>>([]);
-    const [, update] = useState<string>("");
     const connected = useRef(false);
-
     const sandboxRef = useRef<HTMLIFrameElement>(null);
 
+    const output = useRef<Array<{value: string, timestamp: string}>>([]);
+    const [, update] = useState<string>("");
 
     const handleRun = () => {
         sandboxRef.current!.contentWindow!.postMessage({func: algorithm.function, input: input.current}, "*");
     }
 
     const handleMessage = (event: MessageEvent) => {
-        if(event.origin == "https://usad-shell.web.app"){
+        if(event.origin == SHELL_URL){
             if(event.data == "CONNECTION ESTABLISHED"){
                 connected.current = true;
                 return update("ESTABLISHED");
@@ -72,7 +81,7 @@ export const AlgorithmPage = () => {
             <iframe 
             sandbox="allow-same-origin allow-scripts"
             className='w-0 h-0'
-            src="https://usad-shell.web.app" ref={sandboxRef}/>
+            src={SHELL_URL} ref={sandboxRef}/>
 
             <div className='bg-zinc-900
             grid md:grid-cols-2 grid-cols-1 gap-5
