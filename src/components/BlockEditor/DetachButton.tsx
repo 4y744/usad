@@ -17,13 +17,14 @@ export const DetachButton = ({parent, port, position}: {parent: blockType, port:
 
             buttonRef.current!.addEventListener("mouseup", (event: MouseEvent) => event.stopPropagation());
             buttonRef.current!.addEventListener("touchend", (event: TouchEvent) => event.stopPropagation());
+            
         }, [blocks])
 
         const detachBlock = () => {
-            
             if(!attached) return;
-            setBlocks(blocks
-                .map((block) => {
+
+            setBlocks(prev => 
+                prev.map((block) => {
                     if(block.id == parent.ports[port])
                     {
                         block.attached = false;
@@ -38,8 +39,8 @@ export const DetachButton = ({parent, port, position}: {parent: blockType, port:
                         block.ports[port] = "";
                     }
                     return block;
-            }))
-            
+                })
+            )
         }
         
         return (
@@ -50,7 +51,6 @@ export const DetachButton = ({parent, port, position}: {parent: blockType, port:
             ? "bg-red-700 hover:bg-red-600 outline-red-600"
             : "bg-green-600 hover:bg-green-500 outline-green-500"}
             ${position == "right" ? "absolute right-0 top-[22px] translate-x-1/2 -translate-y-1/2" : null}
-            ${position == "flex" ? "my-2" : null}
             ${position == "top" ? "absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2" : null}`}
             onClick={detachBlock}>
                 {attached 

@@ -5,6 +5,7 @@ import { NotFoundPage } from "../static/NotFoundPage";
 import { LinkCard } from "../../components/LinkCard";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { DocumentData } from "firebase/firestore";
+import { TimeFormatter } from "../../utils/formatter";
 
 export const UserPage = () => {
 
@@ -32,9 +33,7 @@ export const UserPage = () => {
                     <div className="text-sm">
                         <span>Created at: </span>
                         <span className="text-green-600 font-bold">
-                            {user.created.getDate()}/
-                            {("0" + (user.created.getMonth() + 1).toString()).slice(-2)}/
-                            {user.created.getFullYear()}
+                            {TimeFormatter.DayMonthYear(user.created)}
                         </span>
                     </div>
                 </div>

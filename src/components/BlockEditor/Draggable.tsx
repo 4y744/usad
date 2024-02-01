@@ -15,9 +15,10 @@ export const Draggable = ({children, startPos, scale} : {children: any, startPos
     const masterId = useContext(MasterBlockContext);
     const {selectedBlock, blocks, setBlocks, blockEditorRef} = useContext(BlockEditorContext);
 
+
     //Mouse event handlers
     const handleMouseMove = (event: MouseEvent) => {
-        if(!dragging.current) return;
+        if(!dragging.current || !draggable.current) return;
 
         currentPos.current = {
             x: (event.clientX - clickPos.current.x) / (scale.current! / 100),
@@ -26,8 +27,6 @@ export const Draggable = ({children, startPos, scale} : {children: any, startPos
 
         draggable.current!.style.top = `${currentPos.current.y * (scale.current! / 100)}px`;
         draggable.current!.style.left = `${currentPos.current.x * (scale.current! / 100)}px`;
-
-        
     }
 
     const handleMouseDown = (event: MouseEvent) => {
@@ -52,27 +51,26 @@ export const Draggable = ({children, startPos, scale} : {children: any, startPos
         draggable.current!.style.zIndex = "0";
         draggable.current!.style.cursor = "grab";
 
-        setBlocks(blocks.map((b) => {
-            if(b.id == masterId)
-            {
-                b.position = currentPos.current;               
-            }
-            return b;
-        }));
+        setBlocks(prev => {
+            const index = blocks.findIndex(b => b.id == masterId);
+            prev[index] = {...prev[index], position: currentPos.current};
+            return prev;
+        });
     }
+
 
     //Touch event handlers
     const handleTouchMove = (event: TouchEvent) => {
-        if(!dragging.current) return;
+        if(!dragging.current || !draggable.current) return;
 
-        currentPos.current! = {
-            x: event.touches[0].clientX - clickPos.current.x,
-            y: event.touches[0].clientY - clickPos.current.y 
+        currentPos.current = {
+            x: (event.touches[0].clientX - clickPos.current.x) / (scale.current! / 100),
+            y: (event.touches[0].clientY - clickPos.current.y) / (scale.current! / 100) 
         }
 
-        draggable.current!.style.top = `${currentPos.current.y}px`;
-        draggable.current!.style.left = `${currentPos.current.x}px`;
-        
+        draggable.current!.style.top = `${currentPos.current.y * (scale.current! / 100)}px`;
+        draggable.current!.style.left = `${currentPos.current.x * (scale.current! / 100)}px`;
+
         event.preventDefault();
     }
 
@@ -95,15 +93,14 @@ export const Draggable = ({children, startPos, scale} : {children: any, startPos
         draggable.current!.style.zIndex = "0";
         dragging.current = false;
 
-        setBlocks(blocks.map((b) => {
-            if(b.id == masterId)
-            {
-                b.position = currentPos.current;               
-            }
-            return b;
-        }));
+        setBlocks(prev => {
+            const index = blocks.findIndex(b => b.id == masterId);
+            prev[index].position = currentPos.current
+            return prev;
+        });
     }
 
+    //Zoom event handler
     const handleZoom = (event: CustomEvent<{deltaY: number, scale: number}>) => {
         if(!draggable.current) return;
         
@@ -121,6 +118,7 @@ export const Draggable = ({children, startPos, scale} : {children: any, startPos
     }
 
     useEffect(() => {
+        //On start
         draggable.current!.style.top = `${startPos.y * (scale.current! / 100)}px`;
         draggable.current!.style.left = `${startPos.x * (scale.current! / 100)}px`;
 
@@ -129,7 +127,8 @@ export const Draggable = ({children, startPos, scale} : {children: any, startPos
 
         draggable.current!.style.scale = `${scale.current!}%`
 
-        document.addEventListener("mousemove", handleMouseMove)
+        //Mount event handlers
+        blockEditorRef.current!.addEventListener("mousemove", handleMouseMove)
         draggable.current!.addEventListener("mousedown", handleMouseDown);
         document.addEventListener("mouseup", handleMouseUp);
 
@@ -141,6 +140,7 @@ export const Draggable = ({children, startPos, scale} : {children: any, startPos
         blockEditorRef.current!.addEventListener("zoom", handleZoom as EventListener);
 
         return () => {
+            //Unmount event handlers
             document.removeEventListener("mousemove", handleMouseMove)
             document.removeEventListener("mouseup", handleMouseUp)
             document.removeEventListener("touchend", handleTouchEnd);
@@ -151,7 +151,16 @@ export const Draggable = ({children, startPos, scale} : {children: any, startPos
     
 
     return (
-        <div className="absolute" tabIndex={0} style={{cursor: "grab", userSelect: "none", zIndex: "0", transformOrigin: "0 0"}} ref={draggable}>
+        <div 
+        className="absolute" 
+        tabIndex={0} 
+        style={{
+            cursor: "grab", 
+            userSelect: "none", 
+            zIndex: "0", 
+            transformOrigin: "0 0"
+        }} 
+        ref={draggable}>
             {children}
         </div>
        

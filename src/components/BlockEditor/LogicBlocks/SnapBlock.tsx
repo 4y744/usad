@@ -3,7 +3,7 @@ import { BlockEditorContext, MasterBlockContext } from "../../../contexts";
 
 export const SnapBlock = ({parent}: {parent: {id: string, port: number}}) => {
 
-    const {blocks, setBlocks, selectedBlock, blockEditorRef} = useContext(BlockEditorContext);
+    const {setBlocks, selectedBlock, blockEditorRef} = useContext(BlockEditorContext);
     const masterId = useContext(MasterBlockContext);
 
     //Used to attach event listeners
@@ -16,7 +16,7 @@ export const SnapBlock = ({parent}: {parent: {id: string, port: number}}) => {
 
         if(!mouseOver.current || selectedBlock.current == "start" || selectedBlock.current == masterId) return;
 
-        setBlocks(blocks.map((block) => {
+        setBlocks(prev => prev.map((block) => {
             if(block.id == parent.id){
                 block.ports[parent.port] = selectedBlock.current;
             }

@@ -6,10 +6,10 @@ import { BlockEditorContext } from "../../../contexts";
 
 export const ComparisonBlock = ({block}: {block: blockType}) => {
 
-    const {blocks, setBlocks} = useContext(BlockEditorContext);
+    const {setBlocks} = useContext(BlockEditorContext);
 
     const handleChange = (event : ChangeEvent<HTMLSelectElement>) => {
-        setBlocks(blocks.map((b) => {
+        setBlocks(prev => prev.map((b) => {
             if(b.id == block.id) b.metadata!.values[0] = event.target.value;
             return b;
         }))

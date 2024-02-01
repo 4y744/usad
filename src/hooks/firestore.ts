@@ -6,37 +6,37 @@ import { doc, collection, getDoc, getDocs, writeBatch, where, query, DocumentDat
 import { db } from "./firebase.ts";
 import { algorithmType } from "../types/index.ts";
 
-export const useGetUser = (param: {username?: string, uid?: string}) : {username: string, uid: string, created: Date, loading: boolean, error: boolean} => {
-    const [user, setUser] = useState({username: "", uid: "", created: new Date(), loading: true, error: false});
+export const useGetUser = (param: {username?: string, uid?: string}) : {username: string, uid: string, created: number, loading: boolean, error: boolean} => {
+    const [user, setUser] = useState({username: "", uid: "", created: 0, loading: true, error: false});
 
     useEffect(() => {
         const fetch = async () => {
 
             try{
 
-                if(param.uid != null){
-                    const userDocRef = doc(db, "users", param.uid);
+                if(param.username != null){
+                    const userDocRef = doc(db, "users", param.username);
                     const userDoc = await getDoc(userDocRef);
                     if(!userDoc.exists()) throw new Error("User does not exist");
                     const data = userDoc.data();
                     setUser({
-                        uid: param.uid,
-                        username: data.username,
-                        created: new Date(data.created),
+                        uid: data.uid,
+                        username: param.username,
+                        created: data.created,
                         loading: false,
                         error: false
                     });
 
                 }
-                else if(param.username != null){
+                else if(param.uid != null){
                     const q = query(collection(db, "users"), where("username", "==", param.username));
                     const userDoc = await getDocs(q);
                     if(!userDoc.docs[0].exists()) throw new Error("User does not exist");
                     const data = userDoc.docs[0].data();
                     setUser({
-                        uid: userDoc.docs[0].id,
-                        username: param.username!,
-                        created: new Date(data.created),
+                        uid: param.uid,
+                        username: userDoc.docs[0].id,
+                        created: data.created,
                         loading: false,
                         error: false
                     });
@@ -59,8 +59,8 @@ export const useGetUser = (param: {username?: string, uid?: string}) : {username
     return user;
 }
 
-export const useGetAlgorithms = (params: {username?: string, uid?: string}) : {algorithms: DocumentData[] | undefined, loading: boolean} => {
-    const [algorithms, setAlgorithms] = useState<DocumentData[]>();
+export const useGetAlgorithms = (params: {username?: string, uid?: string}) : {algorithms: algorithmType[] | undefined, loading: boolean} => {
+    const [algorithms, setAlgorithms] = useState<algorithmType[]>();
     const [loading, setLoading] = useState(true);
 
     const user = useGetUser({username: params.username, uid: params.uid})
@@ -75,7 +75,7 @@ export const useGetAlgorithms = (params: {username?: string, uid?: string}) : {a
                
                 if(algDocs.empty) throw new Error("Not found!")
 
-                let tempDocs : any = [];
+                let tempDocs : algorithmType[] = [];
                 algDocs.forEach((doc) => {
                     tempDocs.push({
                         id: doc.id,
@@ -104,19 +104,20 @@ export const useGetAlgorithms = (params: {username?: string, uid?: string}) : {a
 
 
 export const useGetAlgorithm = (id: string) => {
-    const [algorithm, setAlgorithm] = useState<algorithmType>({loading: true});
+    const [algorithm, setAlgorithm] = useState<algorithmType>({id: "", loading: true});
 
     useEffect(() => {
         const fetch = async () => {
 
             try{
                 const docRef = doc(db, "algorithms", id);
-                const algDocs = await getDoc(docRef);
+                const algDoc = await getDoc(docRef);
                
-                if(!algDocs.exists()) throw new Error("Not found!")
+                if(!algDoc.exists()) throw new Error("Not found!")
 
                 setAlgorithm({
-                    ...algDocs.data(),
+                    id: algDoc.id,
+                    ...algDoc.data(),
                     loading: false
                 })
             }

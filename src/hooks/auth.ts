@@ -6,7 +6,7 @@ import { auth } from "./firebase"
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 //Import Firebase hooks
-import { doc, getDoc, getDocs, writeBatch } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, setDoc, where, writeBatch } from "firebase/firestore";
 import { db } from "./firebase.ts";
 import { useNavigate } from 'react-router-dom';
 import { userType } from "../types/index.ts";
@@ -28,22 +28,29 @@ export const useSignUp = (redirectUrl: string): [(credentials: {username: string
                     throw {code: "input/empty-fields"}
                 }
             });
+
+            if(credentials.password != credentials.confirmPassword) throw {code: "input/password-mismatch"}
             
-            const usernameTaken = (await getDoc(doc(db, "usernames", credentials.username))).exists();
+            const usernameTaken = (await getDoc(doc(db, "users", credentials.username))).exists();
             if(usernameTaken) throw {code: "auth/username-taken"}
         
             await createUserWithEmailAndPassword(auth, credentials.email, credentials.password)
-            
-            const batch = writeBatch(db);
-                    
-            batch.set(doc(db, "users", auth.currentUser!.uid), { 
-                username: credentials.username,
+
+            await setDoc(doc(db, "users", credentials.username), {
+                uid: auth.currentUser!.uid,
                 created: Date.now()
-            });
+            })
+            
+            // const batch = writeBatch(db);
+                    
+            // batch.set(doc(db, "users", auth.currentUser!.uid), { 
+            //     username: credentials.username,
+            //     created: Date.now()
+            // });
 
-            batch.set(doc(db, "usernames", credentials.username), { uid: auth.currentUser!.uid })
+            // batch.set(doc(db, "usernames", credentials.username), { uid: auth.currentUser!.uid })
 
-            await batch.commit()
+            // await batch.commit()
 
             navigate(redirectUrl);
 
@@ -133,11 +140,12 @@ export const useUser = () : userType => {
             setUser({...user, loading: true})
 
             if (auth.currentUser) {
-                getDoc(doc(db, "users", auth.currentUser.uid))
-                .then((doc) =>{
+                const q = query(collection(db, "users"), where("uid", "==", auth.currentUser.uid) )
+                getDocs(q)
+                .then((data) =>{
                     setUser({
                         ...user, 
-                        username: doc.data()?.username, 
+                        username: data.docs[0].id, 
                         email: auth.currentUser!.email!, 
                         logged: true, 
                         loading: false

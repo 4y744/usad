@@ -13,13 +13,15 @@ export type Vector2 = {
 }
 
 export type algorithmType = {
+    id: string,
     title?: string;
     description?: string;
     author?: string;
+    created?: number;
     input_type?: string;
     inputs?: Array<string>;
     function?: string;
-    loading: boolean;
+    loading?: boolean;
 }
 
 export type blockType = {

@@ -28,27 +28,67 @@ export const MainContent = () => {
                     <Routes>
 
                         {/* Generic routes */}
-                        <Route path="" element={<HomePage/>} />
-                        <Route path="signin" element={<SignInPage/>} />
-                        <Route path="signup" element={<SignUpPage/>} />
-                        <Route path="signout" element={<SignOutPage/>} />
-                        <Route path="user/:username" element={<UserPage/>} />
-                        <Route path="about" element={<AboutPage/>} />
-                        <Route path="algorithm/:id" element={<AlgorithmPage/>} />
+                        <Route
+                        path="" 
+                        element={<HomePage/>} />
+
+                        <Route 
+                        path="signin" 
+                        element={<SignInPage/>} />
+
+                        <Route 
+                        path="signup" 
+                        
+                        element={<SignUpPage/>} />
+                        <Route 
+                        path="signout" 
+                        element={<SignOutPage/>} />
+
+                        <Route 
+                        path="user/:username" 
+                        element={<UserPage/>} />
+
+                        <Route 
+                        path="about" 
+                        element={<AboutPage/>} />
+
+                        <Route 
+                        path="algorithm/:id" 
+                        element={<AlgorithmPage/>} />
 
                         {/* Protected routes */}
                         <Route path="/" element={<ProtectedRoute/>}>
-                            <Route path="settings" element={<SettingsPage/>}>
-                                <Route path="s1" element={<h1>s1</h1>}/>
-                                <Route path="s2" element={<h1>s2</h1>}/>
+                            <Route 
+                            path="settings" 
+                            element={<SettingsPage/>}>
+
+                                <Route 
+                                path="s1" 
+                                element={<h1>s1</h1>}/>
+
+                                <Route 
+                                path="s2" 
+                                element={<h1>s2</h1>}/>
+
                             </Route>
-                            <Route path="dashboard" element={<DashboardPage/>} />
-                            <Route path="create" element={<CreatePage/>}/>
-                            <Route path="editor" element={<BlockEditor/>}/>
+
+                            <Route 
+                            path="dashboard" 
+                            element={<DashboardPage/>} />
+
+                            <Route 
+                            path="create" 
+                            element={<CreatePage/>}/>
+
+                            <Route 
+                            path="editor" 
+                            element={<BlockEditor/>}/>
                         </Route>
                         
                         {/* 404 page */}
-                        <Route path="*" element={<NotFoundPage/>} />
+                        <Route 
+                        path="*" 
+                        element={<NotFoundPage/>} />
 
                     </Routes>
                 }
