@@ -23,7 +23,10 @@ module.exports = {
       },
       backgroundImage: {
         'home-headline': "url('/src/assets/svgs/home-headline.svg')",
-      }
+      },
+      fontSize: {
+        '2xs': '0.625rem'
+      },
     }
   },
   plugins: [],

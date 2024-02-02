@@ -60,7 +60,7 @@ export const useGetUser = (param: {username?: string, uid?: string}) : {username
 }
 
 export const useGetAlgorithms = (params: {username?: string, uid?: string}) : {algorithms: algorithmType[] | undefined, loading: boolean} => {
-    const [algorithms, setAlgorithms] = useState<algorithmType[]>();
+    const [algorithms, setAlgorithms] = useState<algorithmType[]>([]);
     const [loading, setLoading] = useState(true);
 
     const user = useGetUser({username: params.username, uid: params.uid})

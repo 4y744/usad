@@ -45,7 +45,7 @@ export const AlgorithmPage = () => {
     const handleMessage = (event: MessageEvent) => {
 
         if(event.origin == SHELL_URL){
-            
+            console.log("f");
             const timestamp = TimeFormatter.HourMinuteSecondMillisecond(event.data.timestamp);
 
             if(event.data.message != null)
@@ -57,7 +57,7 @@ export const AlgorithmPage = () => {
                         timestamp: timestamp
                     }
                 ]);
-
+                
                 return setLoading(false);
             }
 
@@ -65,6 +65,7 @@ export const AlgorithmPage = () => {
                 ...prev,
                 {value: event.data.value, timestamp: timestamp}
             ])
+
 
             setLoading(false);
 
@@ -87,7 +88,7 @@ export const AlgorithmPage = () => {
 
     return (
         <InputContext.Provider value={input}>
-            <div className='w-full my-16 text-white
+            <div className='w-full md:my-16 my-8 text-white
             flex justify-center items-center'>
             <iframe 
             sandbox="allow-same-origin allow-scripts"
@@ -150,7 +151,7 @@ export const AlgorithmPage = () => {
                         <button
                         onClick={handleClearLog}
                         className="bg-green-700 hover:bg-green-600
-                        active:outlineoutline-2 outline-green-600 outline-offset-2
+                        active:outline outline-2 outline-green-600 outline-offset-2
                         px-4 py-2 ml-auto rounded-md shadow-md">
                             Clear
                         </button>
@@ -271,7 +272,7 @@ const CodeContainer = ({func} : {func: string}) => {
 const Placeholder = () => {
 
     return (
-        <div className='w-full my-16 text-white
+        <div className='w-full md:my-16 my-8 text-white
             flex justify-center items-center'>
 
             <div className='bg-zinc-900

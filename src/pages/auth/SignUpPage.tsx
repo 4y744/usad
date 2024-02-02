@@ -22,7 +22,7 @@ export const SignUpPage = () => {
 
 
     return (
-        <div className="flex justify-center items-center w-full my-16">
+        <div className="flex justify-center items-center w-full md:my-16 my-8">
             <div className="flex justify-start items-start flex-col gap-3 rounded-md p-6 shadow-md text-white bg-zinc-900 sm:w-96 w-80">
                 <h1 className="text-2xl font-bold">Sign Up</h1>
                 <span>Create an account to join and contribute.</span>
