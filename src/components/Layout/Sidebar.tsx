@@ -7,22 +7,23 @@ export const Sidebar = () => {
     const {username, logged} = useContext(AuthContext);
 
     return (
-        <section style={logged ? {visibility: "visible"} : {visibility: "hidden"}} className="fixed bottom-0
+        <section style={logged ? {visibility: "visible"} : {visibility: "hidden"}} 
+        className="bg-zinc-900 shadow-md text-zinc-200 text-xl
+        fixed bottom-0
         md:h-[calc(100dvh-56px)] md:w-14 md:hover:w-48 transition-width duration-200 md:pb-1
-        h-14 w-full z-20 group overflow-hidden
+        h-14 w-full z-20 group overflow-hidden select-none
         flex md:flex-col md:items-start md:justify-end items-center justify-center
-        bg-zinc-900 text-zinc-200 text-xl
         md:border-none border-t-[4px] border-green-600">
+            
+            <SideLink 
+            url="/" 
+            faClass="fa-solid fa-house" 
+            text="Home"/>
 
             <SideLink 
             url="/dashboard" 
             faClass="fa-solid fa-chart-line" 
             text="Dashboard"/>
-
-            <SideLink 
-            url="/dashboard/bookmarks" 
-            faClass="fa-regular fa-bookmark" 
-            text="Bookmarks"/>
 
             <SideLink 
             url={`/user/${username}`} 

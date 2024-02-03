@@ -1,42 +1,14 @@
 import { MutableRefObject, createContext } from "react";
-import { algorithmType, blockEditorContextType } from "../types";
+import { algorithmType, authType, blockEditorContextType } from "../types";
 
-export const AuthContext = createContext({username: "", email: "", logged: false, loading: true});
+export const AuthContext = createContext<authType>({} as authType);
 
 export const MasterBlockContext = createContext<string>("");
 
-export const AlgorithmContext = createContext<algorithmType>({
-    id: "",
-    title: "",
-    description: "",
-    author: "",
-    input_type: "",
-    inputs: [""],
-    function: "",
-    loading: true
-})
+export const AlgorithmContext = createContext<algorithmType>({} as algorithmType)
 
-export const AlgorithmsContext = createContext<algorithmType[]>([
-    {
-        id: "",
-        title: "",
-        description: "",
-        author: "",
-        input_type: "",
-        inputs: [""],
-        function: "",
-        loading: true
-    }
-])
+export const AlgorithmsContext = createContext<algorithmType[]>([] as algorithmType[])
 
+export const BlockEditorContext = createContext<blockEditorContextType>({} as blockEditorContextType);
 
-export const BlockEditorContext = createContext<blockEditorContextType>
-({
-    blocks: [], 
-    setBlocks: () => {}, 
-    selectedBlock: {current: ""}, 
-    blockEditorRef: {current: null}, 
-    scale: {current: 100}
-});
-
-export const InputContext = createContext<MutableRefObject<string[]>>({current: []});
+export const InputContext = createContext<MutableRefObject<string[]>>({} as MutableRefObject<string[]>);

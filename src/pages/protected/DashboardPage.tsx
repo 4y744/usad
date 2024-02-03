@@ -1,19 +1,22 @@
-import { useContext, useEffect, useState } from "react"
-import { useGetAlgorithms } from "../../hooks/firestore"
+import { useContext, useState } from "react"
+import { useGetOwnAlgorithms } from "../../hooks/firestore"
 import { AlgorithmsContext, AuthContext } from "../../contexts"
-import { Link } from "react-router-dom";
 import { BoxView, ListView } from "../../components/Dashboard/DashboardView";
 import { algorithmType } from "../../types";
 import { AlgorithmSorter } from "../../utils/sorter";
+import { InfoContainer, ProfileContainer } from "../../components/Dashboard/DashboardInfo";
+import { Placeholder } from "../../components/Dashboard/Placeholder";
+import { useNavigate } from "react-router-dom";
 
 export const DashboardPage = () => {
 
     const {username} = useContext(AuthContext);
-    const {algorithms, loading} = useGetAlgorithms({username: username});
+    const {algorithms, loading} = useGetOwnAlgorithms({username: username});
 
     const [selectedView, setSelectedView] = useState<"list" | "box">("box")
     const [selectedSort, setSelectedSort] = useState<"alphabetical" | "reverse-alphabetical" | "post-date" | "reverse-post-date">("post-date");
 
+    const navigate = useNavigate();
 
     const sortAlgorithms = (algorithms: algorithmType[], type: string) => {
         switch(type){
@@ -28,33 +31,40 @@ export const DashboardPage = () => {
         }
     }
 
-    if(loading) return <>Loading</>;
-
-    
-    return (
-        <div className='w-full md:md:my-16 my-8 my-8 text-white
+    return loading ? <Placeholder/> : (
+        <div className='w-full md:md:my-16 my-8 text-white
         flex justify-center items-center'>
 
-            <div className="grid md:grid-cols-4 grid-cols-1 gap-5
+            <div className="grid lg:grid-cols-4 grid-cols-1 gap-5
             md:w-5/6 w-[95%] min-h-fit">
 
                 <div className="bg-zinc-900 shadow-md rounded-md
-                row-start-1 md:row-end-4 md:col-start-1 md:col-end-2
-                row-end-2 p-8">
+                row-start-1 lg:row-end-4 lg:col-start-1 lg:col-end-2
+                row-end-2 p-8
+                flex flex-col gap-5">
+                    
+                    <ProfileContainer/>
+
+                    <InfoContainer views={3255} votes={1245} forks={43}/>
 
                 </div>
 
                 <div className="bg-zinc-900 shadow-md rounded-md h-fit
-                md:row-start-1 md:row-end-4 md:col-start-2 md:col-end-5
+                lg:row-start-1 lg:row-end-4 lg:col-start-2 lg:col-end-5
                 row-start-2 row-end-5
                 flex flex-col gap-5
                 p-8">
                     
                     <div className="bg-zinc-800 shadow-md rounded-md
-                    w-full p-2
-                    flex gap-2">
-                        
-                        
+                    w-full p-2 gap-2
+                    flex items-center">
+
+                        <div className="bg-zinc-900 w-fit rounded-md shadow-md
+                        flex mr-auto">
+                            <ViewManagerButton 
+                            handleClick={() => navigate("/create")} 
+                            faClass="fa-solid fa-plus"/>
+                        </div>
 
                         <div className="bg-zinc-900 w-fit rounded-md shadow-md
                         flex">
@@ -77,9 +87,13 @@ export const DashboardPage = () => {
 
                         <div className="bg-zinc-900 w-fit rounded-md shadow-md
                         flex ml-auto">
-                            <ViewManagerButton handleClick={() => setSelectedView("list")} faClass="fa-solid fa-list"/>
-                            <ViewManagerButton handleClick={() => setSelectedView("box")} faClass="fa-solid fa-border-all"/>
-   
+                            <ViewManagerButton 
+                            handleClick={() => setSelectedView("list")} 
+                            faClass="fa-solid fa-list"/>
+
+                            <ViewManagerButton 
+                            handleClick={() => setSelectedView("box")} 
+                            faClass="fa-solid fa-border-all"/>
                         </div>
 
                     </div>
@@ -92,7 +106,6 @@ export const DashboardPage = () => {
                         </AlgorithmsContext.Provider>
                     </div>
                     
-
                 </div>
 
             </div>

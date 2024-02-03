@@ -3,6 +3,8 @@ import { algorithmType } from "../../types";
 import { AlgorithmsContext } from "../../contexts";
 import { Link } from "react-router-dom";
 import { TimeFormatter } from "../../utils/formatter";
+import { copyToClipboard } from "../../utils/actions";
+import { ROOT_URL } from "../../config";
 
 //List view components
 
@@ -40,25 +42,7 @@ const ListViewItem = ({alg} : {alg: algorithmType}) => {
             
             <div className="ml-auto
             grid lg:grid-cols-5 grid-cols-3 gap-2">
-                <ViewActionButton 
-                faClass="fa-solid fa-code-fork" 
-                handleClick={() => {}}/>
-
-                <ViewActionButton 
-                faClass="fa-solid fa-link" 
-                handleClick={() => {}}/>
-
-                <ViewActionButton 
-                faClass="fa-solid fa-lock" 
-                handleClick={() => {}}/>
-                
-                <ViewActionButton 
-                faClass="fa-solid fa-pen" 
-                handleClick={() => {}}/>
-
-                <ViewActionButton 
-                faClass="fa-solid fa-trash" 
-                handleClick={() => {}}/>
+               <ViewActionButtonContainer alg={alg}/>
             </div>
         </div>
     )
@@ -117,29 +101,11 @@ const BoxViewItem = ({alg} : {alg: algorithmType}) => {
 
             <ViewPostDate created={alg.created!}/>
 
-            <BoxViewInfoContainer votes={1000} comments={234} visibility="public"/>
+            <BoxViewInfoContainer votes={1000} comments={234} visibility={alg.visibility!}/>
 
             <div className="ml-auto mt-auto pt-5
             flex gap-2">
-                <ViewActionButton 
-                faClass="fa-solid fa-code-fork" 
-                handleClick={() => {}}/>
-
-                <ViewActionButton 
-                faClass="fa-solid fa-link" 
-                handleClick={() => {}}/>
-
-                <ViewActionButton 
-                faClass="fa-solid fa-lock" 
-                handleClick={() => {}}/>
-
-                <ViewActionButton 
-                faClass="fa-solid fa-pen" 
-                handleClick={() => {}}/>
-
-                <ViewActionButton 
-                faClass="fa-solid fa-trash" 
-                handleClick={() => {}}/>
+                <ViewActionButtonContainer alg={alg}/>
             </div>
 
         </div>
@@ -211,5 +177,32 @@ const ViewActionButton = ({faClass, handleClick} : {faClass: string, handleClick
         onClick={handleClick}>
             <i className={faClass}/>
         </button>
+    )
+}
+
+const ViewActionButtonContainer = ({alg} : {alg: algorithmType}) => {
+
+    return (
+        <>
+            <ViewActionButton 
+            faClass="fa-solid fa-code-fork" 
+            handleClick={() => {}}/>
+
+            <ViewActionButton 
+            faClass="fa-solid fa-link" 
+            handleClick={() => copyToClipboard(`${ROOT_URL}/algorithm/${alg.id}`)}/>
+
+            <ViewActionButton 
+            faClass="fa-solid fa-lock" 
+            handleClick={() => {}}/>
+                
+            <ViewActionButton 
+            faClass="fa-solid fa-pen" 
+            handleClick={() => {}}/>
+
+            <ViewActionButton 
+            faClass="fa-solid fa-trash" 
+            handleClick={() => {}}/>
+        </>
     )
 }

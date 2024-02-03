@@ -4,25 +4,35 @@ export const leftPad = (str: string, len: number, char: string) => {
 
 export const TimeFormatter = {
     HourMinuteSecondMillisecond: (timestamp: number) => {
-        const date = new Date(timestamp);
+        try{
+            const date = new Date(timestamp);
 
-        const time = `${
-            leftPad(date.getHours().toString(), 2, "0") }:${
-            leftPad(date.getMinutes().toString(), 2, "0")}:${
-            leftPad(date.getSeconds().toString(), 2, "0")}.${
-            leftPad(date.getMilliseconds().toString(), 4, "0")
-        }`
+            const time = `${
+                leftPad(date.getHours().toString(), 2, "0") }:${
+                leftPad(date.getMinutes().toString(), 2, "0")}:${
+                leftPad(date.getSeconds().toString(), 2, "0")}.${
+                leftPad(date.getMilliseconds().toString(), 4, "0")
+            }`
 
-        return time;
+            return time;
+        }
+        catch{
+            return "[not available]"
+        }
     },
     DayMonthYear: (timestamp: number) => {
-        const date = new Date(timestamp);
+        try{
+            const date = new Date(timestamp);
         
-        const time = `${
-                leftPad(date.getDate().toString(), 2, "0") }/${
-                leftPad((date.getMonth() + 1).toString(), 2, "0")}/${
-                leftPad(date.getFullYear().toString(), 4, "0")}`
+            const time = `${
+                    leftPad(date.getDate().toString(), 2, "0") }/${
+                    leftPad((date.getMonth() + 1).toString(), 2, "0")}/${
+                    leftPad(date.getFullYear().toString(), 4, "0")}`
 
-        return time;
+            return time;
+        }
+        catch{
+            return "[not available]"
+        }
     }
 }

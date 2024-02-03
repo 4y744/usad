@@ -58,30 +58,6 @@ const Heading = () => (
 )
 
 const Featured = () => {
-    
-    // const [isLoading, setLoading] = useState(true);
-    // const [documents, setDocuments] = useState([]);
-
-    // useEffect(() => {
-    //     getDocument();
-    // }, [])
-
-    // async function getDocument()
-    // {
-    //     //Tries to get the documents from Firestore
-    //     const docsRef = query(collection(db, "algorithms"));
-    //     const docs = await getDocs(docsRef);
-    //     let tempDocs : any = [];
-    //     docs.forEach((doc) => {
-    //         tempDocs.push({
-    //             id: doc.id,
-    //             ...doc.data()
-    //           });
-    //     })
-    //     setDocuments(tempDocs);
-
-    //     setLoading(false);     
-    // }
 
     const {algorithms, loading} = useGetAlgorithms({username: "USAD"});
 
@@ -103,58 +79,40 @@ const Cards = () => {
 
     return (
         <div className='grid xl:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-5 place-items-center
-        mx-5'>
+        m-5'>
             <Card 
-            title='Easily find ready-to-use algorithms'
-            description='Having a problem trying to solve someting? Want to make it easier?
-            Here you can find open source algorithms created by other users.
-            USAD provides a safe and sanitazed enviroment to run code.'
-            linktext='Start browsing...'
-            url='/browse'/>
+            title='Find ready-to-use algorithms'
+            description='Find algorithms created by other users and run them in our sandbox.'
+            faClass='fa-solid fa-magnifying-glass'/>
             
             <Card 
             title='Create your own algorithms'
-            description='Have you ever felt the need to automate a task?
-            Most of the time it might be beneficial to automate something
-            instead of doing it manually. On USAD you can not only achieve that,
-            but also easily customise and share your creations!'
-            linktext='Start creating...'
-            url='/create'/>
+            description='Create, modify and share your own algorithms all in one place.'
+            faClass='fa-solid fa-code'/>
 
             <Card 
             title='Built-in code editor'
-            description="Start writing code in the built-in JavaScript editor.
-            USAD provides you with an easy-to-use code editor and runs the code
-            for you. You don't need a fancy runtime like Node.js! Just write a
-            function and the return value will be your output!"
-            linktext='Start coding...'
-            url='/dashboard/create/code-editor'/>
+            description="Built-in and accessible JavaScript code editor."
+            faClass='fa-brands fa-square-js'/>
 
             <Card 
             title='Easy-to-use block editor'
-            description="One of USAD's most powerful features is it's built-in
-            accessible block editor. Code by dragging blocks and let the compiler
-            take care of construction the source code. Start programming without
-            writing a single line of code!"
-            linktext='Try it out...'
-            url='/dashboard/create/block-editor'/>
+            description="Flexible block editor that compiles to JavaScript."
+            faClass='fa-solid fa-arrow-pointer'/>
         </div>
     )
 }
-//Easily find and use algorithms.
-const Card = ({title, description, linktext, url} : {title: string, description: string, linktext: string, url: string}) => {
+
+
+const Card = ({title, description, faClass} : {title: string, description: string, faClass: string}) => {
     
     return (
-        <div className='bg-zinc-900 border-t-4 border-t-green-600 text-white
-        p-8 w-full h-full rounded-b-md shadow-md 
-        flex flex-col items-center gap-5'>
-            <h1 className='md:text-lg text-base font-semibold'>{title}</h1>
-            <p className='md:text-sm text-xs text-pretty text-zinc-200'>{description}</p>
-            <Link to={url}
-            className='bg-green-700 hover:bg-green-600 
-            active:outline outline-2 outline-green-600 outline-offset-2
-            md:text-sm text-sm
-            px-4 py-2 w-fit rounded-md shadow-md mt-auto'>{linktext}</Link>
+        <div className='bg-zinc-900 text-white
+        p-8 h-full w-full rounded-md shadow-md
+        gap-5'>
+            <i className={`${faClass} md:text-lg text-base`}/>
+            <h1 className='md:text-base text-sm font-medium my-1'>{title}</h1>
+            <p className='md:text-sm text-xs text-pretty text-zinc-300'>{description}</p>
         </div>
     )
 }

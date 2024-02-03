@@ -1,13 +1,14 @@
 //Import React hooks
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 
 //Import Firebase hooks
 import { doc, collection, getDoc, getDocs, writeBatch, where, query, DocumentData } from "firebase/firestore";
 import { db } from "./firebase.ts";
-import { algorithmType } from "../types/index.ts";
+import { algorithmType, userType } from "../types/index.ts";
+import { AuthContext } from "../contexts/index.ts";
 
 export const useGetUser = (param: {username?: string, uid?: string}) : {username: string, uid: string, created: number, loading: boolean, error: boolean} => {
-    const [user, setUser] = useState({username: "", uid: "", created: 0, loading: true, error: false});
+    const [user, setUser] = useState<userType>({loading: true} as userType);
 
     useEffect(() => {
         const fetch = async () => {
@@ -22,6 +23,7 @@ export const useGetUser = (param: {username?: string, uid?: string}) : {username
                     setUser({
                         uid: data.uid,
                         username: param.username,
+                        pfp: "",
                         created: data.created,
                         loading: false,
                         error: false
@@ -36,6 +38,7 @@ export const useGetUser = (param: {username?: string, uid?: string}) : {username
                     setUser({
                         uid: param.uid,
                         username: userDoc.docs[0].id,
+                        pfp: "",
                         created: data.created,
                         loading: false,
                         error: false
@@ -60,8 +63,7 @@ export const useGetUser = (param: {username?: string, uid?: string}) : {username
 }
 
 export const useGetAlgorithms = (params: {username?: string, uid?: string}) : {algorithms: algorithmType[] | undefined, loading: boolean} => {
-    const [algorithms, setAlgorithms] = useState<algorithmType[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [algorithms, setAlgorithms] = useState<{algorithms: algorithmType[], loading: boolean}>({loading: true} as {algorithms: algorithmType[], loading: boolean});
 
     const user = useGetUser({username: params.username, uid: params.uid})
 
@@ -70,7 +72,7 @@ export const useGetAlgorithms = (params: {username?: string, uid?: string}) : {a
         const fetch = async () => {
 
             try{
-                const q = query(collection(db, "algorithms"), where("author", "==", user.username));
+                const q = query(collection(db, "algorithms"), where("author", "==", user.username), where("visibility", "==", "public"));
                 const algDocs = await getDocs(q);
                
                 if(algDocs.empty) throw new Error("Not found!")
@@ -82,29 +84,62 @@ export const useGetAlgorithms = (params: {username?: string, uid?: string}) : {a
                         ...doc.data()
                     });
                 })
-
-
-                setAlgorithms(tempDocs);
+                setAlgorithms({algorithms: tempDocs, loading: false});
             }
             catch(err){
-                
+                setAlgorithms({algorithms: [], loading: false});
             }
-            
-            setLoading(false);
+
         }
 
         fetch()
 
     }, [user])
 
-    return {algorithms, loading};
+    return algorithms;
+}
+
+export const useGetOwnAlgorithms = (params: {username?: string, uid?: string}) : {algorithms: algorithmType[] | undefined, loading: boolean} => {
+    const [algorithms, setAlgorithms] = useState<{algorithms: algorithmType[], loading: boolean}>({loading: true} as {algorithms: algorithmType[], loading: boolean});
+
+    const user = useContext(AuthContext);
+
+
+    useEffect(() => {
+        const fetch = async () => {
+
+            try{
+                const q = query(collection(db, "algorithms"), where("author", "==", user.username));
+                const algDocs = await getDocs(q);
+                
+                if(algDocs.empty) throw new Error("Not found!")
+                
+                let tempDocs : algorithmType[] = [];
+                algDocs.forEach((doc) => {
+                    tempDocs.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                })
+
+
+                setAlgorithms({algorithms: tempDocs, loading: false});
+            }
+            catch(err){
+                setAlgorithms({algorithms: [], loading: false});
+            }
+        }
+
+        fetch()
+
+    }, [user])
+
+    return algorithms;
 }
 
 
-
-
 export const useGetAlgorithm = (id: string) => {
-    const [algorithm, setAlgorithm] = useState<algorithmType>({id: "", loading: true});
+    const [algorithm, setAlgorithm] = useState<algorithmType>({loading: true} as algorithmType);
 
     useEffect(() => {
         const fetch = async () => {

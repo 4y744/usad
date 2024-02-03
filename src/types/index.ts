@@ -1,9 +1,21 @@
 import { Dispatch, MutableRefObject, RefObject, SetStateAction } from "react"
 
 export type userType = {
+    uid: string,
+    username: string,
+    created: number,
+    pfp: string,
+    loading: boolean,
+    error: boolean
+}
+
+export type authType = {
+    uid: string,
     username: string, 
     email: string, 
+    created: number,
     logged: boolean, 
+    pfp: string,
     loading: boolean
 }
 
@@ -21,6 +33,7 @@ export type algorithmType = {
     input_type?: string;
     inputs?: Array<string>;
     function?: string;
+    visibility?: "public" | "private";
     loading?: boolean;
 }
 

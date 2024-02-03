@@ -18,6 +18,7 @@ import { TimeFormatter } from '../../utils/formatter.ts';
 
 //Import config constants
 import { SHELL_URL } from '../../config/index.ts';
+import { validateBase64String } from '../../utils/validator.ts';
 
 
 export const AlgorithmPage = () => {
@@ -45,7 +46,6 @@ export const AlgorithmPage = () => {
     const handleMessage = (event: MessageEvent) => {
 
         if(event.origin == SHELL_URL){
-            console.log("f");
             const timestamp = TimeFormatter.HourMinuteSecondMillisecond(event.data.timestamp);
 
             if(event.data.message != null)
@@ -264,7 +264,7 @@ const CodeContainer = ({func} : {func: string}) => {
     return (
         <div className='bg-zinc-900 rounded-md p-4
         flex flex-col h-60 overflow-auto'>
-            <span>{atob(func)}</span>
+            <span>{validateBase64String(func)}</span>
         </div>
     )
 }

@@ -9,7 +9,7 @@ import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndP
 import { collection, doc, getDoc, getDocs, query, setDoc, where, writeBatch } from "firebase/firestore";
 import { db } from "./firebase.ts";
 import { useNavigate } from 'react-router-dom';
-import { userType } from "../types/index.ts";
+import { authType, userType } from "../types/index.ts";
 
 export const useSignUp = (redirectUrl: string): [(credentials: {username: string, email: string, password: string, confirmPassword: string}) => void, boolean, string] => {
     
@@ -132,8 +132,8 @@ export const useSignOut = (redirectUrl: string): [() => void, boolean] => {
 
 
 
-export const useUser = () : userType => {
-    const [user, setUser] = useState({username: "", email: "", logged: false, loading: true});
+export const useUser = () : authType => {
+    const [user, setUser] = useState<authType>({loading: true} as authType);
 
     useEffect(() => {
         onAuthStateChanged(auth, () => {
