@@ -1,6 +1,10 @@
+import { PageWrapper } from "../../components/Layout/PageWrapper"
+
 export const SearchPage = () => {
 
     return (
-        <h1>Search Page</h1>
+        <PageWrapper>
+            <div></div>
+        </PageWrapper>
     )
 }

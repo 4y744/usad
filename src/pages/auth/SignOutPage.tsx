@@ -2,6 +2,7 @@ import { useSignOut } from "../../hooks/auth"
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { useContext } from "react";
 import { AuthContext } from "../../contexts";
+import { PageWrapper } from "../../components/Layout/PageWrapper";
 
 export const SignOutPage = () => {
     const [SignOut, loading] = useSignOut("/");
@@ -13,7 +14,8 @@ export const SignOutPage = () => {
     const {username, email, logged} = useContext(AuthContext);
 
     return (
-        <div className="flex justify-center items-center w-full md:my-16 my-8">
+        <PageWrapper>
+
             <div className="flex justify-start items-start flex-col gap-3 
             rounded-md p-6 shadow-md text-white bg-zinc-900 sm:w-96 w-80">
 
@@ -55,6 +57,7 @@ export const SignOutPage = () => {
                 
 
             </div>
-        </div>
+
+        </PageWrapper>
     )
 }

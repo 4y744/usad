@@ -1,24 +1,25 @@
 import { useContext, useState } from "react"
-import { useGetOwnAlgorithms } from "../../hooks/firestore"
+import { useDeleteAlgorithm, useGetOwnAlgorithms } from "../../hooks/firestore"
 import { AlgorithmsContext, AuthContext } from "../../contexts"
 import { BoxView, ListView } from "../../components/Dashboard/DashboardView";
-import { algorithmType } from "../../types";
+import { algorithmDocType } from "../../types";
 import { AlgorithmSorter } from "../../utils/sorter";
 import { InfoContainer, ProfileContainer } from "../../components/Dashboard/DashboardInfo";
 import { Placeholder } from "../../components/Dashboard/Placeholder";
 import { useNavigate } from "react-router-dom";
+import { PageWrapper } from "../../components/Layout/PageWrapper";
+import { NotFoundPage } from "../static/NotFoundPage";
 
 export const DashboardPage = () => {
 
-    const {username} = useContext(AuthContext);
-    const {algorithms, loading} = useGetOwnAlgorithms({username: username});
+    const {algorithms, loading, error} = useGetOwnAlgorithms();
 
     const [selectedView, setSelectedView] = useState<"list" | "box">("box")
     const [selectedSort, setSelectedSort] = useState<"alphabetical" | "reverse-alphabetical" | "post-date" | "reverse-post-date">("post-date");
 
     const navigate = useNavigate();
 
-    const sortAlgorithms = (algorithms: algorithmType[], type: string) => {
+    const sortAlgorithms = (algorithms: algorithmDocType[], type: string) => {
         switch(type){
             case "alphabetical": 
                 return AlgorithmSorter.byAlphabeticalOrder(algorithms);
@@ -31,9 +32,11 @@ export const DashboardPage = () => {
         }
     }
 
-    return loading ? <Placeholder/> : (
-        <div className='w-full md:md:my-16 my-8 text-white
-        flex justify-center items-center'>
+    if(loading) return <Placeholder/>
+    if(error) return <NotFoundPage/>
+
+    return (
+        <PageWrapper>
 
             <div className="grid lg:grid-cols-4 grid-cols-1 gap-5
             md:w-5/6 w-[95%] min-h-fit">
@@ -110,7 +113,7 @@ export const DashboardPage = () => {
 
             </div>
 
-        </div>
+        </PageWrapper>
     )
 }
 

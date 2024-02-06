@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 //Import auth hooks
 import { useSignUp } from "../../hooks/auth";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
+import { PageWrapper } from "../../components/Layout/PageWrapper";
 
 export const SignUpPage = () => {
 
@@ -22,7 +23,8 @@ export const SignUpPage = () => {
 
 
     return (
-        <div className="flex justify-center items-center w-full md:my-16 my-8">
+        <PageWrapper>
+
             <div className="flex justify-start items-start flex-col gap-3 rounded-md p-6 shadow-md text-white bg-zinc-900 sm:w-96 w-80">
                 <h1 className="text-2xl font-bold">Sign Up</h1>
                 <span>Create an account to join and contribute.</span>
@@ -54,7 +56,8 @@ export const SignUpPage = () => {
                     {loading ? <LoadingSpinner /> : <>Sign up</>}
                 </button>
             </div>
-        </div>
+            
+        </PageWrapper>
     );
 };
 

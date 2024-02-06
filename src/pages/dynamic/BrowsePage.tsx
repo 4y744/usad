@@ -1,6 +1,10 @@
+import { PageWrapper } from "../../components/Layout/PageWrapper"
+
 export const BrowsePage = () => {
 
     return (
-        <h1>Browse Page</h1>
+        <PageWrapper>
+            <div></div>
+        </PageWrapper>
     )
 }

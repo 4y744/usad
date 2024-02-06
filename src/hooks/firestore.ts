@@ -2,13 +2,15 @@
 import { useEffect, useState, useRef, useContext } from "react";
 
 //Import Firebase hooks
-import { doc, collection, getDoc, getDocs, writeBatch, where, query, DocumentData } from "firebase/firestore";
+import { doc, collection, getDoc, getDocs, writeBatch, where, query, DocumentData, addDoc, deleteDoc } from "firebase/firestore";
 import { db } from "./firebase.ts";
-import { algorithmType, userType } from "../types/index.ts";
+import { algorithmDocType, algorithmDraftType, userType } from "../types/index.ts";
 import { AuthContext } from "../contexts/index.ts";
 
-export const useGetUser = (param: {username?: string, uid?: string}) : {username: string, uid: string, created: number, loading: boolean, error: boolean} => {
+export const useGetUser = (param: {username?: string, uid?: string}) : [userType, boolean, string] => {
     const [user, setUser] = useState<userType>({loading: true} as userType);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string>("");
 
     useEffect(() => {
         const fetch = async () => {
@@ -21,13 +23,9 @@ export const useGetUser = (param: {username?: string, uid?: string}) : {username
                     if(!userDoc.exists()) throw new Error("User does not exist");
                     const data = userDoc.data();
                     setUser({
-                        uid: data.uid,
                         username: param.username,
-                        pfp: "",
-                        created: data.created,
-                        loading: false,
-                        error: false
-                    });
+                        ...data
+                    } as userType);
 
                 }
                 else if(param.uid != null){
@@ -37,12 +35,8 @@ export const useGetUser = (param: {username?: string, uid?: string}) : {username
                     const data = userDoc.docs[0].data();
                     setUser({
                         uid: param.uid,
-                        username: userDoc.docs[0].id,
-                        pfp: "",
-                        created: data.created,
-                        loading: false,
-                        error: false
-                    });
+                        ...data
+                    } as userType);
 
                 }else{
                     throw new Error();
@@ -50,8 +44,10 @@ export const useGetUser = (param: {username?: string, uid?: string}) : {username
 
             }
             catch(err){
-                setUser({...user, error: true})
+                setError(err as string);
             }
+
+            setLoading(false);
             
         }
 
@@ -59,17 +55,22 @@ export const useGetUser = (param: {username?: string, uid?: string}) : {username
         
     }, [])
 
-    return user;
+    return [user, loading, error];
 }
 
-export const useGetAlgorithms = (params: {username?: string, uid?: string}) : {algorithms: algorithmType[] | undefined, loading: boolean} => {
-    const [algorithms, setAlgorithms] = useState<{algorithms: algorithmType[], loading: boolean}>({loading: true} as {algorithms: algorithmType[], loading: boolean});
+export const useGetAlgorithms = (params: {username?: string, uid?: string}) => {
+    const [algorithms, setAlgorithms] = useState<algorithmDocType[]>([] as algorithmDocType[]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string>("");
 
-    const user = useGetUser({username: params.username, uid: params.uid})
+
+    const [user, userLoading] = useGetUser({username: params.username, uid: params.uid})
 
 
     useEffect(() => {
         const fetch = async () => {
+
+            if(userLoading) return;
 
             try{
                 const q = query(collection(db, "algorithms"), where("author", "==", user.username), where("visibility", "==", "public"));
@@ -77,18 +78,20 @@ export const useGetAlgorithms = (params: {username?: string, uid?: string}) : {a
                
                 if(algDocs.empty) throw new Error("Not found!")
 
-                let tempDocs : algorithmType[] = [];
+                let tempDocs : algorithmDocType[] = [];
                 algDocs.forEach((doc) => {
                     tempDocs.push({
                         id: doc.id,
                         ...doc.data()
-                    });
+                    } as algorithmDocType);
                 })
-                setAlgorithms({algorithms: tempDocs, loading: false});
+                setAlgorithms(tempDocs);
             }
             catch(err){
-                setAlgorithms({algorithms: [], loading: false});
+                setError(err as string);
             }
+
+            setLoading(false);
 
         }
 
@@ -96,11 +99,14 @@ export const useGetAlgorithms = (params: {username?: string, uid?: string}) : {a
 
     }, [user])
 
-    return algorithms;
+    return {algorithms, loading, error};
 }
 
-export const useGetOwnAlgorithms = (params: {username?: string, uid?: string}) : {algorithms: algorithmType[] | undefined, loading: boolean} => {
-    const [algorithms, setAlgorithms] = useState<{algorithms: algorithmType[], loading: boolean}>({loading: true} as {algorithms: algorithmType[], loading: boolean});
+export const useGetOwnAlgorithms = () => {
+    const [algorithms, setAlgorithms] = useState<algorithmDocType[]>([] as algorithmDocType[]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string>("");
+
 
     const user = useContext(AuthContext);
 
@@ -114,32 +120,37 @@ export const useGetOwnAlgorithms = (params: {username?: string, uid?: string}) :
                 
                 if(algDocs.empty) throw new Error("Not found!")
                 
-                let tempDocs : algorithmType[] = [];
+                let tempDocs : algorithmDocType[] = [];
+
                 algDocs.forEach((doc) => {
                     tempDocs.push({
                         id: doc.id,
                         ...doc.data()
-                    });
+                    } as algorithmDocType);
                 })
 
 
-                setAlgorithms({algorithms: tempDocs, loading: false});
+                setAlgorithms(tempDocs);
             }
             catch(err){
-                setAlgorithms({algorithms: [], loading: false});
+                setError(err as string);
             }
+
+            setLoading(false);
         }
 
         fetch()
 
     }, [user])
 
-    return algorithms;
+    return {algorithms, loading, error};
 }
 
 
 export const useGetAlgorithm = (id: string) => {
-    const [algorithm, setAlgorithm] = useState<algorithmType>({loading: true} as algorithmType);
+    const [algorithm, setAlgorithm] = useState<algorithmDocType>({} as algorithmDocType);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string>("");
 
     useEffect(() => {
         const fetch = async () => {
@@ -152,18 +163,53 @@ export const useGetAlgorithm = (id: string) => {
 
                 setAlgorithm({
                     id: algDoc.id,
-                    ...algDoc.data(),
-                    loading: false
-                })
+                    ...algDoc.data()
+                } as algorithmDocType)
+                
+
             }
             catch(err){
-                
+                setError(err as string)
             }
+
+            setLoading(false);
             
         }
 
         fetch()
     }, [])
 
-    return algorithm;
+    return {algorithm, loading, error};
+}
+
+export const usePostAlgorithm = () => {
+
+    const [loading, setLoading] = useState(true);
+
+    const PostAlgorithm = async (algorithm: algorithmDraftType) => {
+        const collectionRef = collection(db, "algorithms");
+
+        await addDoc(collectionRef, algorithm);
+
+        setLoading(false);
+        console.log("added");
+    }
+    
+    return {PostAlgorithm, loading}
+}
+
+export const useDeleteAlgorithm = () => {
+
+    const [loading, setLoading] = useState(true);
+
+    const DeleteAlgorithm = async (id: string) => {
+        const docRef = doc(db, "algorithms", id);
+
+        await deleteDoc(docRef);
+
+        setLoading(false);
+        console.log("added");
+    }
+    
+    return {DeleteAlgorithm, loading}
 }

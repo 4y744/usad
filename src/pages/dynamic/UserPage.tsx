@@ -6,18 +6,20 @@ import { LinkCard } from "../../components/LinkCard";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { DocumentData } from "firebase/firestore";
 import { TimeFormatter } from "../../utils/formatter";
+import { PageWrapper } from "../../components/Layout/PageWrapper";
 
 export const UserPage = () => {
 
     const {username} = useParams();
 
-    const user = useGetUser({username: username});
+    const [user, loading, error] = useGetUser({username: username});
     const {algorithms} = useGetAlgorithms({username: username});
 
-    if(user.error) return <NotFoundPage/>
+    if(loading) return <Placeholder/>
+    if(error) return <NotFoundPage/>
 
-    return user.loading ? <Placeholder/> : (
-        <div className="flex justify-center items-center w-full">
+    return (
+        <PageWrapper>
 
             <div className="md:grid md:grid-cols-3 md:grid-rows-3 gap-5
             flex flex-col
@@ -57,7 +59,7 @@ export const UserPage = () => {
                     <h2 className="w-full text-center text-sm">This user hasn't written any comments yet...</h2>
                 </div>
             </div>
-        </div>
+        </PageWrapper>
     )
 }
 

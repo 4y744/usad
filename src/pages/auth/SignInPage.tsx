@@ -9,6 +9,7 @@ import { useSignIn } from "../../hooks/auth";
 
 //Import components
 import { LoadingSpinner } from "../../components/LoadingSpinner";
+import { PageWrapper } from "../../components/Layout/PageWrapper";
 
 export const SignInPage = () => {
     
@@ -23,7 +24,8 @@ export const SignInPage = () => {
     }
   
     return (
-        <div className="flex justify-center items-center w-full md:my-16 my-8">
+        <PageWrapper>
+
             <div className="flex justify-start items-start flex-col gap-3 rounded-md p-6 shadow-md text-white bg-zinc-900 sm:w-96 w-80">
                 <h1 className="text-2xl font-bold">Sign In</h1>
                 <span>Sign into your account.</span>
@@ -52,7 +54,8 @@ export const SignInPage = () => {
                     Don't have an account? Sign up!
                 </Link>
             </div>
-        </div>
+
+        </PageWrapper>
     )
 
 }

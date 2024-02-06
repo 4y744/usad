@@ -2,7 +2,7 @@
 import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 
 //Import React Router hooks
-import { Link, useParams } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 
 //Import custom hooks
 import { useGetAlgorithm } from '../../hooks/firestore.ts';
@@ -19,24 +19,27 @@ import { TimeFormatter } from '../../utils/formatter.ts';
 //Import config constants
 import { SHELL_URL } from '../../config/index.ts';
 import { validateBase64String } from '../../utils/validator.ts';
+import { PageWrapper } from '../../components/Layout/PageWrapper.tsx';
+import { NotFoundPage } from '../static/NotFoundPage.tsx';
 
 
 export const AlgorithmPage = () => {
 
 
     const {id} = useParams();
-    const algorithm = useGetAlgorithm(id!);
+    const {algorithm, loading, error} = useGetAlgorithm(id!);
 
-    const input = useRef<string[]>([]);
+    const input = useRef<Array<{variable: string, content: string}>>([]);
 
     const sandboxRef = useRef<HTMLIFrameElement>(null);
     
-    const [loading, setLoading] = useState(true);
+    const [pending, setPending] = useState(true);
+
     const [output, setOutput] = useState<Array<{value: string, timestamp: string}>>([]);
 
     const handleRun = () => {
-        setLoading(true);
-        sandboxRef.current!.contentWindow!.postMessage({func: algorithm.function, input: input.current}, "*");
+        setPending(true);
+        sandboxRef.current!.contentWindow!.postMessage({func: algorithm.function, input: input.current, type: algorithm.input_type}, "*");
     }
 
     const handleClearLog = () => {
@@ -58,7 +61,7 @@ export const AlgorithmPage = () => {
                     }
                 ]);
                 
-                return setLoading(false);
+                return setPending(false);
             }
 
             setOutput((prev) => [
@@ -67,7 +70,7 @@ export const AlgorithmPage = () => {
             ])
 
 
-            setLoading(false);
+            setPending(false);
 
         }
     }
@@ -83,13 +86,14 @@ export const AlgorithmPage = () => {
     }, [])
 
     
-    if(algorithm.loading) return <Placeholder/>
+    if(loading) return <Placeholder/>
+    if(error) return <NotFoundPage/>
     
 
     return (
-        <InputContext.Provider value={input}>
-            <div className='w-full md:my-16 my-8 text-white
-            flex justify-center items-center'>
+        <PageWrapper>
+            <InputContext.Provider value={input}>
+
             <iframe 
             sandbox="allow-same-origin allow-scripts"
             className='hidden'
@@ -125,14 +129,14 @@ export const AlgorithmPage = () => {
                             className={`bg-green-700
                             outline-2 outline-green-600 outline-offset-2
                             px-4 py-2 ml-auto rounded-md shadow-md
-                            ${loading ?  "opacity-50" : "opacity-100 hover:bg-green-600 active:outline"}`}
-                            disabled={loading}>
-                            {loading ? <LoadingSpinner/> : <>Run</>}
+                            ${pending ?  "opacity-50" : "opacity-100 hover:bg-green-600 active:outline"}`}
+                            disabled={pending}>
+                            {pending ? <LoadingSpinner/> : <>Run</>}
                             </button>
                         </div>
                         {algorithm.input_type == "box" ? 
-                        <InputBoxContainer inputs={algorithm.inputs!} /> :
-                        <InputField placeholder={algorithm.inputs![0]}/>}
+                        <InputBoxContainer inputs={algorithm.inputs || [{variable: "", label:"[not available]"}]} /> :
+                        <InputField inputs= {algorithm.inputs || [{variable: "", label:"[not available]"}]}/>}
                     </div>
                 </div>
 
@@ -167,8 +171,10 @@ export const AlgorithmPage = () => {
                 </div>
 
             </div>
-        </div>
-        </InputContext.Provider>
+
+            </InputContext.Provider>
+        
+        </PageWrapper>
 
             
 
@@ -177,45 +183,48 @@ export const AlgorithmPage = () => {
 
 
 
-const InputField = ({placeholder} : {placeholder: string}) => {
+const InputField = ({inputs} : {inputs: Array<{variable: string, label: string}>}) => {
 
     const input = useContext(InputContext);
 
     const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        input.current = event.target.value.split(/(?:,| |[\n])+/);
-        input.current = input.current.filter((str) => str !== "");
+        const userInput = event.target.value.split(/(?:,| |[\n])+/)
+        .filter((str) => str !== "").join(",");
+        input.current[0] = {variable: inputs[0].variable, content: userInput}
     }
 
     return (
         <textarea
         onChange={handleChange}
-        placeholder={placeholder}
+        placeholder={inputs[0].label}
         className='bg-zinc-900 resize-none
         p-2 rounded-md shadow-md h-36
         focus:outline outline-2 outline-green-600 outline-offset-2'/>
     )
 }
 
-const InputBoxContainer = ({inputs} : {inputs: string[]}) => {
+const InputBoxContainer = ({inputs} : {inputs: Array<{variable: string, label: string}>}) => {
 
     return (
         <div className='grid 2xl:grid-cols-3 xl:grid-cols-2 grid-cols-1 gap-5'>
             {inputs.map((input, key) => (
-                <InputBox placeholder={input} index={key} key={key}/>
+                <InputBox placeholder={input.label} variable={input.variable} index={key} key={key}/>
             ))}           
         </div>
     )
 }
 
 
-const InputBox = ({placeholder, index} : {placeholder: string, index: number}) => {
+const InputBox = ({placeholder, variable, index} : {placeholder: string, variable: string, index: number}) => {
 
     const input = useContext(InputContext);
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        input.current[index] = event.target.value.split(/(?:,| |[\n])+/)
+        const userInput = event.target.value.split(/(?:,| |[\n])+/)
         .filter((str) => str !== "")[0];
+        input.current[index] = {variable: variable, content: userInput}
     }
+
 
     return (
         <input

@@ -1,11 +1,11 @@
 import { Outlet } from "react-router-dom"
+import { PageWrapper } from "../../components/Layout/PageWrapper"
 
 export const SettingsPage = () => {
 
     return (
-        <div>
-            <h1>Settings Page</h1>
-            <Outlet/>
-        </div>
+        <PageWrapper>
+            <div></div>
+        </PageWrapper>
     )
 }

@@ -24,17 +24,27 @@ export type Vector2 = {
     y: number
 }
 
-export type algorithmType = {
+export type algorithmDocType = {
     id: string,
-    title?: string;
-    description?: string;
-    author?: string;
-    created?: number;
-    input_type?: string;
-    inputs?: Array<string>;
-    function?: string;
-    visibility?: "public" | "private";
-    loading?: boolean;
+    title: string;
+    description: string;
+    author: string;
+    created: number;
+    input_type: string;
+    inputs: Array<{variable: string, label: string}>;
+    function: string;
+    visibility: "public" | "private";
+}
+
+export type algorithmDraftType = {
+    title: string;
+    description: string;
+    author: string;
+    created: number;
+    input_type: string;
+    inputs: Array<{variable: string, label: string}>;
+    function: string;
+    visibility: "public" | "private";
 }
 
 export type blockType = {
@@ -56,4 +66,12 @@ export type blockEditorContextType = {
     setBlocks: Dispatch<SetStateAction<blockType[]>>,
     selectedBlock: MutableRefObject<string>,
     blockEditorRef: RefObject<HTMLDivElement>, scale: RefObject<number>
+}
+
+//Create page
+
+export type inputType = {
+    id: number,
+    variable: string,
+    label: string
 }

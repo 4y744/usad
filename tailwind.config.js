@@ -9,7 +9,9 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      'inter': ['Inter', 'system-ui']
+      'inter': ['Inter', 'system-ui'],
+      'fira': ['Fira Code', 'system-ui'],
+      'monospace': ['monospace', 'system-ui']
     },
     extend: {
       transitionProperty: {

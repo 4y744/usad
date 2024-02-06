@@ -3,39 +3,20 @@ import {useState, useEffect} from 'react';
 //Import React Router hooks
 import { Link } from 'react-router-dom';
 
-//Import Firebase hooks
-import { getDocs, collection, query } from "firebase/firestore";
-import { db } from "../../hooks/firebase";
-
 //Import components
-import { LinkCard } from '../../components/LinkCard';
-import { useGetAlgorithms } from '../../hooks/firestore';
+import { Featured } from '../../components/HomePage/FeaturedLinkCard';
 
 export const HomePage = () => {
 
-    return <>
+    return (
+        <>
 
         <Heading/>
         <Cards/>
         <Featured/>
-        <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos deserunt quisquam, ut nam quaerat quae soluta est vitae distinctio. Neque minus facere incidunt enim doloremque praesentium illum fugit odio. Soluta!</h1>
-        <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos deserunt quisquam, ut nam quaerat quae soluta est vitae distinctio. Neque minus facere incidunt enim doloremque praesentium illum fugit odio. Soluta!</h1>
-        <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos deserunt quisquam, ut nam quaerat quae soluta est vitae distinctio. Neque minus facere incidunt enim doloremque praesentium illum fugit odio. Soluta!</h1>
-        <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos deserunt quisquam, ut nam quaerat quae soluta est vitae distinctio. Neque minus facere incidunt enim doloremque praesentium illum fugit odio. Soluta!</h1>
-        <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos deserunt quisquam, ut nam quaerat quae soluta est vitae distinctio. Neque minus facere incidunt enim doloremque praesentium illum fugit odio. Soluta!</h1>
-        <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos deserunt quisquam, ut nam quaerat quae soluta est vitae distinctio. Neque minus facere incidunt enim doloremque praesentium illum fugit odio. Soluta!</h1>
-        <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos deserunt quisquam, ut nam quaerat quae soluta est vitae distinctio. Neque minus facere incidunt enim doloremque praesentium illum fugit odio. Soluta!</h1>
-        <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos deserunt quisquam, ut nam quaerat quae soluta est vitae distinctio. Neque minus facere incidunt enim doloremque praesentium illum fugit odio. Soluta!</h1>
-        <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos deserunt quisquam, ut nam quaerat quae soluta est vitae distinctio. Neque minus facere incidunt enim doloremque praesentium illum fugit odio. Soluta!</h1>
-        <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos deserunt quisquam, ut nam quaerat quae soluta est vitae distinctio. Neque minus facere incidunt enim doloremque praesentium illum fugit odio. Soluta!</h1>
-        <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos deserunt quisquam, ut nam quaerat quae soluta est vitae distinctio. Neque minus facere incidunt enim doloremque praesentium illum fugit odio. Soluta!</h1>
-        <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos deserunt quisquam, ut nam quaerat quae soluta est vitae distinctio. Neque minus facere incidunt enim doloremque praesentium illum fugit odio. Soluta!</h1>
-        <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos deserunt quisquam, ut nam quaerat quae soluta est vitae distinctio. Neque minus facere incidunt enim doloremque praesentium illum fugit odio. Soluta!</h1>
-        <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos deserunt quisquam, ut nam quaerat quae soluta est vitae distinctio. Neque minus facere incidunt enim doloremque praesentium illum fugit odio. Soluta!</h1>
-        <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos deserunt quisquam, ut nam quaerat quae soluta est vitae distinctio. Neque minus facere incidunt enim doloremque praesentium illum fugit odio. Soluta!</h1>
-        <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos deserunt quisquam, ut nam quaerat quae soluta est vitae distinctio. Neque minus facere incidunt enim doloremque praesentium illum fugit odio. Soluta!</h1>
-        <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos deserunt quisquam, ut nam quaerat quae soluta est vitae distinctio. Neque minus facere incidunt enim doloremque praesentium illum fugit odio. Soluta!</h1>
-    </>
+        
+        </>
+    )
 }
 
 const Heading = () => (
@@ -56,23 +37,6 @@ const Heading = () => (
     </header>
     
 )
-
-const Featured = () => {
-
-    const {algorithms, loading} = useGetAlgorithms({username: "USAD"});
-
-
-    return <div className='px-4'>
-        <h1 className='font-bold text-white xl:text-2xl lg:text-xl text-lg py-3 text-start'>Featured</h1>
-        {loading ? <h1>LOADING</h1> :
-        <div className='grid 2xl:grid-cols-4 xl:grid-cols-3 md:grid-cols-2 grid-cols-1 place-items-center gap-5'>
-            {algorithms?.map((doc: any) => (
-                    <LinkCard key={doc.id} algorithmId={doc.id} title={doc.title} author={doc.author} language="BG" date="28/12/23" votes={5}/>
-            ))}
-        </div>
-        }
-    </div>
-}
 
 
 const Cards = () => {

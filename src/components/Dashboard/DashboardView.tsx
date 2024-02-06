@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { algorithmType } from "../../types";
+import { algorithmDocType } from "../../types";
 import { AlgorithmsContext } from "../../contexts";
 import { Link } from "react-router-dom";
 import { TimeFormatter } from "../../utils/formatter";
@@ -21,7 +21,7 @@ export const ListView = () => {
     )
 }
 
-const ListViewItem = ({alg} : {alg: algorithmType}) => {
+const ListViewItem = ({alg} : {alg: algorithmDocType}) => {
 
     return (
         <div className="bg-zinc-900 rounded-md shadow-md
@@ -90,7 +90,7 @@ export const BoxView = () => {
     )
 }
 
-const BoxViewItem = ({alg} : {alg: algorithmType}) => {
+const BoxViewItem = ({alg} : {alg: algorithmDocType}) => {
 
     return (
         <div key={alg.id} className="bg-zinc-900 rounded-md shadow-md
@@ -180,7 +180,7 @@ const ViewActionButton = ({faClass, handleClick} : {faClass: string, handleClick
     )
 }
 
-const ViewActionButtonContainer = ({alg} : {alg: algorithmType}) => {
+const ViewActionButtonContainer = ({alg} : {alg: algorithmDocType}) => {
 
     return (
         <>
