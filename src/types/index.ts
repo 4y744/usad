@@ -1,14 +1,14 @@
 import { Dispatch, MutableRefObject, RefObject, SetStateAction } from "react"
 
+//Refers to Firestore users collection
 export type userType = {
     uid: string,
     username: string,
     created: number,
-    pfp: string,
-    loading: boolean,
-    error: boolean
+    pfp: string
 }
 
+//Refers to Firebase Auth
 export type authType = {
     uid: string,
     username: string, 
@@ -24,6 +24,7 @@ export type Vector2 = {
     y: number
 }
 
+//Refers to Firestore doc
 export type algorithmDocType = {
     id: string,
     title: string;
@@ -36,6 +37,7 @@ export type algorithmDocType = {
     visibility: "public" | "private";
 }
 
+//Refers to not hydrated Firestore doc
 export type algorithmDraftType = {
     title: string;
     description: string;
@@ -47,6 +49,8 @@ export type algorithmDraftType = {
     visibility: "public" | "private";
 }
 
+//Block editor
+//Refers to LogicBlock components
 export type blockType = {
     id: string,
     type: string,
@@ -61,6 +65,7 @@ export type blockType = {
     ports: string[]
 }
 
+//Refers to context for use in the block editor
 export type blockEditorContextType = {
     blocks: blockType[], 
     setBlocks: Dispatch<SetStateAction<blockType[]>>,
@@ -68,10 +73,18 @@ export type blockEditorContextType = {
     blockEditorRef: RefObject<HTMLDivElement>, scale: RefObject<number>
 }
 
+
 //Create page
 
+//Refers to types of inputs of algorithm
 export type inputType = {
     id: number,
     variable: string,
     label: string
+}
+
+//Refers to input submitted by a user
+export type submittedInputType = {
+    variable: string,
+    content: string
 }

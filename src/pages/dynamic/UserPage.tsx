@@ -13,7 +13,7 @@ export const UserPage = () => {
     const {username} = useParams();
 
     const [user, loading, error] = useGetUser({username: username});
-    const {algorithms} = useGetAlgorithms({username: username});
+    const [algorithms] = useGetAlgorithms({username: username});
 
     if(loading) return <Placeholder/>
     if(error) return <NotFoundPage/>

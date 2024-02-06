@@ -1,8 +1,8 @@
 import { useRef } from "react"
-import { Information } from "../../components/Create/Information"
-import { Inputs } from "../../components/Create/Inputs"
+import { Information } from "../../components/CreatePage/Information"
+import { Inputs } from "../../components/CreatePage/Inputs"
 import { algorithmDraftType, inputType } from "../../types";
-import { CodeEditor } from "../../components/Create/CodeEditor";
+import { CodeEditor } from "../../components/CreatePage/CodeEditor";
 import { usePostAlgorithm } from "../../hooks/firestore";
 import { PageWrapper } from "../../components/Layout/PageWrapper";
 

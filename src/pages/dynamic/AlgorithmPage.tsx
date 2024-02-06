@@ -21,69 +21,67 @@ import { SHELL_URL } from '../../config/index.ts';
 import { validateBase64String } from '../../utils/validator.ts';
 import { PageWrapper } from '../../components/Layout/PageWrapper.tsx';
 import { NotFoundPage } from '../static/NotFoundPage.tsx';
+import { Sandbox } from '../../components/Sandbox.tsx';
 
 
 export const AlgorithmPage = () => {
 
 
     const {id} = useParams();
-    const {algorithm, loading, error} = useGetAlgorithm(id!);
+    const [algorithm, loading, error] = useGetAlgorithm(id!);
 
     const input = useRef<Array<{variable: string, content: string}>>([]);
-
-    const sandboxRef = useRef<HTMLIFrameElement>(null);
+    const [submittedInput, setSubmittedInput] = useState<{variable: string, content: string}[]>([])
     
     const [pending, setPending] = useState(true);
-
     const [output, setOutput] = useState<Array<{value: string, timestamp: string}>>([]);
 
     const handleRun = () => {
-        setPending(true);
-        sandboxRef.current!.contentWindow!.postMessage({func: algorithm.function, input: input.current, type: algorithm.input_type}, "*");
+        setSubmittedInput(input.current);
     }
 
     const handleClearLog = () => {
         setOutput([]);
     }
 
-    const handleMessage = (event: MessageEvent) => {
+    // const handleMessage = (event: MessageEvent) => {
 
-        if(event.origin == SHELL_URL){
-            const timestamp = TimeFormatter.HourMinuteSecondMillisecond(event.data.timestamp);
+    //     if(event.origin == SHELL_URL){
+    //         const timestamp = TimeFormatter.HourMinuteSecondMillisecond(event.data.timestamp);
 
-            if(event.data.message != null)
-            {
-                setOutput(prev => [
-                    ...prev,
-                    {
-                        value: event.data.message,
-                        timestamp: timestamp
-                    }
-                ]);
+    //         if(event.data.message != null)
+    //         {
+    //             setOutput(prev => [
+    //                 ...prev,
+    //                 {
+    //                     value: event.data.message,
+    //                     timestamp: timestamp
+    //                 }
+    //             ]);
                 
-                return setPending(false);
-            }
+    //             return setPending(false);
+    //         }
 
-            setOutput((prev) => [
-                ...prev,
-                {value: event.data.value, timestamp: timestamp}
-            ])
-
-
-            setPending(false);
-
-        }
-    }
+    //         setOutput((prev) => [
+    //             ...prev,
+    //             {value: event.data.value, timestamp: timestamp}
+    //         ])
 
 
-    useEffect(() => {
-        window.addEventListener("message", handleMessage)
+    //         setPending(false);
 
-        return () => {
-            window.removeEventListener("message", handleMessage)
-        }
+    //     }
+    // }
+
+
+    // useEffect(() => {
+    //     window.addEventListener("message", handleMessage)
+
+    //     return () => {
+    //         window.removeEventListener("message", handleMessage)
+    //     }
         
-    }, [])
+    // }, [])
 
     
     if(loading) return <Placeholder/>
@@ -94,10 +92,11 @@ export const AlgorithmPage = () => {
         <PageWrapper>
             <InputContext.Provider value={input}>
 
-            <iframe 
-            sandbox="allow-same-origin allow-scripts"
-            className='hidden'
-            src={SHELL_URL} ref={sandboxRef}/>
+            <Sandbox
+            algorithm={algorithm}
+            userInput={submittedInput}
+            setStatus={(status) => setPending(status)}
+            setOutput={(output) => setOutput(prev => [...prev, output])}/>
 
             <div className='bg-zinc-900
             grid md:grid-cols-2 grid-cols-1 gap-5

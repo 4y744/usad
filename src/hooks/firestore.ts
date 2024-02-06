@@ -8,7 +8,7 @@ import { algorithmDocType, algorithmDraftType, userType } from "../types/index.t
 import { AuthContext } from "../contexts/index.ts";
 
 export const useGetUser = (param: {username?: string, uid?: string}) : [userType, boolean, string] => {
-    const [user, setUser] = useState<userType>({loading: true} as userType);
+    const [user, setUser] = useState<userType>({} as userType);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>("");
 
@@ -58,7 +58,7 @@ export const useGetUser = (param: {username?: string, uid?: string}) : [userType
     return [user, loading, error];
 }
 
-export const useGetAlgorithms = (params: {username?: string, uid?: string}) => {
+export const useGetAlgorithms = (params: {username?: string, uid?: string}) : [algorithmDocType[], boolean, string] => {
     const [algorithms, setAlgorithms] = useState<algorithmDocType[]>([] as algorithmDocType[]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>("");
@@ -99,10 +99,10 @@ export const useGetAlgorithms = (params: {username?: string, uid?: string}) => {
 
     }, [user])
 
-    return {algorithms, loading, error};
+    return [algorithms, loading, error];
 }
 
-export const useGetOwnAlgorithms = () => {
+export const useGetOwnAlgorithms = () : [algorithmDocType[], boolean, string] => {
     const [algorithms, setAlgorithms] = useState<algorithmDocType[]>([] as algorithmDocType[]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>("");
@@ -143,11 +143,11 @@ export const useGetOwnAlgorithms = () => {
 
     }, [user])
 
-    return {algorithms, loading, error};
+    return [algorithms, loading, error];
 }
 
 
-export const useGetAlgorithm = (id: string) => {
+export const useGetAlgorithm = (id: string) : [algorithmDocType, boolean, string] => {
     const [algorithm, setAlgorithm] = useState<algorithmDocType>({} as algorithmDocType);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>("");
@@ -179,7 +179,7 @@ export const useGetAlgorithm = (id: string) => {
         fetch()
     }, [])
 
-    return {algorithm, loading, error};
+    return [algorithm, loading, error];
 }
 
 export const usePostAlgorithm = () => {
