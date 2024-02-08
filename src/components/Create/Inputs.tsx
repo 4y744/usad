@@ -1,21 +1,17 @@
 import { ChangeEvent, Dispatch, MutableRefObject, SetStateAction, useEffect, useState } from "react"
-import { inputType } from "../../types";
+import { algorithmDraftType, inputType } from "../../types";
 
-export const Inputs = ({getInputs, typeRef} : {getInputs : (inp: inputType[]) => void, typeRef: MutableRefObject<"box" | "field">}) => {
+export const Inputs = ({draftRef} : {draftRef: MutableRefObject<algorithmDraftType>}) => {
 
     const [inputType, setInputType] = useState<"single" | "multiple">("multiple");
-
     const [inputs, setInputs] = useState<inputType[]>([]);
 
     useEffect(() => {
-        getInputs(inputs);
+        draftRef.current.inputs = inputs;   
     }, [inputs])
 
-
-    //TODO: RENAME BOX/FIELD TO SINGLE/MILTIPLE IN FIRESTORE AND SHELL
-
     useEffect(() => {
-        typeRef.current = inputType == "single" ? "field" : "box";
+        draftRef.current.input_type = inputType;
     }, [inputType])
 
 
@@ -112,7 +108,7 @@ const BoxInputs = ({setInputs} : {setInputs: Dispatch<SetStateAction<inputType[]
 
 
             <div className="bg-zinc-900 rounded-md shadow-md
-            grid lg:grid-cols-1 gap-5 p-4 max-h-[350px] overflow-auto">
+            grid lg:grid-cols-1 gap-5 p-4 max-h-[250px] overflow-auto">
                 {
                     inputBoxes.map((input) => (
 
@@ -149,6 +145,10 @@ const BoxInputs = ({setInputs} : {setInputs: Dispatch<SetStateAction<inputType[]
 
                 ))}
             </div>
+            <p className="text-sm text-pretty text-zinc-300">
+                To access the variables created here, reference them in code by their assigned names. For example
+                <span className="font-bold text-green-600"> [variable name]</span>.
+            </p>
         </div>        
     )
 }
@@ -201,7 +201,7 @@ const FieldInput = ({setInputs} : {setInputs: Dispatch<SetStateAction<inputType[
 
             </div> 
             
-            <p className="text-sm text-pretty text-zinc-300">This creates a field type input. The information submitted by the user is stored in the shape of and array.
+            <p className="text-sm text-pretty text-zinc-300 mt-2">This creates a field type input. The information submitted by the user is stored in the shape of and array.
                 You can access it from the code with <span className="font-bold text-green-600">[variable name]</span><span className="font-bold text-red-600">[index]</span>.
             </p>
         </div>

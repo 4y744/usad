@@ -75,8 +75,6 @@ export const useGetAlgorithms = (params: {username?: string, uid?: string}) : [a
             try{
                 const q = query(collection(db, "algorithms"), where("author", "==", user.username), where("visibility", "==", "public"));
                 const algDocs = await getDocs(q);
-               
-                if(algDocs.empty) throw new Error("Not found!")
 
                 let tempDocs : algorithmDocType[] = [];
                 algDocs.forEach((doc) => {
@@ -117,8 +115,6 @@ export const useGetOwnAlgorithms = () : [algorithmDocType[], boolean, string] =>
             try{
                 const q = query(collection(db, "algorithms"), where("author", "==", user.username));
                 const algDocs = await getDocs(q);
-                
-                if(algDocs.empty) throw new Error("Not found!")
                 
                 let tempDocs : algorithmDocType[] = [];
 

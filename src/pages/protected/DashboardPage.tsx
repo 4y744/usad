@@ -21,7 +21,7 @@ import { TimeFormatter } from "../../utils/formatter";
 //Import components
 import { PageWrapper } from "../../components/Layout/PageWrapper";
 import { NotFoundPage } from "../static/NotFoundPage";
-import { LoadingSpinner } from "../../components/LoadingSpinner";
+import { LoadingSpinner } from "../../components/Loading/LoadingSpinner";
 
 //Import config
 import { ROOT_URL } from "../../config";

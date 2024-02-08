@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 //Import auth hooks
 import { useSignUp } from "../../hooks/auth";
-import { LoadingSpinner } from "../../components/LoadingSpinner";
+import { LoadingSpinner } from "../../components/Loading/LoadingSpinner";
 import { PageWrapper } from "../../components/Layout/PageWrapper";
 
 export const SignUpPage = () => {

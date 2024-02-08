@@ -5,7 +5,7 @@ import {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { useGetAlgorithms } from '../../hooks/firestore';
 import { algorithmDocType } from '../../types';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { LoadingSpinner } from '../../components/Loading/LoadingSpinner';
 
 
 export const HomePage = () => {
@@ -28,38 +28,32 @@ export const HomePage = () => {
                 </div>
             </header>
 
-            <div className='bg-zinc-900 rounded-md shadow-md md:m-8 m-4 p-2
-            flex flex-col'>
-
-                <div className='bg-zinc-800 rounded-md shadow-md p-4
-                grid xl:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-5 place-items-center
-                m-4'>
-                    <Card 
-                    title='Find ready-to-use algorithms'
-                    description='Find algorithms created by other users and run them in our sandbox.'
-                    faClass='fa-solid fa-magnifying-glass'/>
+            <div className='p-4
+            grid xl:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-5 place-items-center'>
+                <Card 
+                title='Find ready-to-use algorithms'
+                description='Find algorithms created by other users and run them in our sandbox.'
+                faClass='fa-solid fa-magnifying-glass'/>
                     
-                    <Card 
-                    title='Create your own algorithms'
-                    description='Create, modify and share your own algorithms all in one place.'
-                    faClass='fa-solid fa-code'/>
+                <Card 
+                title='Create your own algorithms'
+                description='Create, modify and share your own algorithms all in one place.'
+                faClass='fa-solid fa-code'/>
 
-                    <Card 
-                    title='Built-in code editor'
-                    description="Built-in and accessible JavaScript code editor."
-                    faClass='fa-brands fa-square-js'/>
+                <Card 
+                title='Built-in code editor'
+                description="Built-in and accessible JavaScript code editor."
+                faClass='fa-brands fa-square-js'/>
 
-                    <Card 
-                    title='Easy-to-use block editor'
-                    description="Flexible block editor that compiles to JavaScript."
-                    faClass='fa-solid fa-arrow-pointer'/>
-                </div>
+                <Card 
+                title='Easy-to-use block editor'
+                description="Flexible block editor that compiles to JavaScript."
+                faClass='fa-solid fa-arrow-pointer'/>
+            </div>
             
-                <div className="bg-zinc-800 rounded-md shadow-md
-                m-4">
-                    <Featured/>
-                </div>
-        
+            <div className="bg-zinc-900 rounded-md shadow-md
+            m-4 p-4">
+                <Featured/>
             </div>
         </>
     )
@@ -84,9 +78,10 @@ export const Featured = () => {
     const [algorithms, loading] = useGetAlgorithms({username: "USAD"});
 
     return (
-        <div className='px-4 my-4'>
+        <>
             <h1 className='font-bold text-white xl:text-2xl lg:text-xl text-lg pb-3 text-start'>Featured</h1>
-                <div className='grid 2xl:grid-cols-4 xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 
+                <div className='bg-zinc-800 rounded-md shadow-md p-4
+                grid 2xl:grid-cols-4 xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 
                 place-items-center gap-5 auto-rows-fr'>
                     
                     {loading ?
@@ -120,6 +115,6 @@ export const Featured = () => {
                     ))}
 
                 </div>
-        </div>
+        </>
     )
 }

@@ -1,5 +1,5 @@
 import { useSignOut } from "../../hooks/auth"
-import { LoadingSpinner } from "../../components/LoadingSpinner";
+import { LoadingSpinner } from "../../components/Loading/LoadingSpinner";
 import { useContext } from "react";
 import { AuthContext } from "../../contexts";
 import { PageWrapper } from "../../components/Layout/PageWrapper";

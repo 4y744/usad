@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"
 import { useGetAlgorithms, useGetUser } from "../../hooks/firestore";
 import { NotFoundPage } from "../static/NotFoundPage";
 import { LinkCard } from "../../components/LinkCard";
-import { LoadingSpinner } from "../../components/LoadingSpinner";
+import { LoadingSpinner } from "../../components/Loading/LoadingSpinner";
 import { DocumentData } from "firebase/firestore";
 import { TimeFormatter } from "../../utils/formatter";
 import { PageWrapper } from "../../components/Layout/PageWrapper";

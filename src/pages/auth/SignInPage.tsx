@@ -8,7 +8,7 @@ import { Link } from "react-router-dom"
 import { useSignIn } from "../../hooks/auth";
 
 //Import components
-import { LoadingSpinner } from "../../components/LoadingSpinner";
+import { LoadingSpinner } from "../../components/Loading/LoadingSpinner";
 import { PageWrapper } from "../../components/Layout/PageWrapper";
 
 export const SignInPage = () => {

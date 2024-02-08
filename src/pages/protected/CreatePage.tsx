@@ -1,10 +1,11 @@
 import { useRef } from "react"
-import { Information } from "../../components/CreatePage/Information"
-import { Inputs } from "../../components/CreatePage/Inputs"
+import { Information } from "../../components/Create/Information"
+import { Inputs } from "../../components/Create/Inputs"
 import { algorithmDraftType, inputType } from "../../types";
-import { CodeEditor } from "../../components/CreatePage/CodeEditor";
+import { CodeEditor } from "../../components/Create/CodeEditor";
 import { usePostAlgorithm } from "../../hooks/firestore";
 import { PageWrapper } from "../../components/Layout/PageWrapper";
+import { Preview } from "../../components/Create/Preview";
 
 export const CreatePage = () => {
 
@@ -13,7 +14,8 @@ export const CreatePage = () => {
     const compiledCode = useRef<string>("");
 
     const inputs = useRef<inputType[]>([]);
-    const inputType = useRef<"box" | "field">("box");
+    
+    const algorithmDraft = useRef<algorithmDraftType>({} as algorithmDraftType);
     
     const {PostAlgorithm, loading} = usePostAlgorithm();
 
@@ -38,19 +40,16 @@ export const CreatePage = () => {
 
     return (
         <PageWrapper>
-            
-            <button onClick={() => compile()}>COMPILE</button>
 
             <div className="grid grid-cols-1 place-items-center
             gap-5 md:w-5/6 w-[95%]">
                 <div className="bg-zinc-900 rounded-md shadow-md
                 grid lg:grid-cols-2 grid-cols-1 gap-5
-                p-8 w-full  ">
+                p-8 w-full">
                     
                     <Information/>
                     <Inputs 
-                    getInputs={(inp: inputType[]) => inputs.current = inp}
-                    typeRef={inputType}/>
+                    draftRef={algorithmDraft}/>
                     
                 </div>
 
@@ -58,8 +57,12 @@ export const CreatePage = () => {
                 p-8 w-full">
                     <CodeEditor code={code}/>
                 </div>
+                
+                <div className="bg-zinc-900 rounded-md shadow-md
+                p-8 w-full">
+                    <Preview algorithmDraft={algorithmDraft.current}/>
+                </div>
 
-                <button onClick={() => dostuff()}>POST</button>
             </div>
             
         </PageWrapper>
