@@ -1,12 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { algorithmDraftType } from "../../types"
-import { InputContext } from "../../contexts";
 import { useSandbox } from "../../hooks/shell";
 import { AlgorithmInput } from "../AlgorithmViewer/AlgorithmInput";
 import { OutputLog } from "../AlgorithmViewer/OutputLog";
 import { Sandbox } from "../Sandbox";
 
-export const Preview = ({algorithmDraft} : {algorithmDraft: algorithmDraftType}) => {
+export const Preview = ({draftRef} : {draftRef: MutableRefObject<algorithmDraftType>}) => {
+
+    const [renderedAlgorithm, setRenderedAlgorithm] = useState<algorithmDraftType>({} as algorithmDraftType);
 
     const input = useRef<Array<{variable: string, content: string}>>([]);
     const [output, setOutput] = useState<Array<{message: string, timestamp: string}>>([]);
@@ -19,16 +20,26 @@ export const Preview = ({algorithmDraft} : {algorithmDraft: algorithmDraftType})
     }, [output])
 
     const handleRun = () => {
-        sendMessage(algorithmDraft, input.current);
+        sendMessage(draftRef.current, input.current);
     }
+
 
     return (
         
         <>
-            <div>
-                <h1 className="text-lg font-semibold mb-2">Preview</h1>
-                <button className="bg-green-600">Reload</button>
+            <div className="bg-zinc-800 rounded-md shadow-md
+            flex items-center mb-4 p-2">
+                
+                <h1 className="text-xl font-semibold">Preview</h1>
+
+                <button className="bg-green-700 rounded-md shadow-md
+                hover:bg-green-600
+                active:outline outline-2 outline-green-600 outline-offset-2
+                px-4 py-2 ml-auto"
+                onClick={() => {}}>Reload</button>
+
             </div>
+
             <div>
                 <div className="grid grid-cols-2
                 gap-5 auto-cols-max">
@@ -37,7 +48,7 @@ export const Preview = ({algorithmDraft} : {algorithmDraft: algorithmDraftType})
                     <div className="bg-zinc-800 rounded-md shadow-md
                     p-4">
                         <AlgorithmInput
-                        algorithm={algorithmDraft}
+                        algorithm={renderedAlgorithm}
                         inputRef={input}
                         status={pending}
                         handleRun={handleRun}/>

@@ -1,4 +1,4 @@
-export const Information = () => {
+export const InfoEditor = () => {
     
     return (
         <div className="bg-zinc-800 rounded-md shadow-md

@@ -1,6 +1,7 @@
-import { MutableRefObject, SelectHTMLAttributes, useRef, useState } from "react"
+import { MutableRefObject, useRef, useState } from "react"
+import { algorithmDraftType } from "../../types";
 
-export const CodeEditor = ({code} : {code: MutableRefObject<string>}) => {
+export const CodeEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDraftType>}) => {
 
     const editorRef = useRef<HTMLOListElement>(null);
 
@@ -76,13 +77,17 @@ export const CodeEditor = ({code} : {code: MutableRefObject<string>}) => {
         }
     }
 
+    const save = () => {
+        if(!editorRef.current!.textContent) return;
+        draftRef.current.function = btoa(editorRef.current!.textContent);
+    }
 
     return (
         <div className="bg-zinc-800 rounded-md shadow-md
         flex flex-col gap-5 p-4">
 
             <div className="bg-zinc-900 rounded-md shadow-md
-            flex p-2">
+            flex gap-2 p-2">
                 <select className="bg-zinc-800 rounded-md shadow-md
                 active:outline ouline-2 outline-green-600
                 hover:bg-zinc-700 px-4 py-2" id="operators"
@@ -113,6 +118,11 @@ export const CodeEditor = ({code} : {code: MutableRefObject<string>}) => {
                     h-10 aspect-square"
                     onClick={() => {if(scale > 50) setScale(scale - 25)}}>-</button>
                 </div>
+
+                <button className="bg-green-700 rounded-md shadow-md
+                hover:bg-green-600 px-4 py-2
+                active:outline outline-2 outline-green-600 outline-offset-2"
+                onClick={() => save()}>Save</button>
             </div>
 
             <div className={`bg-zinc-900 rounded-md shadow-md

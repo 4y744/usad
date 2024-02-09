@@ -1,14 +1,14 @@
 import { ChangeEvent, Dispatch, MutableRefObject, SetStateAction, useEffect, useState } from "react"
 import { algorithmDraftType, inputType } from "../../types";
 
-export const Inputs = ({draftRef} : {draftRef: MutableRefObject<algorithmDraftType>}) => {
+export const InputEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDraftType>}) => {
 
     const [inputType, setInputType] = useState<"single" | "multiple">("multiple");
-    const [inputs, setInputs] = useState<inputType[]>([]);
+    const [input, setInput] = useState<inputType[]>([]);
 
     useEffect(() => {
-        draftRef.current.inputs = inputs;   
-    }, [inputs])
+        draftRef.current.inputs = input;   
+    }, [input])
 
     useEffect(() => {
         draftRef.current.input_type = inputType;
@@ -45,8 +45,8 @@ export const Inputs = ({draftRef} : {draftRef: MutableRefObject<algorithmDraftTy
             </div>
 
             {inputType == "multiple" 
-                ? <BoxInputs setInputs={setInputs}/>
-                : <FieldInput setInputs={setInputs}/>
+                ? <BoxInputs setInputs={(data) => setInput(data)}/>
+                : <FieldInput setInputs={(data) => setInput(data)}/>
                 
             }
 
@@ -55,12 +55,11 @@ export const Inputs = ({draftRef} : {draftRef: MutableRefObject<algorithmDraftTy
 }
 
 
-const BoxInputs = ({setInputs} : {setInputs: Dispatch<SetStateAction<inputType[]>>}) => {
+const BoxInputs = ({setInputs} : {setInputs: (data: inputType[]) => void}) => {
 
     const [inputBoxes, setInputBoxes] = useState<inputType[]>([]);
 
     const remove = (id: number) => {
-
         setInputBoxes(inputBoxes.filter((item) => item.id !== id));
     }
 
@@ -153,7 +152,7 @@ const BoxInputs = ({setInputs} : {setInputs: Dispatch<SetStateAction<inputType[]
     )
 }
 
-const FieldInput = ({setInputs} : {setInputs: Dispatch<SetStateAction<inputType[]>>}) => {
+const FieldInput = ({setInputs} : {setInputs: (data: inputType[]) => void}) => {
 
     const [inputField, setInputField] = useState<inputType>({} as inputType);
 

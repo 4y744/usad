@@ -4,7 +4,7 @@ import { algorithmDraftType } from "../../types";
 import { LoadingSpinner } from "../Loading/LoadingSpinner";
 
 export const AlgorithmInput = ({algorithm, inputRef, status, handleRun} : {algorithm: algorithmDraftType, inputRef: MutableRefObject<{variable: string, content: string}[]>, status: boolean, handleRun: () => void}) => {
-
+;
     return (
         <InputContext.Provider value={inputRef}>
 
