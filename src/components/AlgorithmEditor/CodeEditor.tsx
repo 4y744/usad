@@ -28,13 +28,7 @@ export const CodeEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDra
     // }
 
 
-    const checkIntegrity = () => {
 
-        if(editorRef.current!.innerHTML == ""){
-            editorRef.current!.blur();
-            editorRef.current!.innerHTML = "<li></li>"
-        }
-    }
 
     // const handleKeyDown = (event: KeyboardEvent) => {
 
@@ -51,9 +45,18 @@ export const CodeEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDra
 
     // }, [])
 
-    const [selectedFont, setSelectedFont] = useState("font-inter");
-
+    const [selectedFont, setSelectedFont] = useState("font-fira");
     const [scale, setScale] = useState(100);
+    const [unsavedChanges, setUnsavedChanges] = useState(false);
+
+    const checkIntegrity = () => {
+        setUnsavedChanges(true);
+
+        if(editorRef.current!.innerHTML == ""){
+            editorRef.current!.blur();
+            editorRef.current!.innerHTML = "<li></li>"
+        }
+    }
 
     const getFontSize = (scale: number) => {
         switch(scale)
@@ -78,8 +81,13 @@ export const CodeEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDra
     }
 
     const save = () => {
+        setUnsavedChanges(false);
         if(!editorRef.current!.textContent) return;
-        draftRef.current.function = btoa(editorRef.current!.textContent);
+
+        const logRegex = new RegExp(`\\b${"console.log"}\\b`, 'gi');
+        const compiledCode = editorRef.current!.textContent.replace(logRegex, "postMessage")
+
+        draftRef.current.function = btoa(compiledCode);
     }
 
     return (
@@ -87,10 +95,11 @@ export const CodeEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDra
         flex flex-col gap-5 p-4">
 
             <div className="bg-zinc-900 rounded-md shadow-md
-            flex gap-2 p-2">
+            flex flex-wrap items-center
+            gap-2 p-2">
                 <select className="bg-zinc-800 rounded-md shadow-md
                 active:outline ouline-2 outline-green-600
-                hover:bg-zinc-700 px-4 py-2" id="operators"
+                hover:bg-zinc-700 px-4 py-2"
                 onChange={(event) => setSelectedFont(event.target.value)} 
                 defaultValue={"font-fira"}>
                     <option value="font-inter">
@@ -99,13 +108,16 @@ export const CodeEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDra
                     <option value="font-fira">
                         Fira Code
                     </option>
+                    <option value="font-jbm">
+                        JetBrains Mono
+                    </option>
                     <option value="font-monospace">
                         Monospace
                     </option>
                 </select>
 
                 <div className="bg-zinc-800 rounded-md shadow-md
-                flex justify-center items-center ml-auto">
+                flex justify-center items-center">
                     <button className="hover:bg-zinc-700 rounded-l-md text-lg
                     active:outline ouline-2 outline-green-600
                     h-10 aspect-square"
@@ -119,8 +131,16 @@ export const CodeEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDra
                     onClick={() => {if(scale > 50) setScale(scale - 25)}}>-</button>
                 </div>
 
+                <div>
+                    {unsavedChanges ? 
+                    <span className="text-red-600 text-sm
+                    bg-zinc-800 px-4 py-2 rounded-md shadow-md">Unsaved changes...</span> : 
+                    <span className="text-green-600 text-sm
+                    bg-zinc-800 px-4 py-2 rounded-md shadow-md">No unsaved changes...</span>}
+                </div>
+
                 <button className="bg-green-700 rounded-md shadow-md
-                hover:bg-green-600 px-4 py-2
+                hover:bg-green-600 px-4 py-2 ml-auto
                 active:outline outline-2 outline-green-600 outline-offset-2"
                 onClick={() => save()}>Save</button>
             </div>

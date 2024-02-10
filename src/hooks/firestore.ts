@@ -2,10 +2,11 @@
 import { useEffect, useState, useRef, useContext } from "react";
 
 //Import Firebase hooks
-import { doc, collection, getDoc, getDocs, writeBatch, where, query, DocumentData, addDoc, deleteDoc } from "firebase/firestore";
+import { doc, collection, getDoc, getDocs, writeBatch, where, query, DocumentData, addDoc, deleteDoc, setDoc, updateDoc, getCountFromServer } from "firebase/firestore";
 import { db } from "./firebase.ts";
 import { algorithmDocType, algorithmDraftType, userType } from "../types/index.ts";
 import { AuthContext } from "../contexts/index.ts";
+import { useNavigate } from "react-router-dom";
 
 export const useGetUser = (param: {username?: string, uid?: string}) : [userType, boolean, string] => {
     const [user, setUser] = useState<userType>({} as userType);
@@ -100,7 +101,7 @@ export const useGetAlgorithms = (params: {username?: string, uid?: string}) : [a
     return [algorithms, loading, error];
 }
 
-export const useGetOwnAlgorithms = () : [algorithmDocType[], boolean, string] => {
+export const useGetOwnAlgorithms = () : [algorithmDocType[], (algs: algorithmDocType[]) => void, boolean, string] => {
     const [algorithms, setAlgorithms] = useState<algorithmDocType[]>([] as algorithmDocType[]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>("");
@@ -108,6 +109,9 @@ export const useGetOwnAlgorithms = () : [algorithmDocType[], boolean, string] =>
 
     const user = useContext(AuthContext);
 
+    const SetAlgorithms = (algs: algorithmDocType[]) => {
+        setAlgorithms(algs);
+    }
 
     useEffect(() => {
         const fetch = async () => {
@@ -139,7 +143,7 @@ export const useGetOwnAlgorithms = () : [algorithmDocType[], boolean, string] =>
 
     }, [user])
 
-    return [algorithms, loading, error];
+    return [algorithms, SetAlgorithms, loading, error];
 }
 
 
@@ -181,31 +185,97 @@ export const useGetAlgorithm = (id: string) : [algorithmDocType, boolean, string
 export const usePostAlgorithm = () => {
 
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    const navigate = useNavigate();
 
     const PostAlgorithm = async (algorithm: algorithmDraftType) => {
-        const collectionRef = collection(db, "algorithms");
-
-        await addDoc(collectionRef, algorithm);
+        
+        try{
+            const collectionRef = collection(db, "algorithms");
+            const docRef = await addDoc(collectionRef, algorithm);
+            navigate(`/algorithm/${docRef.id}`);
+        }
+        catch(err){
+            setError(err as string)
+        }
 
         setLoading(false);
-        console.log("added");
     }
     
-    return {PostAlgorithm, loading}
+    return {PostAlgorithm, loading, error}
 }
 
 export const useDeleteAlgorithm = () => {
 
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
     const DeleteAlgorithm = async (id: string) => {
-        const docRef = doc(db, "algorithms", id);
-
-        await deleteDoc(docRef);
+        
+        try{
+            const docRef = doc(db, "algorithms", id);
+            await deleteDoc(docRef);
+        }
+        catch(err){
+            setError(err as string);
+        }
 
         setLoading(false);
-        console.log("added");
     }
     
     return {DeleteAlgorithm, loading}
+}
+
+export const useEditAlgorithm = () => {
+
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    const EditAlgorithm = async (id: string, delta: algorithmDraftType) => {
+        
+        try{
+            const docRef = doc(db, "algorithms", id);
+
+            await updateDoc(docRef, delta)
+        }
+        catch(err){
+            setError(err as string);
+        }
+
+        setLoading(false);
+    }
+    
+    return {EditAlgorithm, loading}
+}
+
+export const useGetAlgorithmCount = (username: string) : [number, boolean, string] => {
+
+    const [count, setCount] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+    
+    
+
+    useEffect(() => {
+        const fetch = async () => {
+        
+            try{
+                const q = query(collection(db, "algorithms"), where("author", "==", username));
+                
+                const algorithms = await getCountFromServer(q);
+    
+                setCount(algorithms.data().count)
+            }
+            catch(err){
+                setError(err as string);
+            }
+    
+            setLoading(false);
+        }
+
+        fetch();
+    })
+    
+    return [count, loading, error]
 }

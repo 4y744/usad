@@ -11,6 +11,7 @@ module.exports = {
     fontFamily: {
       'inter': ['Inter', 'system-ui'],
       'fira': ['Fira Code', 'system-ui'],
+      'jbm': ['JetBrains Mono', 'system-ui'],
       'monospace': ['monospace', 'system-ui']
     },
     extend: {

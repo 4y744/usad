@@ -132,8 +132,7 @@ const BoxInputs = ({setInputs} : {setInputs: (data: inputType[]) => void}) => {
                         maxLength={32}>
                         </input>
                         
-                        <button className="bg-red-700 rounded-md shadow-md
-                        hover:bg-red-600
+                        <button className="bg-red-700 rounded-md shadow-md hover:bg-red-600
                         active:outline outline-2 outline-red-600 outline-offset-2
                         h-8 aspect-square"
                         onClick={() => remove(input.id)}>

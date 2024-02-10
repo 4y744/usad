@@ -1,4 +1,9 @@
 {
-    "home": "Home 3",
-    "page2": "ffff"
+    "home": "Home",
+    "browse": "Browse",
+    "create": "Create",
+    "about": "About",
+    "signin": "Sign in",
+    "search": "Search",
+    "typehere": "Type here"
 }

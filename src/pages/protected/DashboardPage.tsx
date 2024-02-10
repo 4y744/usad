@@ -1,17 +1,17 @@
 //Import React hooks
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 
 //Import React Router hooks
 import { Link, useNavigate } from "react-router-dom";
 
 //Import custom hooks
-import { useGetOwnAlgorithms } from "../../hooks/firestore"
+import { useDeleteAlgorithm, useEditAlgorithm, useGetAlgorithmCount, useGetOwnAlgorithms } from "../../hooks/firestore"
 
 //Import contexts
-import { AlgorithmsContext, AuthContext } from "../../contexts"
+import { AlgorithmsContext, AuthContext, DashboardInfoContext } from "../../contexts"
 
 //Import types
-import { algorithmDocType } from "../../types";
+import { algorithmDocType, algorithmDraftType, dashboardInfoType } from "../../types";
 
 //Import utils
 import { AlgorithmSorter } from "../../utils/sorter";
@@ -32,10 +32,20 @@ import blankProfile from "../../assets/images/blank-profile-image.png"
 
 export const DashboardPage = () => {
 
-    const [algorithms, loading, error] = useGetOwnAlgorithms();
+    const auth = useContext(AuthContext);
+    const [algorithms, SetAlgorithms, loading, error] = useGetOwnAlgorithms();
 
     const [selectedView, setSelectedView] = useState<"list" | "box">("box")
     const [selectedSort, setSelectedSort] = useState<"alphabetical" | "reverse-alphabetical" | "post-date" | "reverse-post-date">("post-date");
+
+    const [info, setInfo] = useState<dashboardInfoType>({} as dashboardInfoType);
+
+
+    const [count] = useGetAlgorithmCount(auth.username);
+
+    useEffect(() => {
+        setInfo({algorithmCount: count} as dashboardInfoType)   
+    }, [count])
 
     const sortAlgorithms = (algorithms: algorithmDocType[], type: string) => {
         switch(type){
@@ -55,7 +65,7 @@ export const DashboardPage = () => {
 
     return (
         <PageWrapper>
-
+            <DashboardInfoContext.Provider value={{info, setInfo}}>
             <div className="grid lg:grid-cols-4 grid-cols-1 gap-5
             md:w-5/6 w-[95%] min-h-fit">
 
@@ -65,8 +75,8 @@ export const DashboardPage = () => {
                 flex flex-col gap-5">
                     
                     <ProfileContainer/>
-
-                    <InfoContainer views={3255} votes={1245} forks={43}/>
+            
+                    <InfoContainer/>
 
                 </div>
 
@@ -90,7 +100,7 @@ export const DashboardPage = () => {
                     <div className="bg-zinc-800 shadow-md rounded-md
                     w-full h-[60vh] overflow-y-auto">
 
-                        <AlgorithmsContext.Provider value={sortAlgorithms(algorithms!, selectedSort)!}>
+                        <AlgorithmsContext.Provider value={{algorithms: sortAlgorithms(algorithms!, selectedSort)!, SetAlgorithms}}>
 
                             {selectedView == "list" ? <ListView/> : <BoxView/>}
 
@@ -101,7 +111,7 @@ export const DashboardPage = () => {
                 </div>
 
             </div>
-
+            </DashboardInfoContext.Provider>
         </PageWrapper>
     )
 }
@@ -129,14 +139,14 @@ export const ProfileContainer = () => {
     )
 }
 
-export const InfoContainer = ({views, votes, forks} : {views: number, votes: number, forks: number}) => {
+export const InfoContainer = () => {
 
-    //TODO: remove props and use auth context
+    const {info} = useContext(DashboardInfoContext);
 
     return (
         <div className="flex flex-col gap-3 p-4
         bg-zinc-800 rounded-md shadow-md">
-            <InfoBox 
+            {/* <InfoBox 
             title="Views" 
             faClass="fa-solid fa-eye" 
             count={views}/>
@@ -149,7 +159,12 @@ export const InfoContainer = ({views, votes, forks} : {views: number, votes: num
             <InfoBox 
             title="Forks" 
             faClass="fa-solid fa-code-fork"
-            count={forks}/>
+            count={forks}/> */}
+
+            <InfoBox
+            title="Algorithms"
+            faClass="fa-solid fa-code"
+            count={info.algorithmCount}/>
         </div>
     )
 }
@@ -221,7 +236,7 @@ const ViewManager = ({setSort, setView} : {setSort: (sort: "alphabetical" | "rev
 const ViewManagerButton = ({faClass, handleClick} : {faClass: string, handleClick: () => void}) => {
 
     return (
-        <button className="py-2 px-4 md:text-base text-sm
+        <button className="py-2 sm:px-4 px-2 md:text-base text-sm
         hover:bg-green-600 rounded-md
         active:outline outline-2 outline-green-600 outline-offset-2"
         onClick={handleClick}>
@@ -233,7 +248,7 @@ const ViewManagerButton = ({faClass, handleClick} : {faClass: string, handleClic
 //List view components
 export const ListView = () => {
 
-    const algorithms = useContext(AlgorithmsContext);
+    const {algorithms} = useContext(AlgorithmsContext);
 
     return (
         <div className="p-4 grid gap-2 h-fit auto-rows-fr">
@@ -255,7 +270,7 @@ export const ListView = () => {
                             <ViewInformation 
                             votes={"1000"} 
                             comments={"100"} 
-                            visibility={"public"}/>
+                            visibility={alg.visibility}/>
         
                         </div>
         
@@ -274,7 +289,7 @@ export const ListView = () => {
 //Box view components
 export const BoxView = () => {
 
-    const algorithms = useContext(AlgorithmsContext);
+    const {algorithms} = useContext(AlgorithmsContext);
 
     return (
         <div className="p-4 gap-2 h-fit auto-rows-fr
@@ -292,7 +307,7 @@ export const BoxView = () => {
                         <ViewInformation 
                         votes={`Votes: ${1000}`} 
                         comments={`Comments: ${100}`} 
-                        visibility={`Visibility: ${"public"}`}/>
+                        visibility={`Visibility: ${alg.visibility}`}/>
                    
                     </div>
        
@@ -337,7 +352,7 @@ const ViewInformation = ({votes, comments, visibility} : {votes: string, comment
 
     return (
         <>
-            <span>
+            {/* <span>
                 <i className="fa-solid fa-check-to-slot mr-1"></i>
                 <span>{votes}</span>
             </span>
@@ -345,7 +360,7 @@ const ViewInformation = ({votes, comments, visibility} : {votes: string, comment
             <span>
                 <i className="fa-solid fa-square-poll-horizontal mr-1"></i>
                 <span>{comments}</span>
-            </span>
+            </span> */}
 
             <span>
                 <i className="fa-solid fa-eye mr-1"></i>
@@ -372,27 +387,54 @@ const ViewActionButton = ({faClass, handleClick} : {faClass: string, handleClick
 
 const ViewActionButtonContainer = ({alg} : {alg: algorithmDocType}) => {
 
+    const {algorithms, SetAlgorithms} = useContext(AlgorithmsContext);
+    const {DeleteAlgorithm} = useDeleteAlgorithm();
+    const {EditAlgorithm} = useEditAlgorithm();
+
+    const {info, setInfo} = useContext(DashboardInfoContext);
+
+    const handleDelete = () => {
+
+        DeleteAlgorithm(alg.id);
+
+        setInfo({...info, algorithmCount: info.algorithmCount - 1})
+
+        SetAlgorithms(algorithms.filter((item) => item.id != alg.id))
+    }
+
+    const handleChangeVisibility = () => {
+        const visibility = alg.visibility == "public" ? "private" : "public";
+        
+        EditAlgorithm(alg.id, {visibility: visibility} as algorithmDraftType);
+
+        SetAlgorithms(algorithms.map((item) => {
+            if(item.id == alg.id) item.visibility = visibility;
+
+            return item;
+        }))
+    }
+
     return (
         <>
-            <ViewActionButton 
+            {/* <ViewActionButton 
             faClass="fa-solid fa-code-fork" 
-            handleClick={() => {}}/>
+            handleClick={() => {}}/> */}
 
             <ViewActionButton 
             faClass="fa-solid fa-link" 
             handleClick={() => copyToClipboard(`${ROOT_URL}/algorithm/${alg.id}`)}/>
 
             <ViewActionButton 
-            faClass="fa-solid fa-lock" 
-            handleClick={() => {}}/>
+            faClass={alg.visibility == "public" ? "fa-solid fa-lock-open" : "fa-solid fa-lock"}
+            handleClick={() => handleChangeVisibility()}/>
                 
-            <ViewActionButton 
+            {/* <ViewActionButton 
             faClass="fa-solid fa-pen" 
-            handleClick={() => {}}/>
+            handleClick={() => {}}/> */}
 
             <ViewActionButton 
             faClass="fa-solid fa-trash" 
-            handleClick={() => {}}/>
+            handleClick={() => handleDelete()}/>
         </>
     )
 }
