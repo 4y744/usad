@@ -3,6 +3,7 @@ import { LoadingSpinner } from "../../components/Loading/LoadingSpinner";
 import { useContext } from "react";
 import { AuthContext } from "../../contexts";
 import { PageWrapper } from "../../components/Layout/PageWrapper";
+import { useTranslation } from "react-i18next";
 
 export const SignOutPage = () => {
     const [SignOut, loading] = useSignOut("/");
@@ -12,6 +13,7 @@ export const SignOutPage = () => {
     }
 
     const {username, email, logged} = useContext(AuthContext);
+    const {t} = useTranslation();
 
     return (
         <PageWrapper>
@@ -19,8 +21,8 @@ export const SignOutPage = () => {
             <div className="flex justify-start items-start flex-col gap-3 
             rounded-md p-6 shadow-md text-white bg-zinc-900 sm:w-96 w-80">
 
-                <h1 className="text-2xl font-bold">Sign Out</h1>
-                <span>Are you sure you want to sign out of your account?</span>
+                <h1 className="text-2xl font-bold">{t("signout")}</h1>
+                <span>{t("want-to-sign-out")}</span>
 
                 {logged ?
                     <>
@@ -29,13 +31,13 @@ export const SignOutPage = () => {
                         </span> */}
 
                         <div className="bg-zinc-800 w-full p-2 rounded-md">
-                            <h1 className="font-semibold mb-1">Current user information</h1>
+                            <h1 className="font-semibold mb-1">{t("current-user-info")}</h1>
                             <div className="w-full text-sm">
-                                <span>Username:</span>
+                                <span>{t("username")}:</span>
                                 <span className="text-green-600 font-bold ml-1">{username}</span>
                             </div>
                             <div className="w-full text-sm">
-                                <span>Email:</span>
+                                <span>{t("email")}:</span>
                                 <span className="text-green-600 font-bold ml-1">{email}</span>
                             </div>
                         </div>
@@ -44,12 +46,12 @@ export const SignOutPage = () => {
                         outline-green-600 w-full h-12 rounded-md flex justify-center items-center 
                         ${loading ? "opacity-50" : "opacity-100 hover:bg-green-600 active:outline"}`} 
                         onClick={handleSignOut} disabled={loading}>
-                            {loading ? <LoadingSpinner /> : <>Sign out</>}
+                            {loading ? <LoadingSpinner /> : t("signout")}
                         </button>
                     </> :
                     
                     <>
-                        <span className="text-red-600 font-bold my-2">You are already signed out.</span>
+                        <span className="text-red-600 font-bold my-2">{t("already-signed-out")}</span>
                     </>
                 
                 }

@@ -182,6 +182,59 @@ export const useGetAlgorithm = (id: string) : [algorithmDocType, boolean, string
     return [algorithm, loading, error];
 }
 
+export const useQueryAlgorithms = ({term} : {term: string}) : [algorithmDocType[], boolean, string] => {
+
+    const [algorithms, setAlgorithms] = useState<algorithmDocType[]>([] as algorithmDocType[]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string>("");
+
+    useEffect(() => {
+        setLoading(true);
+
+        const fetch = async () => {
+
+            try{
+                const collectionRef = collection(db, "algorithms");
+                const q = query(collectionRef, where("visibility", "==", "public"));
+
+                const algDocs = await getDocs(q);   
+
+                let tempDocs : algorithmDocType[] = [];
+
+                algDocs.forEach((doc) => {
+                    tempDocs.push({
+                        id: doc.id,
+                        ...doc.data()   
+                    } as algorithmDocType);
+                })
+
+                /*
+                    This is absolutely horrible and really bad for scaling.
+                    Firestore doesn't support complex substring queries so
+                    I just pull the entire collection and manually filter it.
+                    I will find a workaround in the future, but for now this will do.
+                    :(
+                */
+               
+                tempDocs = tempDocs.filter((doc) => doc.title.toLocaleLowerCase().includes(term.toLocaleLowerCase()))
+
+                setAlgorithms(tempDocs);
+
+            }
+            catch(err){
+                setError(err as string);
+            }
+
+            setLoading(false);
+            
+        }
+
+        fetch()
+    }, [term])
+
+    return [algorithms, loading, error];
+}
+
 export const usePostAlgorithm = () => {
 
     const [loading, setLoading] = useState(true);

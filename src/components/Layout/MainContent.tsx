@@ -12,11 +12,13 @@ import { AlgorithmPage } from "../../pages/dynamic/AlgorithmPage";
 import { NotFoundPage } from "../../pages/static/NotFoundPage";
 import { LoadingPage } from "../../pages/static/LoadingPage";
 import { UserPage } from "../../pages/dynamic/UserPage";
-import { BlockEditor } from "../../pages/protected/BlockEditor";
+import { BlockEditor } from "../AlgorithmEditor/BlockEditor";
 import { DashboardPage } from "../../pages/protected/DashboardPage";
 import { ProtectedRoute } from "../Router/ProtectedRoute";
 import { CreatePage } from "../../pages/protected/CreatePage";
 import { SettingsPage } from "../../pages/dynamic/SettingsPage";
+import { BrowsePage } from "../../pages/dynamic/BrowsePage";
+import { SearchPage } from "../../pages/dynamic/SearchPage";
 
 export const MainContent = () => {
 
@@ -53,6 +55,14 @@ export const MainContent = () => {
                         element={<AboutPage/>} />
 
                         <Route 
+                        path="browse" 
+                        element={<BrowsePage/>} />
+
+                        <Route 
+                        path="search/:query" 
+                        element={<SearchPage/>} />
+
+                        <Route 
                         path="algorithm/:id" 
                         element={<AlgorithmPage/>} />
 
@@ -62,13 +72,13 @@ export const MainContent = () => {
                             path="settings" 
                             element={<SettingsPage/>}>
 
-                                <Route 
+                                {/* <Route 
                                 path="s1" 
                                 element={<h1>s1</h1>}/>
 
                                 <Route 
                                 path="s2" 
-                                element={<h1>s2</h1>}/>
+                                element={<h1>s2</h1>}/> */}
 
                             </Route>
 
@@ -80,9 +90,6 @@ export const MainContent = () => {
                             path="create" 
                             element={<CreatePage/>}/>
 
-                            <Route 
-                            path="editor" 
-                            element={<BlockEditor/>}/>
                         </Route>
                         
                         {/* 404 page */}

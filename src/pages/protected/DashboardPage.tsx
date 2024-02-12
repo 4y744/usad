@@ -28,6 +28,7 @@ import { ROOT_URL } from "../../config";
 
 //Import assets
 import blankProfile from "../../assets/images/blank-profile-image.png"
+import { useTranslation } from "react-i18next";
 
 
 export const DashboardPage = () => {
@@ -124,7 +125,7 @@ export const ProfileContainer = () => {
     return (
         <div className="flex flex-col items-center justify-center
         gap-1 bg-zinc-800 p-4 rounded-md shadow-md">
-            <img src={user?.pfp || blankProfile} alt="This image is missing..." 
+            <img src={blankProfile} alt="This image is missing..." 
             className="w-16 aspect-square rounded-full
             outline outline-2 outline-green-600 outline-offset-2
             mb-2"/>
@@ -142,6 +143,7 @@ export const ProfileContainer = () => {
 export const InfoContainer = () => {
 
     const {info} = useContext(DashboardInfoContext);
+    const {t} = useTranslation();
 
     return (
         <div className="flex flex-col gap-3 p-4
@@ -162,7 +164,7 @@ export const InfoContainer = () => {
             count={forks}/> */}
 
             <InfoBox
-            title="Algorithms"
+            title={t("algorithms")}
             faClass="fa-solid fa-code"
             count={info.algorithmCount}/>
         </div>
@@ -249,12 +251,14 @@ const ViewManagerButton = ({faClass, handleClick} : {faClass: string, handleClic
 export const ListView = () => {
 
     const {algorithms} = useContext(AlgorithmsContext);
+    const {t} = useTranslation();
 
     return (
         <div className="p-4 grid gap-2 h-fit auto-rows-fr">
             {algorithms?.map((alg) => (
                 <div className="bg-zinc-900 rounded-md shadow-md
-                flex items-center p-4 gap-2" key={alg.id}>
+                flex items-center p-4 gap-2
+                border border-zinc-700" key={alg.id}>
                     
                     <div className="flex lg:flex-row flex-col w-1/2">
         
@@ -270,7 +274,7 @@ export const ListView = () => {
                             <ViewInformation 
                             votes={"1000"} 
                             comments={"100"} 
-                            visibility={alg.visibility}/>
+                            visibility={t(alg.visibility)}/>
         
                         </div>
         
@@ -290,13 +294,15 @@ export const ListView = () => {
 export const BoxView = () => {
 
     const {algorithms} = useContext(AlgorithmsContext);
+    const {t} = useTranslation();
 
     return (
         <div className="p-4 gap-2 h-fit auto-rows-fr
         grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1">
             {algorithms?.map((alg) => (
                 <div className="bg-zinc-900 rounded-md shadow-md
-                flex flex-col p-4" key={alg.id} >
+                flex flex-col p-4
+                border border-zinc-700" key={alg.id} >
                    
                     <ViewTitleCard title={alg.title!} id={alg.id!}/>
                     <ViewPostDate created={alg.created!}/>
@@ -305,9 +311,9 @@ export const BoxView = () => {
                     md:text-xs text-2xs font-semibold text-green-600">
        
                         <ViewInformation 
-                        votes={`Votes: ${1000}`} 
-                        comments={`Comments: ${100}`} 
-                        visibility={`Visibility: ${alg.visibility}`}/>
+                        votes={`${t("votes")}: ${1000}`} 
+                        comments={`${t("comments")}: ${100}`} 
+                        visibility={`${t("visibility")}: ${t(alg.visibility)}`}/>
                    
                     </div>
        
@@ -340,9 +346,11 @@ const ViewTitleCard = ({title, id} : {title: string, id: string}) => {
 
 const ViewPostDate = ({created} : {created: number}) => {
 
+    const {t} = useTranslation();
+
     return (
         <span className="md:text-xs text-2xs text-zinc-300">
-            posted on {TimeFormatter.DayMonthYear(created)}
+            {t("postedon")} {TimeFormatter.DayMonthYear(created)}
         </span>
 
     )

@@ -8,6 +8,12 @@ import { NumberBlock } from "./LogicBlocks/NumberBlock.tsx"
 import { BlockEditorContext } from "../../contexts/index.ts"
 
 import { useContext } from "react"
+import { ForBlock } from "./LogicBlocks/ForBlock.tsx"
+import { WhileBlock } from "./LogicBlocks/WhileBlock.tsx"
+import { VariableBlock } from "./LogicBlocks/VariableBlock.tsx"
+import { SetBlock } from "./LogicBlocks/SetBlock.tsx"
+import { ParseBlock } from "./LogicBlocks/ParseBlock.tsx"
+import { MathBlock } from "./LogicBlocks/MathBlock.tsx"
 
 
 export const BuildBlock = ({parentId, port, isMaster,} : {parentId: string, port: number, isMaster?: boolean}) => {
@@ -23,12 +29,57 @@ export const BuildBlock = ({parentId, port, isMaster,} : {parentId: string, port
     )
 
     switch(block.type){
-        case "start": return <StartBlock block={block}/> 
-        case "exit": return <ExitBlock block={block}/> 
-        case "print": return <PrintBlock block={block}/>
-        case "condition": return <ConditionalBlock block={block}/>  
-        case "comparison": return <ComparisonBlock block={block}/>
-        case "number": return <NumberBlock block={block}/> 
-        default: return <SnapBlock parent={{id: parentId, port}}/>
+        case "start": return (
+            <StartBlock 
+            block={block}/> 
+        )
+        case "exit": return (
+            <ExitBlock 
+            block={block}/> 
+        )
+        case "print": return (
+            <PrintBlock 
+            block={block}/>
+        )
+        case "condition": return (
+            <ConditionalBlock 
+            block={block}/> 
+        ) 
+        case "for": return (
+            <ForBlock 
+            block={block}/>
+        )
+        case "while": return (
+            <WhileBlock
+            block={block}/>
+        )
+        case "comparison": return (
+            <ComparisonBlock 
+            block={block}/>
+        )
+        case "number": return (
+            <NumberBlock 
+            block={block}/> 
+        )
+        case "variable": return (
+            <VariableBlock
+            block={block}/> 
+        )
+        case "set": return (
+            <SetBlock
+            block={block}/> 
+        )
+        case "parse": return (
+            <ParseBlock
+            block={block}/> 
+        )
+        case "math": return (
+            <MathBlock
+            block={block}/> 
+        )
+        default: return (
+            <SnapBlock 
+            parent={{id: parentId, port}}/>
+        )
     }
 }

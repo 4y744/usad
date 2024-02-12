@@ -2,14 +2,17 @@ import { ChangeEvent, MutableRefObject, useContext } from "react";
 import { InputContext } from "../../contexts";
 import { algorithmDraftType } from "../../types";
 import { LoadingSpinner } from "../Loading/LoadingSpinner";
+import { useTranslation } from "react-i18next";
 
 export const AlgorithmInput = ({algorithm, inputRef, status, handleRun} : {algorithm: algorithmDraftType, inputRef: MutableRefObject<{variable: string, content: string}[]>, status: boolean, handleRun: () => void}) => {
-;
+
+    const {t} = useTranslation();
+
     return (
         <InputContext.Provider value={inputRef}>
 
             <div className='flex items-center mb-2'>
-                <h1 className='text-xl font-semibold'>Inputs</h1>
+                <h1 className='text-xl font-semibold'>{t("inputs")}</h1>
                 <button
                 onClick={handleRun}
                 className={`bg-green-700
@@ -17,13 +20,13 @@ export const AlgorithmInput = ({algorithm, inputRef, status, handleRun} : {algor
                 px-4 py-2 ml-auto rounded-md shadow-md
                 ${status ?  "opacity-50" : "opacity-100 hover:bg-green-600 active:outline"}`}
                 disabled={status}>
-                {status ? <LoadingSpinner/> : <>Run</>}
+                {status ? <LoadingSpinner/> : t("run")}
                 </button>
             </div>
 
             {algorithm.input_type == "multiple" ? 
-            <InputBoxContainer inputs={algorithm.inputs || [{variable: "", label:"[not available]"}]} /> :
-            <InputField inputs= {algorithm.inputs || [{variable: "", label:"[not available]"}]}/>}
+            <InputBoxContainer inputs={algorithm.inputs || [{variable: "", label: t("not-available")}]} /> :
+            <InputField inputs= {algorithm.inputs || [{variable: "", label :t("not-available")}]}/>}
             
         </InputContext.Provider>
     )

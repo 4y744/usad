@@ -4,6 +4,7 @@ import { useSandbox } from "../../hooks/shell";
 import { AlgorithmInput } from "../AlgorithmViewer/AlgorithmInput";
 import { OutputLog } from "../AlgorithmViewer/OutputLog";
 import { Sandbox } from "../Sandbox";
+import { useTranslation } from "react-i18next";
 
 export const Preview = ({draftRef} : {draftRef: MutableRefObject<algorithmDraftType>}) => {
 
@@ -11,6 +12,8 @@ export const Preview = ({draftRef} : {draftRef: MutableRefObject<algorithmDraftT
 
     const input = useRef<Array<{variable: string, content: string}>>([]);
     const [output, setOutput] = useState<Array<{message: string, timestamp: string}>>([]);
+
+    const {t} = useTranslation();
 
     const sandboxRef = useRef<HTMLIFrameElement>(null);
     const {sendMessage, onMessage, pending} = useSandbox(sandboxRef);
@@ -23,12 +26,12 @@ export const Preview = ({draftRef} : {draftRef: MutableRefObject<algorithmDraftT
         sendMessage(draftRef.current, input.current);
     }
 
-    const handleTest = () => {
+    const handleReload = () => {
         //React performs only shallow object comparisons so nested fields are not checked.
         //The spread syntax is needed to create and entirely new object.
         //Otherwise setState will not cause a rerender.
         setRenderedAlgorithm({...draftRef.current});
-
+        console.log(draftRef.current)
     }
 
     return (
@@ -37,13 +40,13 @@ export const Preview = ({draftRef} : {draftRef: MutableRefObject<algorithmDraftT
             <div className="bg-zinc-800 rounded-md shadow-md
             flex items-center mb-4 p-2">
                 
-                <h1 className="text-xl font-semibold ml-2">Preview</h1>
+                <h1 className="text-xl font-semibold ml-2">{t("preview")}</h1>
 
                 <button className="bg-green-700 rounded-md shadow-md
                 hover:bg-green-600
                 active:outline outline-2 outline-green-600 outline-offset-2
                 px-4 py-2 ml-auto"
-                onClick={() => handleTest()}>Reload</button>
+                onClick={() => handleReload()}>{t("reload")}</button>
 
             </div>
 

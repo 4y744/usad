@@ -6,9 +6,12 @@ import { Link } from 'react-router-dom';
 import { useGetAlgorithms } from '../../hooks/firestore';
 import { algorithmDocType } from '../../types';
 import { LoadingSpinner } from '../../components/Loading/LoadingSpinner';
+import { useTranslation } from 'react-i18next';
 
 
 export const HomePage = () => {
+
+    const {t} = useTranslation();
 
     return (
         <>
@@ -18,12 +21,20 @@ export const HomePage = () => {
                 <div className='flex flex-col justify-center items-center w-full lg:px-16 px-4'>
                     <h1 className='font-bold text-white xl:text-4xl lg:text-3xl text-3xl my-3 text-center'>Universal Scalable Algorithm Directory</h1>
                     <p className="my-3 xl:text-lg max-w-xl text-center">
-                        The ultimate tool for creating and sharing algorithms.
-                        Easily create and share your own specialized calculators. 
+                        {t("slogan")}
                     </p>
                     <div className='flex'>
-                        <Link to="/dashboard" className="m-3 px-4 py-3 rounded-md bg-green-700 hover:bg-green-600 transition-background duration-100 active:outline outline-offset-2 outline-2 outline-green-600 shadow-md">Get started</Link>
-                        <Link to="/about" className="m-3 px-4 py-3 rounded-md bg-green-700 hover:bg-green-600 transition-background duration-100 active:outline outline-offset-2 outline-2 outline-green-600 shadow-md">Learn more</Link>
+                        <Link to="/dashboard" 
+                        className="m-3 px-4 py-3 rounded-md bg-green-700 hover:bg-green-600 transition-background duration-100 
+                        active:outline outline-offset-2 outline-2 outline-green-600 shadow-md">
+                            {t("getstarted")}
+                        </Link>
+
+                        <Link to="/about" 
+                        className="m-3 px-4 py-3 rounded-md bg-green-700 hover:bg-green-600 transition-background duration-100 
+                        active:outline outline-offset-2 outline-2 outline-green-600 shadow-md">
+                            {t("learnmore")}
+                        </Link>
                     </div>
                 </div>
             </header>
@@ -31,23 +42,23 @@ export const HomePage = () => {
             <div className='p-4
             grid xl:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-5 place-items-center'>
                 <Card 
-                title='Find ready-to-use algorithms'
-                description='Find algorithms created by other users and run them in our sandbox.'
+                title={t("featured-1-title")}
+                description={t("featured-1-text")}
                 faClass='fa-solid fa-magnifying-glass'/>
                     
                 <Card 
-                title='Create your own algorithms'
-                description='Create, modify and share your own algorithms all in one place.'
+                title={t("featured-2-title")}
+                description={t("featured-2-text")}
                 faClass='fa-solid fa-code'/>
 
                 <Card 
-                title='Built-in code editor'
-                description="Built-in and accessible JavaScript code editor."
+                title={t("featured-3-title")}
+                description={t("featured-3-text")}
                 faClass='fa-brands fa-square-js'/>
 
                 <Card 
-                title='Easy-to-use block editor'
-                description="Flexible block editor that compiles to JavaScript."
+                title={t("featured-4-title")}
+                description={t("featured-4-text")}
                 faClass='fa-solid fa-arrow-pointer'/>
             </div>
             
@@ -65,7 +76,7 @@ const Card = ({title, description, faClass} : {title: string, description: strin
     return (
         <div className='bg-zinc-900 text-white
         p-8 h-full w-full rounded-md shadow-md
-        gap-5'>
+        gap-5 border border-zinc-700'>
             <i className={`${faClass} md:text-lg text-base`}/>
             <h1 className='md:text-base text-sm font-medium my-1'>{title}</h1>
             <p className='md:text-sm text-xs text-pretty text-zinc-300'>{description}</p>
@@ -76,10 +87,13 @@ const Card = ({title, description, faClass} : {title: string, description: strin
 export const Featured = () => {
 
     const [algorithms, loading] = useGetAlgorithms({username: "USAD"});
+    const {t} = useTranslation();
 
     return (
         <>
-            <h1 className='font-bold text-white xl:text-2xl lg:text-xl text-lg pb-3 text-start'>Featured</h1>
+            <h1 className='font-bold text-white xl:text-2xl lg:text-xl text-lg pb-3 text-start'>
+                {t("featured")}
+            </h1>
                 <div className='bg-zinc-800 rounded-md shadow-md p-4
                 grid 2xl:grid-cols-4 xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 
                 place-items-center gap-5 auto-rows-fr'>

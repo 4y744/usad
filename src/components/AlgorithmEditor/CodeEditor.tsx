@@ -1,5 +1,6 @@
 import { MutableRefObject, useRef, useState } from "react"
 import { algorithmDraftType } from "../../types";
+import { useTranslation } from "react-i18next";
 
 export const CodeEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDraftType>}) => {
 
@@ -48,6 +49,8 @@ export const CodeEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDra
     const [selectedFont, setSelectedFont] = useState("font-fira");
     const [scale, setScale] = useState(100);
     const [unsavedChanges, setUnsavedChanges] = useState(false);
+
+    const {t} = useTranslation(); 
 
     const checkIntegrity = () => {
         setUnsavedChanges(true);
@@ -134,15 +137,15 @@ export const CodeEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDra
                 <div>
                     {unsavedChanges ? 
                     <span className="text-red-600 text-sm
-                    bg-zinc-800 px-4 py-2 rounded-md shadow-md">Unsaved changes...</span> : 
+                    bg-zinc-800 px-4 py-2 rounded-md shadow-md">{t("unsaved-changes")}</span> : 
                     <span className="text-green-600 text-sm
-                    bg-zinc-800 px-4 py-2 rounded-md shadow-md">No unsaved changes...</span>}
+                    bg-zinc-800 px-4 py-2 rounded-md shadow-md">{t("no-unsaved-changes")}</span>}
                 </div>
 
                 <button className="bg-green-700 rounded-md shadow-md
                 hover:bg-green-600 px-4 py-2 ml-auto
                 active:outline outline-2 outline-green-600 outline-offset-2"
-                onClick={() => save()}>Save</button>
+                onClick={() => save()}>{t("save")}</button>
             </div>
 
             <div className={`bg-zinc-900 rounded-md shadow-md

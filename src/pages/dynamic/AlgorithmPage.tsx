@@ -24,6 +24,7 @@ import { useSandbox } from '../../hooks/shell.ts';
 import { CodeContainer } from '../../components/AlgorithmViewer/CodeContainer.tsx';
 import { AlgorithmInput, InputBoxContainer } from '../../components/AlgorithmViewer/AlgorithmInput.tsx';
 import { OutputLog } from '../../components/AlgorithmViewer/OutputLog.tsx';
+import { useTranslation } from 'react-i18next';
 
 
 export const AlgorithmPage = () => {
@@ -34,6 +35,8 @@ export const AlgorithmPage = () => {
 
     const input = useRef<Array<{variable: string, content: string}>>([]);
     const [output, setOutput] = useState<Array<{message: string, timestamp: string}>>([]);
+
+    const {t} = useTranslation();
 
     const sandboxRef = useRef<HTMLIFrameElement>(null);
     const {sendMessage, onMessage, pending} = useSandbox(sandboxRef);
@@ -66,11 +69,11 @@ export const AlgorithmPage = () => {
                     shadow-md'>
                         <h1 className='text-2xl font-semibold mb-1'>{algorithm.title}</h1>
                         <div className='text-sm text-zinc-300'>
-                            <span>Posted by </span>
+                            <span>{t("posted-by")} </span>
                             <Link to={`/user/${algorithm.author}`}
                             className='hover:underline font-semibold'>{algorithm.author}</Link>
 
-                            <span> on </span>
+                            <span> {t("on")} </span>
                             <span className='font-semibold'>
                                 {TimeFormatter.DayMonthYear(algorithm.created!)}
                             </span>
@@ -92,7 +95,7 @@ export const AlgorithmPage = () => {
                 
 
                 <div className='bg-zinc-800 p-4 rounded-md shadow-md'>
-                    <h1 className='text-xl font-semibold mb-2'>Description</h1>
+                    <h1 className='text-xl font-semibold mb-2'>{t("description")}</h1>
                     <p className='text-base'>{algorithm.description}</p>
                 </div>
 

@@ -1,8 +1,11 @@
 import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 export const OutputLog = ({logs, clearLogs} : {logs: Array<{message: string, timestamp: string}>, clearLogs: () => void}) => {
 
     const logRef = useRef<HTMLUListElement>(null);
+
+    const {t} = useTranslation();
 
     useEffect(() => {
         logRef.current!.scroll({top: logRef.current!.getBoundingClientRect().height + logRef.current!.scrollTop, behavior: 'smooth'});
@@ -11,13 +14,13 @@ export const OutputLog = ({logs, clearLogs} : {logs: Array<{message: string, tim
     return (
         <>
             <div className='flex items-center mb-2'>
-                <h1 className='text-xl font-semibold'>Output log</h1>
+                <h1 className='text-xl font-semibold'>{t("output-log")}</h1>
                 <button
                 onClick={clearLogs}
                 className="bg-green-700 hover:bg-green-600
                 active:outline outline-2 outline-green-600 outline-offset-2
                 px-4 py-2 ml-auto rounded-md shadow-md">
-                    Clear
+                    {t("clear")}
                 </button>
             </div>
 

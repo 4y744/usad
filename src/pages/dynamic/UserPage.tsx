@@ -6,6 +6,7 @@ import { LoadingSpinner } from "../../components/Loading/LoadingSpinner";
 import { TimeFormatter } from "../../utils/formatter";
 import { PageWrapper } from "../../components/Layout/PageWrapper";
 import blankProfile from "../../assets/images/blank-profile-image.png"
+import { useTranslation } from "react-i18next";
 
 export const UserPage = () => {
 
@@ -13,6 +14,8 @@ export const UserPage = () => {
 
     const [user, loading, error] = useGetUser({username: username});
     const [algorithms] = useGetAlgorithms({username: username});
+
+    const {t} = useTranslation();
 
     if(loading) return <Placeholder/>
     if(error) return <NotFoundPage/>
@@ -60,53 +63,69 @@ export const UserPage = () => {
             </div> */}
 
             <div className="bg-zinc-900 rounded-md shadow-md
-            flex flex-col gap-5 p-8">
+            flex flex-col gap-5 p-8
+            w-[1000px] max-w-[95%]">
 
                 <div className="bg-zinc-800 rounded-md shadow-md
-                flex flex-col items-center p-4">
+                flex flex-col items-center justify-center p-4">
 
                     <img src={user?.pfp || blankProfile} alt="This image is missing..." 
-                    className="w-16 aspect-square rounded-full
+                    className="w-24 aspect-square rounded-full
                     outline outline-2 outline-green-600 outline-offset-2
                     mb-2"/>
 
                     <div className="bg-zinc-900 rounded-md shadow-md
-                    flex flex-col items-center justify-center
-                    px-2 py-2 w-fit">
-                        <h1 className="text-green-600 font-semibold">{user.username}</h1>
+                    flex flex-col justify-center items-center p-2">
+
+                        <div className="flex flex-col items-center justify-center">
+                            <h1 className="text-green-600 font-semibold">{user.username}</h1>
+                        </div>
+
+                        <div className="bg-zinc-">
+                            <span className="text-zinc-300 text-sm">
+                                {t("joined")} {TimeFormatter.DayMonthYear(user.created)}
+                            </span>
+                        </div>
+
                     </div>
 
                 </div>
                 
                 <div className="bg-zinc-800 rounded-md shadow-md
-                flex flex-col gap-3 p-4
-                h-[50vh] overflow-y-auto">
-                    {algorithms.map((alg) => (
-                        <Link key={alg.id} 
-                        to={`/algorithm/${alg.id}`} 
-                        className="bg-zinc-900 rounded-md shadow-md
-                        text-white w-full h-full py-4 px-8 group
-                        flex flex-col justify-center">
+                p-4 h-[50vh] w-full overflow-y-auto">
 
-                            <div className="flex">
+                    <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1
+                    auto-rows-fr gap-3">         
+                        {algorithms.map((alg) => (
+                            <Link key={alg.id} 
+                            to={`/algorithm/${alg.id}`} 
+                            className="bg-zinc-900 rounded-md shadow-md
+                            text-white w-full h-full py-4 px-8 group
+                            flex flex-col justify-center
+                            border border-zinc-700">
 
-                                <h1 className="font-medium max-w-3/4 truncat
-                                group-hover:underline">
-                                    {alg.title}
-                                </h1>
-                                <span className="bg-zinc-800 rounded-md shadow-md
-                                text-xs h-fit
-                                px-2 py-1 ml-2">BG</span>
+                                <div className="flex">
 
-                            </div>
+                                    <h1 className="font-medium max-w-3/4 truncate
+                                    group-hover:underline">
+                                        {alg.title}
+                                    </h1>
+                                    <span className="bg-zinc-800 rounded-md shadow-md
+                                    text-xs h-fit
+                                    px-2 py-1 ml-2">BG</span>
 
-                            <div>
-                                <span className="text-zinc-300 text-xs"
-                                >Posted on {TimeFormatter.DayMonthYear(alg.created)}</span>
-                            </div>
+                                </div>
 
-                        </Link> 
-                    ))}
+                                <div>
+                                    <span className="text-zinc-300 text-xs">
+                                        {t("postedon")} {TimeFormatter.DayMonthYear(alg.created)}
+                                    </span>
+                                </div>
+
+                            </Link> 
+                        ))}
+                    </div>
+
                 </div>
             </div>
         </PageWrapper>
@@ -115,32 +134,34 @@ export const UserPage = () => {
 
 const Placeholder = () => (
     <PageWrapper>
+
         <div className="bg-zinc-900 rounded-md shadow-md
-            flex flex-col gap-5 p-8">
+        flex flex-col gap-5 p-8
+        w-[1000px] max-w-[95%]">
 
-                <div className="bg-zinc-800 rounded-md shadow-md
-                flex flex-col items-center p-4">
+            <div className="bg-zinc-800 rounded-md shadow-md
+            flex flex-col items-center justify-center p-4">
 
-                    <img src={blankProfile} alt="This image is missing..." 
-                    className="w-16 aspect-square rounded-full
-                    outline outline-2 outline-green-600 outline-offset-2
-                    mb-2"/>
+            <img src={blankProfile} alt="This image is missing..." 
+            className="w-24 aspect-square rounded-full
+            outline outline-2 outline-green-600 outline-offset-2
+            mb-2"/>
 
-                    <div className="bg-zinc-900 rounded-md shadow-md
-                    flex flex-col items-center justify-center
-                    px-2 py-2 w-32 h-12">
-                        <LoadingSpinner/>
-                    </div>
+            <div className="bg-zinc-900 rounded-md shadow-md
+            flex flex-col justify-center items-center p-2 w-24">
+                <LoadingSpinner/>            
+             </div>
 
-                </div>
-                
-                <div className="bg-zinc-800 rounded-md shadow-md
-                flex justify-center items-center p-4
-                h-[50vh] w-96">
-                    <div>
-                        <LoadingSpinner/>
-                    </div>
-                </div>
             </div>
+                
+            <div className="bg-zinc-800 rounded-md shadow-md
+            p-4 h-[50vh] w-full overflow-y-auto
+            flex justify-center items-center">
+
+                <LoadingSpinner/>
+
+            </div>
+
+        </div>
     </PageWrapper>
 )

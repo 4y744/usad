@@ -1,10 +1,13 @@
 import { ChangeEvent, Dispatch, MutableRefObject, SetStateAction, useEffect, useState } from "react"
 import { algorithmDraftType, inputType } from "../../types";
+import { useTranslation } from "react-i18next";
 
 export const InputEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDraftType>}) => {
 
     const [inputType, setInputType] = useState<"single" | "multiple">("multiple");
     const [input, setInput] = useState<inputType[]>([]);
+
+    const {t} = useTranslation();
 
     useEffect(() => {
         draftRef.current.inputs = input;   
@@ -22,7 +25,7 @@ export const InputEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDr
             <div className="bg-zinc-900 rounded-md shadow-md px-4 py-2 
             flex items-center gap-5 p-4">
 
-                <h1 className="text-lg font-semibold">Inputs</h1>
+                <h1 className="text-lg font-semibold">{t("inputs")}</h1>
                 <div className="bg-zinc-800 rounded-md shadow-md
                 flex gap-1 ml-auto">
 
@@ -30,14 +33,14 @@ export const InputEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDr
                     hover:bg-green-600 px-4 py-2
                     active:outline outline-2 outline-green-600 outline-offset-2"
                     onClick={() => setInputType("single")}>
-                        Single
+                        {t("single")}
                     </button>
 
                     <button className="rounded-r-md
                     hover:bg-green-600 px-4 py-2
                     active:outline outline-2 outline-green-600 outline-offset-2"
                     onClick={() => setInputType("multiple")}>
-                        Multiple
+                        {t("multiple")}
                     </button>
 
                 </div>
@@ -58,6 +61,8 @@ export const InputEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDr
 const BoxInputs = ({setInputs} : {setInputs: (data: inputType[]) => void}) => {
 
     const [inputBoxes, setInputBoxes] = useState<inputType[]>([]);
+
+    const {t} = useTranslation()
 
     const remove = (id: number) => {
         setInputBoxes(inputBoxes.filter((item) => item.id !== id));
@@ -101,7 +106,7 @@ const BoxInputs = ({setInputs} : {setInputs: (data: inputType[]) => void}) => {
             flex items-center justify-center"
             onClick={() => add()}>
                 <i className="fa-solid fa-plus pr-2"/>
-                <h1>Add a new input</h1>
+                <h1>{t("add-new-input")}</h1>
             </button>
 
 
@@ -144,8 +149,8 @@ const BoxInputs = ({setInputs} : {setInputs: (data: inputType[]) => void}) => {
                 ))}
             </div>
             <p className="text-sm text-pretty text-zinc-300">
-                To access the variables created here, reference them in code by their assigned names. For example
-                <span className="font-bold text-green-600"> [variable name]</span>.
+                {t("single-input-text")}
+                <span className="font-bold text-green-600"> [{t("variable-name")}]</span>.
             </p>
         </div>        
     )
@@ -154,6 +159,8 @@ const BoxInputs = ({setInputs} : {setInputs: (data: inputType[]) => void}) => {
 const FieldInput = ({setInputs} : {setInputs: (data: inputType[]) => void}) => {
 
     const [inputField, setInputField] = useState<inputType>({} as inputType);
+    
+    const {t} = useTranslation();
 
     const updateVariable = (str: string) => {
         setInputField({
@@ -183,7 +190,7 @@ const FieldInput = ({setInputs} : {setInputs: (data: inputType[]) => void}) => {
                 <input className="bg-zinc-800 rounded-md shadow-md
                 focus-within:outline outline-2 outline-green-600 outline-offset-2
                 p-2 w-full text-sm"     
-                placeholder="Enter a variable name"
+                placeholder={t("enter-variable-name")}
                 onChange={(event: ChangeEvent<HTMLInputElement>) => updateVariable(event.target.value)}
                 maxLength={16}>
                 </input>
@@ -191,7 +198,7 @@ const FieldInput = ({setInputs} : {setInputs: (data: inputType[]) => void}) => {
                 <input className="bg-zinc-800 rounded-md shadow-md
                 focus-within:outline outline-2 outline-green-600 outline-offset-2
                 p-2 w-full text-sm"     
-                placeholder="Enter a label"
+                placeholder={t("enter-label")}
                 onChange={(event: ChangeEvent<HTMLInputElement>) => updateLabel(event.target.value)}
                 maxLength={32}>
                 </input>
@@ -199,8 +206,10 @@ const FieldInput = ({setInputs} : {setInputs: (data: inputType[]) => void}) => {
 
             </div> 
             
-            <p className="text-sm text-pretty text-zinc-300 mt-2">This creates a field type input. The information submitted by the user is stored in the shape of and array.
-                You can access it from the code with <span className="font-bold text-green-600">[variable name]</span><span className="font-bold text-red-600">[index]</span>.
+            <p className="text-sm text-pretty text-zinc-300 mt-2">
+                {t("multiple-input-text")} 
+                <span className="font-bold text-green-600">[{t("variable-name")}]</span>
+                <span className="font-bold text-red-600">[{t("index")}]</span>.
             </p>
         </div>
     )

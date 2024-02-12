@@ -1,42 +1,42 @@
 
 import { RefObject, useEffect, useRef } from "react"
-import { Vector2 } from "../types";
+import { Vector2, blockType } from "../types";
 
-// const BuildScript = (blockId: string, blocks: any): string => {
+const BuildScript = (blockId: string, blocks: any): string => {
         
-//     const block = blocks[blockId];
+    const block = blocks[blockId];
     
-//     if(block == null) return ""
+    if(block == null) return ""
 
-//     switch(block.type){
-//         case "start":
-//             return (
-//                 BuildScript(block.ports.next, blocks)
-//             )
-//         case "exit":
-//             return (
-//                 ""
-//             )    
-//         case "print":
-//             return (
-//                 `console.log("Hello World!");\n${BuildScript(block.ports.next, blocks)}`
-//             )
-//         case "condition":
-//             return (
-//                 `if(${BuildScript(block.ports.condition, blocks)}){\n${BuildScript(block.ports.run, blocks)}\n}\n${BuildScript(block.ports.next, blocks)}`
-//             )            
-//         case "comparison":
-//             return (
-//                 `${BuildScript(block.ports.first, blocks)} ${block.metadata.comparator} ${BuildScript(block.ports.second, blocks)}`
-//             )  
-//         case "number":
-//             return (
-//                 `${block.metadata.number}`
-//             )
-//         default:
-//             return ``
-//     }
-// }
+    switch(block.type){
+        case "start":
+            return (
+                BuildScript(block.ports.next, blocks)
+            )
+        case "exit":
+            return (
+                ""
+            )    
+        case "print":
+            return (
+                `console.log("Hello World!");\n${BuildScript(block.ports.next, blocks)}`
+            )
+        case "condition":
+            return (
+                `if(${BuildScript(block.ports.condition, blocks)}){\n${BuildScript(block.ports.run, blocks)}\n}\n${BuildScript(block.ports.next, blocks)}`
+            )            
+        case "comparison":
+            return (
+                `${BuildScript(block.ports.first, blocks)} ${block.metadata.comparator} ${BuildScript(block.ports.second, blocks)}`
+            )  
+        case "number":
+            return (
+                `${block.metadata.number}`
+            )
+        default:
+            return ``
+    }
+}
 
 
 
@@ -127,13 +127,28 @@ export const useScrollToZoom = (blockEditorRef : RefObject<HTMLDivElement>, magn
     
     const mousePos = useRef<Vector2>({x: 0, y: 0});
 
+    
+    const zoomIn = () => {
+        if(scale.current > 200) return true;
+        scale.current =  scale.current * (magnitude + 1);
+        blockEditorRef.current!.dispatchEvent(new CustomEvent("zoom", {detail: {deltaY: 100, scale: scale.current}}));
+    }
+
+    const zoomOut = () => {
+        if(scale.current < 30) return true;
+        scale.current = scale.current / (magnitude + 1);
+        blockEditorRef.current!.dispatchEvent(new CustomEvent("zoom", {detail: {deltaY: -100, scale: scale.current}}));
+    }
+
     const handleZoom = (event: WheelEvent) => {
-       
-        scale.current = event.deltaY > 0 ? scale.current / (magnitude + 1) : scale.current * (magnitude + 1);
-        blockEditorRef.current!.dispatchEvent(new CustomEvent("zoom", {detail: {deltaY: event.deltaY, scale: scale.current}}));
+
+        const blockZoom = event.deltaY < 0 ? zoomIn() : zoomOut();
         
+        if(blockZoom) return;
+
         //I've tried to many things to get the correct behavior, but I just can't do it.
         //Should of course be possible, but for now I will leave it at this.
+
         if(event.deltaY < 0)
         {
             blockEditorRef.current!.scrollLeft += mousePos.current.x * magnitude;
@@ -177,3 +192,74 @@ export const useDisableScroll = (blockEditorRef: RefObject<HTMLElement>) => {
     })
 }
 
+export const useBlockCompiler = () : [(blockArray: blockType[]) => string] => {
+
+    const blocks = useRef<blockType[]>([]);
+    
+    const BuildScript = (blockId: string): string => {
+        
+        const block = blocks.current.find((b) => b.id == blockId);
+        
+        if(block == null) return ""
+    
+        switch(block.type){
+            case "start":
+                return (
+                    BuildScript(block.ports[0])
+                )
+            case "exit":
+                return (
+                    ""
+                )    
+            case "print":
+                return (
+                    `postMessage(${BuildScript(block.ports[1])});\n${BuildScript(block.ports[0])}`
+                )
+            case "condition":
+                return (
+                    `if(${BuildScript(block.ports[1])}){\n${BuildScript(block.ports[2])}\n}\n${BuildScript(block.ports[0])}`
+                )  
+            case "for":
+                return (
+                    `for(let i = 0; i < ${BuildScript(block.ports[1])}; i++){\n${BuildScript(block.ports[2])}\n}\n${BuildScript(block.ports[0])}`
+                )    
+            case "while":
+                return (
+                    `while(${BuildScript(block.ports[1])}){\n${BuildScript(block.ports[2])}\n}\n${BuildScript(block.ports[0])}`
+                ) 
+            case "comparison":
+                return (
+                    `${BuildScript(block.ports[0])} ${block.metadata?.values[0]} ${BuildScript(block.ports[1])}`
+                )  
+            case "number":
+                return (
+                    `${block.metadata?.values[0]}`
+                )
+            case "variable":
+                return (
+                    `${block.metadata?.values[0]}`
+                )
+            case "set":
+                return (
+                    `${BuildScript(block.ports[1])} = ${BuildScript(block.ports[2])};\n${BuildScript(block.ports[0])}`
+                )
+            case "parse":
+                return (
+                    `parseFloat(${BuildScript(block.ports[1])})\n${BuildScript(block.ports[0])}`
+                )
+            case "math":
+                return (
+                    `${BuildScript(block.ports[0])} ${block.metadata?.values[0]} ${BuildScript(block.ports[1])}`
+                )
+            default:
+                return ``
+        }
+    }
+
+    const Compile = (blockArray: blockType[]) => {
+        blocks.current = blockArray;
+        return BuildScript("start");
+    }
+
+    return [Compile]
+}

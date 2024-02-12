@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom"
 import { useContext } from "react"
 import { AuthContext } from "../../contexts";
+import { useTranslation } from "react-i18next";
 
 export const Sidebar = () => {
 
     const {username, logged} = useContext(AuthContext);
+    const {t} = useTranslation();
 
     return (
         <section style={logged ? {visibility: "visible"} : {visibility: "hidden"}} 
@@ -18,27 +20,27 @@ export const Sidebar = () => {
             <SideLink 
             url="/" 
             faClass="fa-solid fa-house" 
-            text="Home"/>
+            text={t("home")}/>
 
             <SideLink 
             url="/dashboard" 
             faClass="fa-solid fa-chart-line" 
-            text="Dashboard"/>
+            text={t("dashboard")}/>
 
             <SideLink 
             url={`/user/${username}`} 
             faClass="fa-regular fa-user" 
-            text="Profile"/>
+            text={t("profile")}/>
 
             <SideLink 
             url="/signout" 
             faClass="fa-solid fa-arrow-right-from-bracket" 
-            text="Sign out"/>
+            text={t("signout")}/>
 
             <SideLink 
             url="/settings" 
             faClass="fa-solid fa-gear" 
-            text="Settings"/>
+            text={t("settings")}/>
 
         </section>
     )

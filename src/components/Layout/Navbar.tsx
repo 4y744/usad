@@ -2,9 +2,9 @@
 import logo from "../../assets/images/logo.png";
 
 //Import React hooks
-import { useState, useRef, useContext } from "react";
+import { useState, useRef, useContext, MouseEvent } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts";
 import { useTranslation } from "react-i18next";
 
@@ -109,6 +109,14 @@ const NavLink = (props: { url: string; text: string }) => (
 const NavSearch = () => {
 
     const {t} = useTranslation();
+    const navigate = useNavigate();
+
+    const query = useRef("");
+
+    const search = (event: MouseEvent<HTMLButtonElement>) => {
+        if(query.current != "") navigate(`/search/${query.current}`);
+        event.preventDefault();
+    }
 
     return (
         <form className="focus-within:outline outline-offset-2 outline-2 outline-green-600 
@@ -117,9 +125,15 @@ const NavSearch = () => {
                 <i className="fa-solid fa-magnifying-glass aspect-square p-2"></i>
             </label>
             <input className="outline-none bg-transparent w-full text-white"
-                id="searchbar" type="text" placeholder={`${t("typehere")}...`}/>
+            id="searchbar" 
+            type="text" 
+            placeholder={`${t("typehere")}...`}
+            onChange={(event) => query.current = event.target.value}
+            maxLength={64}/>
             <button className="bg-green-700 hover:bg-green-600 transition:background 
-            duration-100 ease-in-out text-zinc-200 py-1 px-3 ml-auto rounded-md shadow-sm">
+            duration-100 ease-in-out text-zinc-200 py-1 px-3 ml-auto rounded-md shadow-sm
+            active:outline outline-2 outline-green-600 outline-offset-2"
+            onClick={search}>
                 {t("search")}...
             </button>
         </form>
@@ -149,6 +163,7 @@ const LanguageToggle = () => {
 
     const changeLanguage = (lang: string) => {
         i18n.changeLanguage(lang);
+        localStorage.setItem("language", lang);
     }
 
     return (

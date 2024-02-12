@@ -2,6 +2,7 @@ import { RefObject, useEffect, useRef, useState } from "react";
 import { SHELL_URL } from "../config";
 import { algorithmDraftType } from "../types";
 import { TimeFormatter } from "../utils/formatter";
+import { useTranslation } from "react-i18next";
 
 type userInput = {
     variable: string, 
@@ -18,6 +19,8 @@ export const useSandbox = (sandboxRef: RefObject<HTMLIFrameElement>) => {
     const [pending, setPending] = useState(true);
     const onMessageFunc = useRef<(data: messageDataType) => void>(() => {});
 
+    const {t} = useTranslation();
+
     const handleMessage = (event: MessageEvent) => {
 
         if(event.origin != SHELL_URL) return;
@@ -25,7 +28,7 @@ export const useSandbox = (sandboxRef: RefObject<HTMLIFrameElement>) => {
         const timestamp = TimeFormatter.HourMinuteSecondMillisecond(event.data.timestamp);
 
         onMessageFunc.current({
-            message: event.data.message,
+            message: t(event.data.message),
             timestamp: timestamp
         });
 

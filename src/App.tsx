@@ -18,10 +18,18 @@ import { ScrollToTop } from "./components/ScrollToTop";
 
 //Import contexts
 import { AuthContext } from "./contexts";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export const App = () => {
 
     const user = useUser();
+
+    const {i18n} = useTranslation();
+    useEffect(() => {
+        const lang = localStorage.getItem("language");
+        i18n.changeLanguage(lang || "en");
+    }, [])
 
     return (
     <AuthContext.Provider value={{...user}}>

@@ -1,7 +1,10 @@
 import { MutableRefObject, useEffect } from "react"
 import { algorithmDraftType } from "../../types"
+import { useTranslation } from "react-i18next"
 
 export const InfoEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDraftType>}) => {
+
+    const {t} = useTranslation();
 
     useEffect(() => {
         draftRef.current.visibility = "public";
@@ -13,9 +16,10 @@ export const InfoEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDra
 
             <div className="bg-zinc-900 rounded-md shadow-md
             flex flex-col gap-2 p-4">
-                <h1 className="text-lg font-semibold">Title</h1>
+                <h1 className="text-lg font-semibold">{t("title")}</h1>
                 <input type="text" maxLength={64} 
-                spellCheck={false} placeholder="Enter your title..."
+                spellCheck={false} 
+                placeholder={t("enter-title")}
                 className="bg-zinc-800 rounded-md shadow-md
                 p-2
                 focus:outline outline-2 outline-green-600 outline-offset-2"
@@ -24,9 +28,9 @@ export const InfoEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDra
 
             <div className="bg-zinc-900 rounded-md shadow-md
             flex flex-col gap-2 p-4">
-                <h1 className="text-lg font-semibold">Description</h1>
+                <h1 className="text-lg font-semibold">{t("description")}</h1>
                 <textarea maxLength={1024} spellCheck={false}
-                placeholder="Enter your description..."
+                placeholder={t("enter-description")}
                 className="bg-zinc-800 rounded-md shadow-md resize-none
                 focus:outline outline-2 outline-green-600 outline-offset-2
                 p-2 h-60 text-sm"
@@ -35,7 +39,7 @@ export const InfoEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDra
 
             <div className="bg-zinc-900 rounded-md shadow-md
             flex items-center px-4 py-4">
-                <h2>Visibility</h2>
+                <h2>{t("visibility")}</h2>
                 
                 <select className="bg-zinc-800 rounded-md shadow-md
                 active:outline ouline-2 outline-green-600
@@ -44,10 +48,10 @@ export const InfoEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDra
                 onChange={(event) => draftRef.current.visibility = event.target.value as "public" | "private"}>
 
                     <option value="public">
-                        Public
+                        {t("public")}
                     </option>
                     <option value="private">
-                        Private
+                        {t("private")}
                     </option>
 
                 </select>
