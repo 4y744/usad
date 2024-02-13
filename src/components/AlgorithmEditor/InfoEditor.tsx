@@ -38,41 +38,45 @@ export const InfoEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDra
             </div>
 
             <div className="bg-zinc-900 rounded-md shadow-md
-            flex items-center gap-3 p-4">
+            flex flex-wrap items-center gap-3 p-4">
                 
-                <h2 className="font-semibold text-base">{t("visibility")}</h2>
-                
-                <select className="bg-zinc-800 rounded-md shadow-md
-                active:outline ouline-2 outline-green-600
-                hover:bg-zinc-700 px-4 py-2 text-sm"
-                defaultValue={"public"}
-                onChange={(event) => draftRef.current.visibility = event.target.value as "public" | "private"}>
+                <div className="flex items-center gap-3">
+                    <h2 className="font-semibold text-base">{t("visibility")}</h2>
+                    
+                    <select className="bg-zinc-800 rounded-md shadow-md
+                    active:outline ouline-2 outline-green-600
+                    hover:bg-zinc-700 px-4 py-2 text-sm"
+                    defaultValue={"public"}
+                    onChange={(event) => draftRef.current.visibility = event.target.value as "public" | "private"}>
 
-                    <option value="public">
-                        {t("public")}
-                    </option>
-                    <option value="private">
-                        {t("private")}
-                    </option>
+                        <option value="public">
+                            {t("public")}
+                        </option>
+                        <option value="private">
+                            {t("private")}
+                        </option>
 
-                </select>
+                    </select>
+                </div>
 
-                <h2 className="font-semibold text-base">{t("language")}</h2>
-                
-                <select className="bg-zinc-800 rounded-md shadow-md
-                active:outline ouline-2 outline-green-600
-                hover:bg-zinc-700 px-4 py-2"
-                defaultValue={"public"}
-                onChange={(event) => draftRef.current.language = event.target.value}>
+                <div className="flex items-center gap-3">
+                    <h2 className="font-semibold text-base">{t("language")}</h2>
+                    
+                    <select className="bg-zinc-800 rounded-md shadow-md
+                    active:outline ouline-2 outline-green-600
+                    hover:bg-zinc-700 px-4 py-2"
+                    defaultValue={"public"}
+                    onChange={(event) => draftRef.current.language = event.target.value}>
 
-                    <option value="BG">
-                        {t("BG")}
-                    </option>
-                    <option value="EN">
-                        {t("EN")}
-                    </option>
+                        <option value="BG">
+                            {t("BG")}
+                        </option>
+                        <option value="EN">
+                            {t("EN")}
+                        </option>
 
-                </select>
+                    </select>
+                </div>
             </div>
             
         </div>

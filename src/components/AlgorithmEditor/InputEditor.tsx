@@ -23,11 +23,12 @@ export const InputEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDr
             flex flex-col gap-5 p-4">
 
             <div className="bg-zinc-900 rounded-md shadow-md px-4 py-2 
-            flex items-center gap-5 p-4">
+            flex flex-wrap justify-center items-center gap-5 p-4">
 
                 <h1 className="text-lg font-semibold">{t("inputs")}</h1>
+
                 <div className="bg-zinc-800 rounded-md shadow-md
-                flex gap-1 ml-auto">
+                flex gap-1">
 
                     <button className="rounded-l-md
                     hover:bg-green-600 px-4 py-2

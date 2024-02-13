@@ -51,7 +51,7 @@ export const BrowsePage = () => {
     return (
         <PageWrapper>
             <div className="bg-zinc-900 rounded-md shadow-md
-            flex flex-col gap-5 p-8 md:w-5/6 w-[95%]">
+            flex flex-col gap-5 p-4 md:w-5/6 w-[95%]">
 
                 <div className="bg-zinc-800 rounded-md shadow-md
                 p-4 gap-3

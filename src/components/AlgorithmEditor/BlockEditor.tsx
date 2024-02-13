@@ -38,6 +38,8 @@ export const BlockEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDr
     const handleCompile = () => {
         const code = Compile(blocks);
         draftRef.current.function = btoa(code);
+        console.log(code);
+        console.log(blocks);
     }
 
     const selectedBlockType = useRef("exit");

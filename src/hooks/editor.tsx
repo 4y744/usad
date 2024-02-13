@@ -152,6 +152,7 @@ export const useDisableScroll = (blockEditorRef: RefObject<HTMLElement>) => {
         blockEditorRef.current!.addEventListener("focusin", handleEditorFocus);
         blockEditorRef.current!.addEventListener("focusout", handleEditorBlur);
         blockEditorRef.current!.addEventListener("mouseleave", handleEditorBlur);
+        blockEditorRef.current!.addEventListener("touchend", handleEditorBlur)
     })
 }
 
@@ -180,7 +181,7 @@ export const useBlockCompiler = () : [(blockArray: blockType[]) => string] => {
                 )
             case "condition":
                 return (
-                    `if(${BuildScript(block.ports[1])}){\n${BuildScript(block.ports[2])}\n}\n${BuildScript(block.ports[0])}`
+                    `if(${BuildScript(block.ports[1])}){\n${BuildScript(block.ports[2])}\n}\n${BuildScript(block.ports[0])}\nelse{\n${BuildScript(block.ports[3])}\n}\n`
                 )  
             case "for":
                 return (

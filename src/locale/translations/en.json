@@ -139,6 +139,22 @@
 
     "language": "Language",
     "browse-the-db": "Browse the database",
-    "search-results-for": "Search results for "
+    "search-results-for": "Search results for ",
+
+    "terms-of-use": "Term of use",
+    "tos1": "Users are not allowed to create and share malicious code.",
+    "tos2": "Users are not allowed to spam the database.",
+    "tos3": "Users are not allowed to use uncivil or deragatory language.",
+    "tos4": "Users are not allowed to steal other people's workds and share them as their own without significant changes.",
+    "tos-warning": "IMPORTANT:  By creating an account you agree to all the terms above.",
+
+    "about1": "USAD stands for Universal Scalable Algorithm Directory. Just like its name implies, it's a database for algorithms. But it also provides tools to create and use algorithms. The platform is built on the React framework and developed by using ViteJS. All of the content is stored on Cloud Firestore and authentication is handled by Firebase Auth.",
+    "about2": "Algorithms need a title, a description, a language, a function, inputs and a visibility field.",
+    "about3": "The title and description are self-explanatory. The language indicates in what language they were written.",
+    "about4": "Every algorithm has inputs, which collect the required data to run said algorithm. Inputs can be single and multiple. The single type input creates a field in which the user can type an assortment of values. That information is stored in the shape of an array.",
+    "about5": "The multiple input type creates a set number of input boxes which each represent a single variable. To make it more clear, placeholder text can be defined to guide the user when entering values.",
+    "about6": "The heart of the algorithm is its function. It's a piece of JavaScript code which executes each time the algorithm is used. USAD allows users to both write the code themselves or use the built-in editor (which is still in beta).",
+    "about7": "Other information every algorithm contains are its post date and its visibility. Visibility is set by the poster and can be changed in the Dashboard."
+
     
 }

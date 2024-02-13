@@ -34,7 +34,7 @@ export const UserPage = () => {
         <PageWrapper>
 
             <div className="bg-zinc-900 rounded-md shadow-md
-            flex flex-col gap-5 p-8
+            flex flex-col gap-5 p-4
             w-[1000px] max-w-[95%]">
 
                 <div className="bg-zinc-800 rounded-md shadow-md
@@ -107,7 +107,7 @@ const Placeholder = () => (
     <PageWrapper>
 
         <div className="bg-zinc-900 rounded-md shadow-md
-        flex flex-col gap-5 p-8
+        flex flex-col gap-5 p-4
         w-[1000px] max-w-[95%]">
 
             <div className="bg-zinc-800 rounded-md shadow-md

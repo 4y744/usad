@@ -18,10 +18,12 @@ export const MathBlock = ({block}: {block: blockType}) => {
     }
 
     useEffect(() => {
-        setBlocks(prev => prev.map((b) => {
-            if(b.id == block.id) b.metadata!.values[0] = "+";
-            return b;
-        }))
+        if(block.metadata?.values[0] == null){
+            setBlocks(prev => prev.map((b) => {
+                if(b.id == block.id) b.metadata!.values[0] = "+";
+                return b;
+            }))
+        } 
     }, [])
 
     const {t} = useTranslation();

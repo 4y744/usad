@@ -51,10 +51,10 @@ export const SnapBlock = ({parent}: {parent: {id: string, port: number}}) => {
 
         const snapRect = snapRef.current!.getBoundingClientRect();
 
-        mouseOver.current = event.touches[0].pageY > snapRect.top 
-        && event.touches[0].pageY < snapRect.bottom 
-        && event.touches[0].pageX > snapRect.left 
-        && event.touches[0].pageX < snapRect.right;
+        mouseOver.current = event.touches[0].clientY > snapRect.top 
+        && event.touches[0].clientY < snapRect.bottom 
+        && event.touches[0].clientX > snapRect.left 
+        && event.touches[0].clientX < snapRect.right;
 
         mouseOver.current! ? snapRef.current!.classList.add("!rounded-none") : snapRef.current!.classList.remove("!rounded-none");
     }

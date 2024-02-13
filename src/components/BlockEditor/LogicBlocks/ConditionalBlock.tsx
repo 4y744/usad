@@ -46,6 +46,21 @@ export const ConditionalBlock = ({block}: {block: blockType}) => {
                     </div>
                     
                 </div>
+
+                <div className="flex items-center rounded-md w-full my-2">
+
+                    <div className="bg-cyan-600 rounded-md px-2 mr-2 w-16 h-16
+                    min-w-16 flex justify-center items-center">
+                        <h1 className="text-white text-lg text-center font-semibold">{t("else")}</h1>
+                    </div>
+
+                    <div className="relative bg-cyan-600 rounded-md p-2 w-full
+                    flex justify-center">
+                        <DetachButton parent={block} port={3} position="top"/>
+                        <BuildBlock parentId={block.id} port={3}/>
+                    </div>
+                    
+                </div>
                 
             </div>
             <BuildBlock parentId={block.id} port={0}/>

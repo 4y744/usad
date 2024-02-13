@@ -85,7 +85,7 @@ export const CreatePage = () => {
 
                     <div className="bg-zinc-800 rounded-md shadow-md 
                     p-2 w-full
-                    flex items-center flex-wrap gap-3">
+                    flex items-center justify-center flex-wrap gap-3">
                         <h1 className="font-medium">{t("choose-a-way-to-edit")}</h1>
 
                         <div className="grid grid-cols-2 gap-3">

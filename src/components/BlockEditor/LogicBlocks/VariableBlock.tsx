@@ -38,6 +38,7 @@ export const VariableBlock = ({block}: {block: blockType}) => {
                 ref={inputRef} 
                 type="text"
                 placeholder="" 
+                onChange={handleChange}
                 className="no-scrollbar 
                 outline-none text-end w-full h-12 bg-transparent placeholder-white text-white
                 border-2 border-sky-800 rounded-md pr-2"
