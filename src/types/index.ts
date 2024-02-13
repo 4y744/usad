@@ -29,6 +29,7 @@ export type algorithmDocType = {
     id: string,
     title: string;
     description: string;
+    language: string;
     author: string;
     created: number;
     input_type: string;
@@ -41,6 +42,7 @@ export type algorithmDocType = {
 export type algorithmDraftType = {
     title: string;
     description: string;
+    language: string;
     input_type: string;
     inputs: Array<{variable: string, label: string}>;
     function: string;
@@ -90,4 +92,14 @@ export type submittedInputType = {
 //Dashboard
 export type dashboardInfoType = {
     algorithmCount: number
+}
+
+export type userInput = {
+    variable: string, 
+    content: string
+}
+
+export type messageDataType = {
+    message: string, 
+    timestamp: string
 }

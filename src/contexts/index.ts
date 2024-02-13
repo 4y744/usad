@@ -1,6 +1,8 @@
-import { dashboardInfoType } from './../types/index';
+//Import types
+import { algorithmDocType, authType, blockEditorContextType, dashboardInfoType } from "../types";
+
+//Import React hooks
 import { Dispatch, MutableRefObject, SetStateAction, createContext } from "react";
-import { algorithmDocType, authType, blockEditorContextType } from "../types";
 
 export const AuthContext = createContext<authType>({} as authType);
 

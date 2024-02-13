@@ -1,13 +1,14 @@
 //Import React hooks
-import { useEffect, useState } from "react";
-
-//Import React Router hooks
-import { Link } from "react-router-dom";
+import { useState } from "react";
 
 //Import auth hooks
 import { useSignUp } from "../../hooks/auth";
+
+//Import components
 import { LoadingSpinner } from "../../components/Loading/LoadingSpinner";
 import { PageWrapper } from "../../components/Layout/PageWrapper";
+
+//Import i18n hooks
 import { useTranslation } from "react-i18next";
 
 export const SignUpPage = () => {

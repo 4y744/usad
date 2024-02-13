@@ -1,8 +1,19 @@
+//Import custom hooks
 import { useSignOut } from "../../hooks/auth"
+
+//Import components
 import { LoadingSpinner } from "../../components/Loading/LoadingSpinner";
+
+//Import React hooks
 import { useContext } from "react";
+
+//Import contexts
 import { AuthContext } from "../../contexts";
+
+//Import components
 import { PageWrapper } from "../../components/Layout/PageWrapper";
+
+//Import i18n hooks
 import { useTranslation } from "react-i18next";
 
 export const SignOutPage = () => {

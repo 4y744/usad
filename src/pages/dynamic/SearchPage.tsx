@@ -1,14 +1,24 @@
+//Import React Router hooks
 import { Link, useParams } from "react-router-dom"
+
+//Import components
 import { PageWrapper } from "../../components/Layout/PageWrapper"
-import { useQueryAlgorithms } from "../../hooks/firestore";
-import { TimeFormatter } from "../../utils/formatter";
 import { LoadingSpinner } from "../../components/Loading/LoadingSpinner";
 import { NotFoundPage } from "../static/NotFoundPage";
+
+//Import firestore hooks
+import { useQueryAlgorithms } from "../../hooks/firestore";
+
+//Import utils
+import { TimeFormatter } from "../../utils/formatter";
+import { useTranslation } from "react-i18next";
 
 export const SearchPage = () => {
 
     const {query} = useParams();
     const [algorithms, loading, error] = useQueryAlgorithms({term: query!});
+
+    const {t} = useTranslation();
 
     if(loading) return <Placeholder/>
     if(error) return <NotFoundPage/>
@@ -21,7 +31,7 @@ export const SearchPage = () => {
                 <div className="bg-zinc-800 rounded-md shadow-md
                 p-4">
                     <h1 className="text-xl font-semibold
-                    text-center">Search results for <span className="text-green-600">{query}</span></h1>
+                    text-center">{t("search-results-for")}<span className="text-green-600">{query}</span></h1>
                 </div>
 
                 <div className="bg-zinc-800 rounded-md shadow-md p-4

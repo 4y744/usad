@@ -1,5 +1,6 @@
 import { useContext, useEffect, useRef } from "react"
 import { BlockEditorContext, MasterBlockContext } from "../../../contexts";
+import { useTranslation } from "react-i18next";
 
 export const SnapBlock = ({parent}: {parent: {id: string, port: number}}) => {
 
@@ -11,6 +12,8 @@ export const SnapBlock = ({parent}: {parent: {id: string, port: number}}) => {
 
     //Checks if the cursor is in the rect bounds of the snapRef object
     const mouseOver = useRef(false);
+
+    const {t} = useTranslation();
     
     const handleAttach = () => {
 
@@ -69,7 +72,7 @@ export const SnapBlock = ({parent}: {parent: {id: string, port: number}}) => {
         <div ref={snapRef} className="rounded-lg w-36 h-12
         flex justify-center items-center transition-rounded duration-100
         border-2 border-dashed border-cyan-700">
-            <h1 className="text-white text-xs px-3">Drag a block here...</h1>
+            <h1 className="text-white text-xs px-3">{t("drag-a-block-here")}</h1>
         </div>
     )
 }

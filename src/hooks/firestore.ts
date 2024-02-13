@@ -1,11 +1,17 @@
 //Import React hooks
-import { useEffect, useState, useRef, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 
 //Import Firebase hooks
-import { doc, collection, getDoc, getDocs, writeBatch, where, query, DocumentData, addDoc, deleteDoc, setDoc, updateDoc, getCountFromServer } from "firebase/firestore";
+import { doc, collection, getDoc, getDocs, where, query, addDoc, deleteDoc, updateDoc, getCountFromServer } from "firebase/firestore";
 import { db } from "./firebase.ts";
+
+//Import types
 import { algorithmDocType, algorithmDraftType, userType } from "../types/index.ts";
+
+//Import contexts
 import { AuthContext } from "../contexts/index.ts";
+
+//Import React Router hooks
 import { useNavigate } from "react-router-dom";
 
 export const useGetUser = (param: {username?: string, uid?: string}) : [userType, boolean, string] => {
@@ -182,6 +188,48 @@ export const useGetAlgorithm = (id: string) : [algorithmDocType, boolean, string
     return [algorithm, loading, error];
 }
 
+export const useGetAllAlgorithms = () : [algorithmDocType[], boolean, string] => {
+    const [algorithms, setAlgorithms] = useState<algorithmDocType[]>([] as algorithmDocType[]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string>("");
+
+    useEffect(() => {
+        setLoading(true);
+
+        const fetch = async () => {
+
+            try{
+                const collectionRef = collection(db, "algorithms");
+                const q = query(collectionRef, where("visibility", "==", "public"));
+
+                const algDocs = await getDocs(q);   
+
+                let tempDocs : algorithmDocType[] = [];
+
+                algDocs.forEach((doc) => {
+                    tempDocs.push({
+                        id: doc.id,
+                        ...doc.data()   
+                    } as algorithmDocType);
+                })
+               
+                setAlgorithms(tempDocs);
+
+            }
+            catch(err){
+                setError(err as string)
+            }
+
+            setLoading(false);
+            
+        }
+
+        fetch()
+    }, [])
+
+    return [algorithms, loading, error];
+}
+
 export const useQueryAlgorithms = ({term} : {term: string}) : [algorithmDocType[], boolean, string] => {
 
     const [algorithms, setAlgorithms] = useState<algorithmDocType[]>([] as algorithmDocType[]);
@@ -216,7 +264,9 @@ export const useQueryAlgorithms = ({term} : {term: string}) : [algorithmDocType[
                     :(
                 */
                
-                tempDocs = tempDocs.filter((doc) => doc.title.toLocaleLowerCase().includes(term.toLocaleLowerCase()))
+                tempDocs = tempDocs.filter((doc) => {
+                    if(doc.title) return doc.title.toLocaleLowerCase().includes(term.toLocaleLowerCase())
+                })
 
                 setAlgorithms(tempDocs);
 

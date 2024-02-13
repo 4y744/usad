@@ -19,6 +19,7 @@ import { CreatePage } from "../../pages/protected/CreatePage";
 import { SettingsPage } from "../../pages/dynamic/SettingsPage";
 import { BrowsePage } from "../../pages/dynamic/BrowsePage";
 import { SearchPage } from "../../pages/dynamic/SearchPage";
+import { TermsOfUsePage } from "../../pages/static/TermsOfUsePage";
 
 export const MainContent = () => {
 
@@ -53,6 +54,10 @@ export const MainContent = () => {
                         <Route 
                         path="about" 
                         element={<AboutPage/>} />
+
+                        <Route 
+                        path="terms-of-use" 
+                        element={<TermsOfUsePage/>} />
 
                         <Route 
                         path="browse" 

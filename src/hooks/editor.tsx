@@ -1,46 +1,8 @@
-
+//Import React hooks
 import { RefObject, useEffect, useRef } from "react"
+
+//Import types
 import { Vector2, blockType } from "../types";
-
-const BuildScript = (blockId: string, blocks: any): string => {
-        
-    const block = blocks[blockId];
-    
-    if(block == null) return ""
-
-    switch(block.type){
-        case "start":
-            return (
-                BuildScript(block.ports.next, blocks)
-            )
-        case "exit":
-            return (
-                ""
-            )    
-        case "print":
-            return (
-                `console.log("Hello World!");\n${BuildScript(block.ports.next, blocks)}`
-            )
-        case "condition":
-            return (
-                `if(${BuildScript(block.ports.condition, blocks)}){\n${BuildScript(block.ports.run, blocks)}\n}\n${BuildScript(block.ports.next, blocks)}`
-            )            
-        case "comparison":
-            return (
-                `${BuildScript(block.ports.first, blocks)} ${block.metadata.comparator} ${BuildScript(block.ports.second, blocks)}`
-            )  
-        case "number":
-            return (
-                `${block.metadata.number}`
-            )
-        default:
-            return ``
-    }
-}
-
-
-
-
 
 export const useDragToScroll = (blockEditorRef: RefObject<HTMLDivElement>) => {
 
@@ -146,18 +108,18 @@ export const useScrollToZoom = (blockEditorRef : RefObject<HTMLDivElement>, magn
         
         if(blockZoom) return;
 
-        //I've tried to many things to get the correct behavior, but I just can't do it.
-        //Should of course be possible, but for now I will leave it at this.
+        // //I've tried to many things to get the correct behavior, but I just can't do it.
+        // //Should of course be possible, but for now I will leave it at this.
 
-        if(event.deltaY < 0)
-        {
-            blockEditorRef.current!.scrollLeft += mousePos.current.x * magnitude;
-            blockEditorRef.current!.scrollTop += mousePos.current.y * magnitude;
-        }
-        else{
-            blockEditorRef.current!.scrollLeft -= mousePos.current.x * magnitude;
-            blockEditorRef.current!.scrollTop -= mousePos.current.y * magnitude;
-        }
+        // if(event.deltaY < 0)
+        // {
+        //     blockEditorRef.current!.scrollLeft += mousePos.current.x * magnitude;
+        //     blockEditorRef.current!.scrollTop += mousePos.current.y * magnitude;
+        // }
+        // else{
+        //     blockEditorRef.current!.scrollLeft -= mousePos.current.x * magnitude;
+        //     blockEditorRef.current!.scrollTop -= mousePos.current.y * magnitude;
+        // }
     }
 
     const handleMouseMove = (event: MouseEvent) => {
@@ -189,6 +151,7 @@ export const useDisableScroll = (blockEditorRef: RefObject<HTMLElement>) => {
     useEffect(() => {
         blockEditorRef.current!.addEventListener("focusin", handleEditorFocus);
         blockEditorRef.current!.addEventListener("focusout", handleEditorBlur);
+        blockEditorRef.current!.addEventListener("mouseleave", handleEditorBlur);
     })
 }
 
@@ -235,6 +198,10 @@ export const useBlockCompiler = () : [(blockArray: blockType[]) => string] => {
                 return (
                     `${block.metadata?.values[0]}`
                 )
+            case "string":
+                return (
+                    `"${block.metadata?.values[0]}"`
+                )
             case "variable":
                 return (
                     `${block.metadata?.values[0]}`
@@ -248,8 +215,14 @@ export const useBlockCompiler = () : [(blockArray: blockType[]) => string] => {
                     `parseFloat(${BuildScript(block.ports[1])})\n${BuildScript(block.ports[0])}`
                 )
             case "math":
+                if(block.metadata?.values[0] == "random") return (
+                    `Math.floor(Math.random() * (${BuildScript(block.ports[1])} - ${BuildScript(block.ports[0])}) + ${BuildScript(block.ports[0])})`
+                )
+                if(block.metadata?.values[0] == "root") return (
+                    `(${BuildScript(block.ports[0])} ** (1 / ${BuildScript(block.ports[1])}))`
+                )
                 return (
-                    `${BuildScript(block.ports[0])} ${block.metadata?.values[0]} ${BuildScript(block.ports[1])}`
+                    `(${BuildScript(block.ports[0])} ${block.metadata?.values[0]} ${BuildScript(block.ports[1])})`
                 )
             default:
                 return ``

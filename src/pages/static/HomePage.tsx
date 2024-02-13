@@ -1,12 +1,20 @@
-//Import react hooks
-import {useState, useEffect} from 'react';
-
 //Import React Router hooks
 import { Link } from 'react-router-dom';
+
+//Import Firestore hooks
 import { useGetAlgorithms } from '../../hooks/firestore';
+
+//Import types
 import { algorithmDocType } from '../../types';
+
+//Import components
 import { LoadingSpinner } from '../../components/Loading/LoadingSpinner';
+
+//Import i18n hooks
 import { useTranslation } from 'react-i18next';
+
+//Import utils
+import { AlgorithmFilter } from '../../utils/sorter';
 
 
 export const HomePage = () => {
@@ -87,7 +95,7 @@ const Card = ({title, description, faClass} : {title: string, description: strin
 export const Featured = () => {
 
     const [algorithms, loading] = useGetAlgorithms({username: "USAD"});
-    const {t} = useTranslation();
+    const {t, i18n} = useTranslation();
 
     return (
         <>
@@ -107,8 +115,7 @@ export const Featured = () => {
                             <LoadingSpinner/>
                         </div>
                     )) : 
-                    algorithms?.map((algorithm: algorithmDocType) => (
-
+                    AlgorithmFilter.byLanguage(algorithms, i18n.language.toUpperCase()).map((algorithm: algorithmDocType) => (
                         <Link to={`/algorithm/${algorithm.id}`} className="bg-green-700 rounded-md shadow-md
                         text-white w-full h-full py-4 px-8 group
                         flex flex-col justify-center gap-1" key={algorithm.id}>
@@ -119,7 +126,7 @@ export const Featured = () => {
                                 </h1>
                                 <span className="bg-green-800 rounded-md shadow-md
                                 text-xs h-fit
-                                px-2 py-1 ml-2">BG</span>
+                                px-2 py-1 ml-2">{algorithm.language}</span>
                             </div>
                             <div>
                                 <p className="text-xs text-zinc-300">{algorithm.description}</p>

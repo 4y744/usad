@@ -5,11 +5,15 @@ import { useEffect, useState } from "react";
 import { auth } from "./firebase"
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
-//Import Firebase hooks
+//Import Firestore hooks
 import { collection, doc, getDoc, getDocs, query, setDoc, where, writeBatch } from "firebase/firestore";
 import { db } from "./firebase.ts";
+
+//Import React Router hooks
 import { useNavigate } from 'react-router-dom';
-import { authType, userType } from "../types/index.ts";
+
+//Import types
+import { authType } from "../types/index.ts";
 
 export const useSignUp = (redirectUrl: string): [(credentials: {username: string, email: string, password: string, confirmPassword: string}) => void, boolean, string] => {
     
@@ -40,17 +44,6 @@ export const useSignUp = (redirectUrl: string): [(credentials: {username: string
                 uid: auth.currentUser!.uid,
                 created: Date.now()
             })
-            
-            // const batch = writeBatch(db);
-                    
-            // batch.set(doc(db, "users", auth.currentUser!.uid), { 
-            //     username: credentials.username,
-            //     created: Date.now()
-            // });
-
-            // batch.set(doc(db, "usernames", credentials.username), { uid: auth.currentUser!.uid })
-
-            // await batch.commit()
 
             navigate(redirectUrl);
 
@@ -119,18 +112,6 @@ export const useSignOut = (redirectUrl: string): [() => void, boolean] => {
 
     return [SignOut, loading]
 }
-
-// export const useGetUsername = () : [(uid: string) => void, string] => {
-//     const [username, setUsername] = useState("");
-
-//     const getUsername = async (uid: string) => {
-//       await setUsername((await getDoc(doc(db, "users", uid))).data()?.username)
-//     }
-
-//     return [getUsername, username]
-//}
-
-
 
 export const useUser = () : authType => {
     const [user, setUser] = useState<authType>({loading: true} as authType);

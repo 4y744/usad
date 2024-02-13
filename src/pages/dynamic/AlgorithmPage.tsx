@@ -1,29 +1,26 @@
 //Import React hooks
-import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 //Import React Router hooks
-import { Link, Navigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 //Import custom hooks
 import { useGetAlgorithm } from '../../hooks/firestore.ts';
-
-//Import contexts
-import { InputContext } from '../../contexts/index.ts';
+import { useSandbox } from '../../hooks/shell.ts';
 
 //Import components
 import { LoadingSpinner } from '../../components/Loading/LoadingSpinner.tsx';
+import { PageWrapper } from '../../components/Layout/PageWrapper.tsx';
+import { NotFoundPage } from '../static/NotFoundPage.tsx';
+import { Sandbox } from '../../components/Sandbox.tsx';
+import { AlgorithmInput } from '../../components/AlgorithmViewer/AlgorithmInput.tsx';
+import { CodeContainer } from '../../components/AlgorithmViewer/CodeContainer.tsx';
+import { OutputLog } from '../../components/AlgorithmViewer/OutputLog.tsx';
 
 //Import utils
 import { TimeFormatter } from '../../utils/formatter.ts';
 
-
-import { PageWrapper } from '../../components/Layout/PageWrapper.tsx';
-import { NotFoundPage } from '../static/NotFoundPage.tsx';
-import { Sandbox } from '../../components/Sandbox.tsx';
-import { useSandbox } from '../../hooks/shell.ts';
-import { CodeContainer } from '../../components/AlgorithmViewer/CodeContainer.tsx';
-import { AlgorithmInput, InputBoxContainer } from '../../components/AlgorithmViewer/AlgorithmInput.tsx';
-import { OutputLog } from '../../components/AlgorithmViewer/OutputLog.tsx';
+//Import i18n hooks
 import { useTranslation } from 'react-i18next';
 
 

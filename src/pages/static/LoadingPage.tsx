@@ -1,3 +1,4 @@
+//Import components
 import { Loading } from "../../components/Loading/Loading";
 
 export const LoadingPage = () => (

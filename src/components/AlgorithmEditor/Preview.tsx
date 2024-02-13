@@ -31,7 +31,6 @@ export const Preview = ({draftRef} : {draftRef: MutableRefObject<algorithmDraftT
         //The spread syntax is needed to create and entirely new object.
         //Otherwise setState will not cause a rerender.
         setRenderedAlgorithm({...draftRef.current});
-        console.log(draftRef.current)
     }
 
     return (

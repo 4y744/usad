@@ -1,4 +1,7 @@
+//Import i18n hooks
 import { useTranslation } from "react-i18next";
+
+//Import components
 import { PageWrapper } from "../../components/Layout/PageWrapper";
 
 export const NotFoundPage = () => {

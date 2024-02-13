@@ -1,8 +1,10 @@
-import { ChangeEvent, useContext } from "react";
+import { ChangeEvent, useContext, useEffect } from "react";
 import { BuildBlock } from "../BuildBlock";
 import { DetachButton } from "../DetachButton";
 import { blockType } from "../../../types";
 import { BlockEditorContext } from "../../../contexts";
+import { RemoveButton } from "../RemoveButton";
+import { useTranslation } from "react-i18next";
 
 export const MathBlock = ({block}: {block: blockType}) => {
 
@@ -14,6 +16,15 @@ export const MathBlock = ({block}: {block: blockType}) => {
             return b;
         }))
     }
+
+    useEffect(() => {
+        setBlocks(prev => prev.map((b) => {
+            if(b.id == block.id) b.metadata!.values[0] = "+";
+            return b;
+        }))
+    }, [])
+
+    const {t} = useTranslation();
     
     return (
 
@@ -21,7 +32,8 @@ export const MathBlock = ({block}: {block: blockType}) => {
             <div className="min-w-60 w-fit h-fit bg-red-800 relative p-2
                 rounded-lg flex flex-col justify-center items-center text-white
                 border-2 border-red-900">
-                <h1 className="text-lg font-semibold mb-2">Math</h1>
+                <h1 className="text-lg font-semibold mb-2">{t("math")}</h1>
+                <RemoveButton blockId={block.id}/>
 
                 <div className="flex gap-3 justify-center items-center">
                     <div className="flex justify-center items-center
@@ -47,6 +59,12 @@ export const MathBlock = ({block}: {block: blockType}) => {
                         </option>
                         <option value="**">
                             {"^"}
+                        </option>
+                        <option value="root">
+                            {"√"}
+                        </option>
+                        <option value="random">
+                            {t("random")}
                         </option>
                     </select>
                         

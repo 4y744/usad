@@ -28,6 +28,8 @@ import { ROOT_URL } from "../../config";
 
 //Import assets
 import blankProfile from "../../assets/images/blank-profile-image.png"
+
+//Import i18n hooks
 import { useTranslation } from "react-i18next";
 
 

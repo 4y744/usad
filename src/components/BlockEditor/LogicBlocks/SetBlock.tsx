@@ -1,9 +1,12 @@
 import { BuildBlock } from "../BuildBlock";
 import { DetachButton } from "../DetachButton";
 import { blockType } from "../../../types";
+import { RemoveButton } from "../RemoveButton";
+import { useTranslation } from "react-i18next";
 
 export const SetBlock = ({block}: {block: blockType}) => {
 
+    const {t} = useTranslation();
     
     return (
 
@@ -12,7 +15,9 @@ export const SetBlock = ({block}: {block: blockType}) => {
             rounded-lg flex flex-col justify-center items-center text-white
             border-2 border-teal-900">
                 <DetachButton parent={block} port={0} position="right"/>
-                <h1 className="text-lg font-semibold mb-2">Set</h1>
+                <RemoveButton blockId={block.id}/>
+
+                <h1 className="text-lg font-semibold mb-2">{t("set")}</h1>
 
                 <div className="flex gap-3 justify-center items-center">
 

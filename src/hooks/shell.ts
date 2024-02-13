@@ -1,18 +1,17 @@
+//Import React hooks
 import { RefObject, useEffect, useRef, useState } from "react";
+
+//Import config
 import { SHELL_URL } from "../config";
-import { algorithmDraftType } from "../types";
+
+//Import types
+import { algorithmDraftType, messageDataType, userInput } from "../types";
+
+//Import utils
 import { TimeFormatter } from "../utils/formatter";
+
+//Import i18n hooks
 import { useTranslation } from "react-i18next";
-
-type userInput = {
-    variable: string, 
-    content: string
-}
-
-type messageDataType = {
-    message: string, 
-    timestamp: string
-}
 
 export const useSandbox = (sandboxRef: RefObject<HTMLIFrameElement>) => {
 

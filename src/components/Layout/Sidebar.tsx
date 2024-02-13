@@ -37,10 +37,10 @@ export const Sidebar = () => {
             faClass="fa-solid fa-arrow-right-from-bracket" 
             text={t("signout")}/>
 
-            <SideLink 
+            {/* <SideLink 
             url="/settings" 
             faClass="fa-solid fa-gear" 
-            text={t("settings")}/>
+            text={t("settings")}/> */}
 
         </section>
     )

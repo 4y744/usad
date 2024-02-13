@@ -14,6 +14,7 @@ import { VariableBlock } from "./LogicBlocks/VariableBlock.tsx"
 import { SetBlock } from "./LogicBlocks/SetBlock.tsx"
 import { ParseBlock } from "./LogicBlocks/ParseBlock.tsx"
 import { MathBlock } from "./LogicBlocks/MathBlock.tsx"
+import { StringBlock } from "./LogicBlocks/StringBlock.tsx"
 
 
 export const BuildBlock = ({parentId, port, isMaster,} : {parentId: string, port: number, isMaster?: boolean}) => {
@@ -59,6 +60,10 @@ export const BuildBlock = ({parentId, port, isMaster,} : {parentId: string, port
         )
         case "number": return (
             <NumberBlock 
+            block={block}/> 
+        )
+        case "string": return (
+            <StringBlock 
             block={block}/> 
         )
         case "variable": return (

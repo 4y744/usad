@@ -1,3 +1,6 @@
+//Import React hooks
+import { useEffect } from "react";
+
 //Import React Router hooks
 import { BrowserRouter } from "react-router-dom";
 
@@ -18,7 +21,8 @@ import { ScrollToTop } from "./components/ScrollToTop";
 
 //Import contexts
 import { AuthContext } from "./contexts";
-import { useEffect } from "react";
+
+//Importt i18n hooks
 import { useTranslation } from "react-i18next";
 
 export const App = () => {

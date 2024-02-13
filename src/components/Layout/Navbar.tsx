@@ -81,8 +81,14 @@ export const Navbar = () => {
 
                     <hr className="h-1 w-full my-2 border-1 border-zinc-200" />
 
-                    {logged ? <DropdownLink onclick={toggleNavbar} url="/dashboard" text={username}/> : 
-                    <DropdownLink onclick={toggleNavbar} url="/signin" text={t("signin")}/>}
+                    <div className="flex items-center gap-3 w-full">
+                        {logged ? <DropdownLink onclick={toggleNavbar} url="/dashboard" text={username}/> : 
+                        <DropdownLink onclick={toggleNavbar} url="/signin" text={t("signin")}/>}
+
+                        <div className="ml-auto">
+                            <LanguageToggle/>
+                        </div>
+                    </div>
 
                     {/* Empty space, because margins or vertical paddings are not affected by height */}
                     <div className="w-full py-1"></div>

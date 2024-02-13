@@ -1,9 +1,13 @@
+//Import React Router hooks
 import { Link } from "react-router-dom"
 
+//Import assets
 import firebase from "../../assets/images/logos/firebase.png"
 import react from "../../assets/images/logos/react.png"
 import vite from "../../assets/images/logos/vite.png"
 import tailwind from "../../assets/images/logos/tailwind.png"
+
+//Import i18n hooks
 import { useTranslation } from "react-i18next"
 
 export const Footer = () => {
@@ -18,22 +22,22 @@ export const Footer = () => {
                         <div className="flex flex-col flex-1 md:mx-8 mx-4">
                             <FooterHeading text={t("project")}/>
                             <FooterAnchor url="https://github.com/4y744/USAD" text="GitHub"/>
-                            <FooterLink url="#" text={t("documentation")}/>
+                            <FooterLink url="https://github.com/4y744/usad/blob/main/README.md" text={t("documentation")}/>
                             <FooterLink url="/about" text={t("about")}/>
                         </div>
 
-                        <div className="flex flex-col flex-1 md:mx-8 mx-4">
+                        {/* <div className="flex flex-col flex-1 md:mx-8 mx-4">
                             <FooterHeading text={t("resources")}/>
                             <FooterLink url="#" text={t("faq")}/>
                             <FooterLink url="#" text={t("tutorial")}/>
                             <FooterLink url="#" text={t("contact")}/>
                         </div>
-            
+                        */}
                         <div className="flex flex-col flex-1 md:mx-8 mx-4">
                             <FooterHeading text={t("legal")}/>
                             <FooterAnchor url="https://www.gnu.org/licenses/gpl-3.0.html" text="GNU GPLv3"/>
                             <FooterAnchor url="https://github.com/4y744/USAD/blob/main/LICENSE" text={t("license")}/>
-                            <FooterLink url="#" text={t("tos")}/>
+                            <FooterLink url="/terms-of-use" text={t("tos")}/>
                         </div>
 
                         <div className="flex flex-wrap justify-center items-center h-16 mx-4">

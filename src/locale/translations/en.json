@@ -7,7 +7,7 @@
     "search": "Search",
     "typehere": "Type here",
 
-    "slogan": "The ultimate tool for creating and sharing algorithms. Easily create and share your own specialized calculators.",
+    "slogan": "A public database for creating and sharing algorithms. Easily create and share your own algorithms.",
     "getstarted": "Get started",
     "learnmore": "Learn more",
 
@@ -73,6 +73,7 @@
     "auth/email-already-in-use": "That email is already in use.",
 
     "posted-by": "Posted by",
+    "by": "by",
     "on": "on",
     "description": "Description",
     "inputs": "Inputs",
@@ -107,6 +108,37 @@
     "save": "Save",
     "preview": "Preview",
     "reload": "Reload",
-    "compile": "Compile"
+    "compile": "Compile",
+    "code-editor": "Code editor",
+    "block-editor": "Block editor [Beta]",
+    "choose-a-way-to-edit": "Choose a way to edit your algorithm: ",
+
+    "start": "Start",
+    "exit": "Exit",
+    "print": "Print",
+    "math": "Math",
+    "condition": "Condition",
+    "comparison": "Comparison",
+    "for-loop": "For loop",
+    "while-loop": "White loop",
+    "set": "Set",
+    "variable": "Variable",
+    "number": "Number",
+    "string": "String",
+    "parse-number": "Parse number",
+    "if": "If",
+    "then": "Then",
+    "for": "For",
+    "do": "Do",
+    "drag-a-block-here": "Drag a block here...",
+    "random": "random",
+
+    "focus": "Focus",
+    "unfocus": "Unfocus",
+    "add": "Add",
+
+    "language": "Language",
+    "browse-the-db": "Browse the database",
+    "search-results-for": "Search results for "
     
 }
