@@ -83,7 +83,7 @@ export const UserPage = () => {
                                     </h1>
                                     <span className="bg-zinc-800 rounded-md shadow-md
                                     text-xs h-fit
-                                    px-2 py-1 ml-2">BG</span>
+                                    px-2 py-1 ml-2">{alg.language}</span>
 
                                 </div>
 
