@@ -21,7 +21,7 @@ export const ForBlock = ({block}: {block: blockType}) => {
 
                     <div className="bg-orange-600 rounded-md px-2 mr-2 w-24 h-16
                     flex justify-center items-center">
-                        <h1 className="text-white text-lg font-semibold">{t("condition")}</h1>
+                        <h1 className="text-white text-lg font-semibold">{t("for")}</h1>
                     </div>
                     
                     <div className="relative bg-orange-600 rounded-md p-2 w-full

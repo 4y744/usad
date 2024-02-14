@@ -38,8 +38,6 @@ export const BlockEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDr
     const handleCompile = () => {
         const code = Compile(blocks);
         draftRef.current.function = btoa(code);
-        console.log(code);
-        console.log(blocks);
     }
 
     const selectedBlockType = useRef("exit");
@@ -71,21 +69,6 @@ export const BlockEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDr
                 scale={scale}
                 magnitude={0.05}
                 blockEditorRef={blockEditorRef}/>
-
-                <div className="bg-zinc-900 rounded-md shadow-md
-                grid grid-cols-2">
-                    <button className="px-4 py-2
-                    hover:bg-zinc-700 rounded-l-md"
-                    onClick={() => blockEditorRef.current!.focus()}>
-                        {t("focus")}
-                    </button>
-
-                    <button className="px-4 py-2
-                    hover:bg-zinc-700 rounded-r-md"
-                    onClick={() => document.documentElement.focus()}>
-                        {t("unfocus")}
-                    </button>
-                </div>
 
                 <div className="bg-zinc-900 rounded-md shadow-md
                 flex">

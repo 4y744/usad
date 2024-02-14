@@ -3,7 +3,7 @@ import { algorithmDraftType } from "../../types"
 import { useSandbox } from "../../hooks/shell";
 import { AlgorithmInput } from "../AlgorithmViewer/AlgorithmInput";
 import { OutputLog } from "../AlgorithmViewer/OutputLog";
-import { Sandbox } from "../Sandbox";
+import { Sandbox } from "../AlgorithmViewer/Sandbox";
 import { useTranslation } from "react-i18next";
 
 export const Preview = ({draftRef} : {draftRef: MutableRefObject<algorithmDraftType>}) => {
@@ -19,7 +19,7 @@ export const Preview = ({draftRef} : {draftRef: MutableRefObject<algorithmDraftT
     const {sendMessage, onMessage, pending} = useSandbox(sandboxRef);
 
     useEffect(() => {
-        onMessage((data) => setOutput([...output, data]))
+        onMessage((data) => setOutput(prev => [...prev, data]))
     }, [output])
 
     const handleRun = () => {

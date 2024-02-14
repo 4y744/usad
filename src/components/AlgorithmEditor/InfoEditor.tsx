@@ -8,6 +8,7 @@ export const InfoEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDra
 
     useEffect(() => {
         draftRef.current.visibility = "public";
+        draftRef.current.language = "BG";
     }, [])
     
     return (
@@ -65,7 +66,7 @@ export const InfoEditor = ({draftRef} : {draftRef: MutableRefObject<algorithmDra
                     <select className="bg-zinc-800 rounded-md shadow-md
                     active:outline ouline-2 outline-green-600
                     hover:bg-zinc-700 px-4 py-2"
-                    defaultValue={"public"}
+                    defaultValue={"BG"}
                     onChange={(event) => draftRef.current.language = event.target.value}>
 
                         <option value="BG">

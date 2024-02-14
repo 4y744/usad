@@ -12,7 +12,7 @@ import { useSandbox } from '../../hooks/shell.ts';
 import { LoadingSpinner } from '../../components/Loading/LoadingSpinner.tsx';
 import { PageWrapper } from '../../components/Layout/PageWrapper.tsx';
 import { NotFoundPage } from '../static/NotFoundPage.tsx';
-import { Sandbox } from '../../components/Sandbox.tsx';
+import { Sandbox } from '../../components/AlgorithmViewer/Sandbox.tsx';
 import { AlgorithmInput } from '../../components/AlgorithmViewer/AlgorithmInput.tsx';
 import { CodeContainer } from '../../components/AlgorithmViewer/CodeContainer.tsx';
 import { OutputLog } from '../../components/AlgorithmViewer/OutputLog.tsx';
