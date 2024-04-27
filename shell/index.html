@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>USAD Shell</title>
+  </head>
+  <body>
+	<div>
+		SHELL
+	</div>
+    <script>
+		window.top.postMessage({message: "sandbox/connection-established", timestamp: Date.now()}, "*")
+
+		window.addEventListener("message", (event) => {
+
+			let messageSent = false;
+
+			try{
+
+				const declaration = event.data.input.map(inp => {
+
+					if(Array.isArray(inp.value)){
+						return `let ${inp.variable} = [${inp.value}];`
+					}
+					else{
+						return `let ${inp.variable} = ${inp.value};`;
+					}
+					
+				}).join("\n");
+
+				algUrl = (URL.createObjectURL(new Blob([`
+				self.onmessage = () => {
+					${declaration}
+					${event.data.func}
+				}`], {type: 'application/javascript'})));
+
+				const worker = new Worker(algUrl);
+
+				worker.postMessage(0);
+
+				worker.onmessage = (event) => { 
+
+					messageSent = true;
+
+					window.top.postMessage({message: event.data, timestamp: Date.now()}, "*");
+
+				} 
+
+				setTimeout(() => {
+					
+					if(!messageSent){
+
+						window.top.postMessage({message: "sandbox/out-of-time", timestamp: Date.now()}, "*")
+						
+					}
+
+					worker.terminate();
+
+				}, 5000)
+			}
+			catch(err){
+
+				window.top.postMessage({message: "sandbox/error", timestamp: Date.now()}, "*")
+				
+			}
+
+		})     
+    </script>
+  </body>
+</html>

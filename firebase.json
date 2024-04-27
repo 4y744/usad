@@ -1,0 +1,46 @@
+{
+	"hosting": [
+	{
+		"public": "client/dist",
+		"site": "usad-app",
+		"ignore": [
+		"**/.*",
+		"**/node_modules/**"
+		],
+		"rewrites": [
+		{
+			"source": "**",
+			"destination": "/index.html"
+		}
+		]
+	},
+	{
+		"public": "shell",
+		"site": "usad-shell",
+		"ignore": [
+		"**/.*",
+		"**/node_modules/**"
+		],
+		"rewrites": [
+		{
+			"source": "**",
+			"destination": "/index.html"
+		}
+		]
+	}],
+	"functions": [
+		{
+		"source": "functions",
+		"codebase": "default",
+		"ignore": [
+			"node_modules",
+			".git",
+			"firebase-debug.log",
+			"firebase-debug.*.log"
+		],
+		"predeploy": [
+			"npm --prefix \"$RESOURCE_DIR\" run build"
+		]
+		}
+	]
+}
